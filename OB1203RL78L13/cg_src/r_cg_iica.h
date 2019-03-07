@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements device driver for IICA module.
-* Creation Date: 3/6/2019
+* Creation Date: 3/7/2019
 ***********************************************************************************************************************/
 #ifndef IICA_H
 #define IICA_H
@@ -151,8 +151,8 @@ Typedef definitions
 Global functions
 ***********************************************************************************************************************/
 void R_IICA0_Create(void);
-MD_STATUS R_IICA0_Master_Send(uint8_t adr, uint8_t * const tx_buf, uint16_t tx_num, uint8_t wait);
-MD_STATUS R_IICA0_Master_Receive(uint8_t adr, uint8_t * const rx_buf, uint16_t rx_num, uint8_t wait);
+MD_STATUS R_IICA0_Master_Send(uint8_t adr, uint8_t * tx_buf, uint16_t tx_num, uint8_t wait);
+MD_STATUS R_IICA0_Master_Receive(uint8_t adr, uint8_t * rx_buf, uint16_t rx_num, uint8_t wait);
 void R_IICA0_Stop(void);
 void R_IICA0_StopCondition(void);
 static void r_iica0_callback_master_sendend(void);

@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file includes user definition.
-* Creation Date: 3/6/2019
+* Creation Date: 3/7/2019
 ***********************************************************************************************************************/
 #ifndef _USER_DEF_H
 #define _USER_DEF_H
@@ -33,5 +33,8 @@ User definitions
 ***********************************************************************************************************************/
 
 /* Start user code for function. Do not edit comment generated here */
+void OB1203_callback_tx_complete(void);
+void OB1203_callback_rx_complete(void);
+void OB1203_callback_error(MD_STATUS status);
 /* End user code. Do not edit comment generated here */
 #endif

@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements device driver for IICA module.
-* Creation Date: 3/6/2019
+* Creation Date: 3/7/2019
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -66,9 +66,9 @@ void R_IICA0_Create(void)
     IICE0 = 0U; /* disable IICA0 operation */
     IICAMK0 = 1U; /* disable INTIICA0 interrupt */
     IICAIF0 = 0U; /* clear INTIICA0 interrupt flag */
-    /* Set INTIICA0 level 1 priority */
-    IICAPR10 = 0U;
-    IICAPR00 = 1U;
+    /* Set INTIICA0 level 2 priority */
+    IICAPR10 = 1U;
+    IICAPR00 = 0U;
     /* Set SCLA0, SDAA0 pin */
     P6 &= 0xFCU;
     PM6 |= 0x03U;
@@ -123,7 +123,7 @@ void R_IICA0_StopCondition(void)
 * Return Value : status -
 *                    MD_OK or MD_ERROR1 or MD_ERROR2
 ***********************************************************************************************************************/
-MD_STATUS R_IICA0_Master_Send(uint8_t adr, uint8_t * const tx_buf, uint16_t tx_num, uint8_t wait)
+MD_STATUS R_IICA0_Master_Send(uint8_t adr, uint8_t * tx_buf, uint16_t tx_num, uint8_t wait)
 {
     MD_STATUS status = MD_OK;
 
@@ -175,7 +175,7 @@ MD_STATUS R_IICA0_Master_Send(uint8_t adr, uint8_t * const tx_buf, uint16_t tx_n
 * Return Value : status -
 *                    MD_OK or MD_ERROR1 or MD_ERROR2
 ***********************************************************************************************************************/
-MD_STATUS R_IICA0_Master_Receive(uint8_t adr, uint8_t * const rx_buf, uint16_t rx_num, uint8_t wait)
+MD_STATUS R_IICA0_Master_Receive(uint8_t adr, uint8_t * rx_buf, uint16_t rx_num, uint8_t wait)
 {
     MD_STATUS status = MD_OK;
 

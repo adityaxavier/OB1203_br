@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements main function.
-* Creation Date: 3/6/2019
+* Creation Date: 3/7/2019
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -31,6 +31,7 @@ Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
 #include "r_cg_cgc.h"
+#include "r_cg_iica.h"
 #include "r_cg_intp.h"
 /* Start user code for include. Do not edit comment generated here */
 #include "OB1203.h"
@@ -47,8 +48,12 @@ Pragma directive
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
+#if !defined(USE_CG)
 r_iic_drv_info_t i2c;
 OB1203 ob1203(&i2c);
+#else
+OB1203 ob1203;
+#endif
 /* End user code. Do not edit comment generated here */
 
 /* Set option bytes */

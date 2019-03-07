@@ -1,8 +1,15 @@
 #ifndef __OB1203_H__
 #define __OB1203_H__
 
+#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
+#if !defined(USE_CG)
 #include "r_iic_drv_api.h"
-
+#elif defined(USE_CG)
+#include "r_cg_macrodriver.h"
+#include "r_cg_iica.h"
+#include "r_cg_userdefine.h"
+#endif
+#endif //#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
 //#define DEBUG
 
 #define OB1203_ADDR 0xA6
@@ -190,136 +197,145 @@
 
 class OB1203
 {
+#if !defined(USE_CG)
   static r_iic_drv_info_t *current_i2c;
   r_iic_drv_info_t *i2c;
+#endif
   uint8_t i2c_addr;
-    
+  
 public:
-    
-    error_t i2c_error;
-    error_t i2c_DevStatus;
-    bool ready;
-    
-    static volatile bool busy;
-    static void callback(void);
-    char osc_trim;
-    char ls_res;
-    char ls_rate;
-    char ls_gain;
-    uint32_t ls_thres_hi;
-    uint32_t ls_thres_lo;
-    char ls_sai;
-    char ls_mode;
-    char ls_en;
-    char ls_int_sel;
-    char ls_var_mode;
-    char ps_sai_en;
-    char temp_en;
-    char ppg_ps_mode;
-    char ppg_ps_en;
-    char ps_can_ana;
-    char afull_int_en;
-    char ppg_int_en;
-    char ps_logic_mode;
-    uint16_t ps_digital_can;
-    char ps_int_en;
-    char ls_persist;
-    char ps_persist;
-    uint16_t ps_thres_hi;
-    uint16_t ps_thres_lo;
-    uint16_t ps_current;
-    uint16_t ir_current;
-    uint16_t r_current;
-    char ppg_ps_gain;
-    char ppg_pow_save;
-    char led_flip;
-    char ch1_can_ana;
-    char ch2_can_ana;
-    char ppg_avg;
-    char ppg_pwidth;
-    char ppg_freq;
-    char ppg_rate;
-    char ppg_LED_settling;
-    char ppg_ALC_track;
-    char ps_pulses;
-    char ps_pwidth;
-    char ps_rate;
-    char ps_avg_en;
-    char ps_hys_level;
-    char ls_int_en;
-    char fifo_rollover_en;
-    char fifo_afull_advance_warning;
-    char writePointer;
-    char readPointer;
-    char fifoOverflow;
-    char bio_trim;
-    char led_trim;
-    char diff;
-    char alc;
-    char sig_out;
-    
-    OB1203 (r_iic_drv_info_t *i2c_obj, uint8_t addr = OB1203_ADDR);
-
-    // Low-level operations
-    void reset();
-    uint16_t get_status();
-    void writeRegister(int, char, char);
-    void writeBlock(int, char, char *, char);
-    void readBlock(int, char, char *, int);
-    uint32_t bytes2uint32(char *, int);
-    uint32_t twoandhalfBytes2uint32(char *, int); 
-
-    // High-level operations
-    void setOscTrim();
-    bool dataIsNew();
-    bool lsIsNew();
-    bool psIsNew();
-    bool tempIsNew();
-    bool bioIsNew();
-    void setMainConfig();
-    void setIntConfig();
-    void setLSthresh();
-    void setPSthresh();
-    void setPScurrent();
-    void setPPGcurrent();
-    void setPPG_PSgain_cfg();
-    void setPPGana_can();
-    void setDigitalCan();
-    void setPPGavg_and_rate();
-    void setFifoConfig();
-    void setBioTrim();
-    void setLEDTrim();
-    char get_ps_data(uint32_t *);
-    char get_ls_data(uint32_t *);
-    char get_ps_ls_data(uint32_t *);
-    void resetFIFO();
-    void init_ps();
-    void init_rgb();
-    void init_ps_rgb();
-    void init_hr();
-    void init_spo2();
-    void getFifoInfo(char *fifo_info);
-    uint8_t getNumFifoSamplesAvailable();
-    void getFifoSamples(uint8_t, char *);
-    void parseFifoSamples(char, char *, uint32_t *);
-    char get_part_ID(char *);
-
-
-    //agc functions
-    void do_agc(uint32_t,bool);
-    
-    //variables
-    uint16_t rate;
-    char res;
-    char gain;
-    uint32_t data_max;
-    uint32_t reg_max;
-    
-
-//    const uint32_t targetCounts[2];
-
-    bool update;
-
+  
+#if !defined(USE_CG)
+  error_t i2c_error;
+  error_t i2c_DevStatus;
+#else
+  static OB1203 * current;
+  MD_STATUS i2c_error;
+#endif    
+  bool ready;
+  
+  static volatile bool busy;
+  static void callback(void);
+  char osc_trim;
+  char ls_res;
+  char ls_rate;
+  char ls_gain;
+  uint32_t ls_thres_hi;
+  uint32_t ls_thres_lo;
+  char ls_sai;
+  char ls_mode;
+  char ls_en;
+  char ls_int_sel;
+  char ls_var_mode;
+  char ps_sai_en;
+  char temp_en;
+  char ppg_ps_mode;
+  char ppg_ps_en;
+  char ps_can_ana;
+  char afull_int_en;
+  char ppg_int_en;
+  char ps_logic_mode;
+  uint16_t ps_digital_can;
+  char ps_int_en;
+  char ls_persist;
+  char ps_persist;
+  uint16_t ps_thres_hi;
+  uint16_t ps_thres_lo;
+  uint16_t ps_current;
+  uint16_t ir_current;
+  uint16_t r_current;
+  char ppg_ps_gain;
+  char ppg_pow_save;
+  char led_flip;
+  char ch1_can_ana;
+  char ch2_can_ana;
+  char ppg_avg;
+  char ppg_pwidth;
+  char ppg_freq;
+  char ppg_rate;
+  char ppg_LED_settling;
+  char ppg_ALC_track;
+  char ps_pulses;
+  char ps_pwidth;
+  char ps_rate;
+  char ps_avg_en;
+  char ps_hys_level;
+  char ls_int_en;
+  char fifo_rollover_en;
+  char fifo_afull_advance_warning;
+  char writePointer;
+  char readPointer;
+  char fifoOverflow;
+  char bio_trim;
+  char led_trim;
+  char diff;
+  char alc;
+  char sig_out;
+#if !defined(USE_CG)  
+  OB1203 (r_iic_drv_info_t *i2c_obj, uint8_t addr = OB1203_ADDR);
+#else
+  OB1203 (uint8_t addr = OB1203_ADDR);
+#endif
+  // Low-level operations
+  void reset();
+  uint16_t get_status();
+  void writeRegister(int, char, char);
+  void writeBlock(int, char, char *, char);
+  void readBlock(int, char, char *, int);
+  uint32_t bytes2uint32(char *, int);
+  uint32_t twoandhalfBytes2uint32(char *, int); 
+  
+  // High-level operations
+  void setOscTrim();
+  bool dataIsNew();
+  bool lsIsNew();
+  bool psIsNew();
+  bool tempIsNew();
+  bool bioIsNew();
+  void setMainConfig();
+  void setIntConfig();
+  void setLSthresh();
+  void setPSthresh();
+  void setPScurrent();
+  void setPPGcurrent();
+  void setPPG_PSgain_cfg();
+  void setPPGana_can();
+  void setDigitalCan();
+  void setPPGavg_and_rate();
+  void setFifoConfig();
+  void setBioTrim();
+  void setLEDTrim();
+  char get_ps_data(uint32_t *);
+  char get_ls_data(uint32_t *);
+  char get_ps_ls_data(uint32_t *);
+  void resetFIFO();
+  void init_ps();
+  void init_rgb();
+  void init_ps_rgb();
+  void init_hr();
+  void init_spo2();
+  void getFifoInfo(char *fifo_info);
+  uint8_t getNumFifoSamplesAvailable();
+  void getFifoSamples(uint8_t, char *);
+  void parseFifoSamples(char, char *, uint32_t *);
+  char get_part_ID(char *);
+  
+  
+  //agc functions
+  void do_agc(uint32_t,bool);
+  
+  //variables
+  uint16_t rate;
+  char res;
+  char gain;
+  uint32_t data_max;
+  uint32_t reg_max;
+  
+  
+  //    const uint32_t targetCounts[2];
+  
+  bool update;
+  
 };
 
 

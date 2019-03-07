@@ -1,8 +1,11 @@
 #include <stddef.h>
 #include "OB1203.h"
 
+#if defined(USE_CG)
+#warning "Compiling with RL78 Code Generator I2C Driver"
+#endif
+
 /* Declare and Initialize the static variables */
-r_iic_drv_info_t * __near OB1203::current_i2c = NULL;
 volatile bool OB1203::busy = false;
 
 void OB1203::callback(void)
@@ -10,8 +13,38 @@ void OB1203::callback(void)
   busy = false;
 }
 
-OB1203::OB1203(r_iic_drv_info_t *i2c_obj, uint8_t addr)
+#if defined(USE_CG)
+OB1203 * OB1203::current = NULL;
+void OB1203_callback_tx_complete(void)
 {
+  OB1203::callback();
+}
+void OB1203_callback_rx_complete(void)
+{
+  OB1203::callback();
+}
+
+void OB1203_callback_error(MD_STATUS status)
+{
+  if(NULL != OB1203::current)
+  {
+    OB1203::current->i2c_error = status;
+    R_IICA0_StopCondition();
+  }
+  OB1203::callback();
+}
+#else
+r_iic_drv_info_t * __near OB1203::current_i2c = NULL;
+#endif
+
+#if !defined(USE_CG)
+OB1203::OB1203(r_iic_drv_info_t *i2c_obj, uint8_t addr)
+#else
+OB1203::OB1203(uint8_t addr)
+#endif
+{
+#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
+#if !defined(USE_CG)
   i2c = i2c_obj;
   current_i2c = NULL;
   busy = false;
@@ -24,11 +57,21 @@ OB1203::OB1203(r_iic_drv_info_t *i2c_obj, uint8_t addr)
   i2c->pData2nd       = NULL;
   i2c->Cnt2nd         = 0;
   i2c->pDevStatus     = &i2c_DevStatus;  
+#else
+  busy = false;
+  ready = false;
+  i2c_addr = addr;
+  i2c_error = MD_OK;
+#endif
+#endif //defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
 }
 
 
 void OB1203::reset()
 { 
+  current = this;
+#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__)
+#if !defined(USE_CG)
   /* Test if Slave Responds */
   {
     i2c->pSlvAdr        = &i2c_addr;
@@ -99,13 +142,73 @@ void OB1203::reset()
       ready = true;
     }
   }
+#else
+  /* Test if Slave Responds */
+  {
+    do
+    {
+      i2c_error = R_IICA0_Master_Send(i2c_addr, NULL, 0, 1);
+      if(i2c_error==MD_OK)
+      {
+        busy = true;
+      }
+      
+      while(true == busy);
+      
+    }while((i2c_error==MD_ERROR1) || (i2c_error==MD_ERROR2));
+    
+    /* If I2C is IDLE; Power-On Reset the Device over I2C */
+    if(MD_OK==i2c_error)
+    {
+      writeRegister(OB1203_ADDR,REG_MAIN_CTRL_0,SW_RESET);
+      
+      ready = false;
+      
+      /* Wait for POR to complete. Check if device is back over the I2C bus. */
+      {
+        do
+        {
+          i2c_error = R_IICA0_Master_Send(i2c_addr, NULL, 0, 1);
+          if(i2c_error==MD_OK)
+          {
+            busy = true;
+          }
+          
+          while(true == busy);
+          
+        }while((i2c_error==MD_ERROR1) || 
+               (i2c_error==MD_ERROR2) || 
+                 (i2c_error==MD_NACK) );
+      }
+      
+      /* Read the status register */
+      {
+        uint16_t status_reg_vals = get_status();
+        
+        /* Part is operational after a typical delay of 10 ms. 
+        However, the power on reset bit in STATUS_0 is NOT set. */
+        if((status_reg_vals & 0x8000) == 0)
+        {
+          ready = true;
+        }
+      }
+    }
+    
+    
+  }
+  
+#endif
+#endif //defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
 }
 
 
 void OB1203::writeRegister(int addr, char reg, char val) 
 {
+  current = this;
+  uint8_t writeRegister_writeData[2];
   /*writes 1 byte to a single register*/
-#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) || !defined(USE_CG)
+#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
+#if !defined(USE_CG)
   i2c_addr = addr & 0xFFU;
   
   i2c->pSlvAdr        = &i2c_addr;
@@ -133,18 +236,41 @@ void OB1203::writeRegister(int addr, char reg, char val)
       while(R_IIC_COMMUNICATION == i2c_DevStatus);
     }
   }
+#else
+  i2c_addr = addr & 0xFFU;
+  
+  writeRegister_writeData[0] = reg;
+  writeRegister_writeData[1] = val;
+  
+  /* Wait for previous transmission to complete */
+  while(busy == true);
+  
+  /* Send out the data */
+  do
+  {
+    i2c_error = R_IICA0_Master_Send(i2c_addr, &writeRegister_writeData[0], 2, 1);
+    if(i2c_error==MD_OK)
+    {
+      busy = true;
+    }
+    
+    while(true == busy);
+  }while((i2c_error==MD_ERROR1) || (i2c_error==MD_ERROR2));
 #endif
+#endif //defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
 }
 
 
 void OB1203::writeBlock(int addr, char startReg, char *data, char numBytes) 
 {
+  current = this;
   /*writes data from an array beginning at the startReg*/
 #if defined(DEBUG)
   pc.printf("entering writeBlock with data %02x %02x\r\n",data[0],data[1]);
 #endif
   
-#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__)
+#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
+#if !defined(USE_CG)
   i2c_addr = addr & 0xFFU;
   
   i2c->pSlvAdr        = &i2c_addr;
@@ -172,13 +298,18 @@ void OB1203::writeBlock(int addr, char startReg, char *data, char numBytes)
       while(R_IIC_COMMUNICATION == i2c_DevStatus);
     }
   }
+#else
+  
 #endif
+#endif //defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
 }
 
 
 void OB1203::readBlock(int addr, char startReg, char *data, int numBytes) 
 {
-#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__)
+  current = this;
+#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
+#if !defined(USE_CG)
   i2c_addr = addr & 0xFFU;
   
   i2c->pSlvAdr        = &i2c_addr;
@@ -206,13 +337,19 @@ void OB1203::readBlock(int addr, char startReg, char *data, int numBytes)
     while(R_IIC_COMMUNICATION == i2c_DevStatus);
     }
   }
+#else
+  
 #endif
+#endif //defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
 }
 
+uint8_t get_status_writeData[1]; 
+uint8_t get_status_readData[2];
 uint16_t OB1203::get_status()
 {
-  char data[2] = {0,0}; 
-#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__)
+  current = this; 
+#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
+#if !defined(USE_CG)
   char writeData[1]; 
   writeData[0] = REG_STATUS_0;
   
@@ -238,8 +375,35 @@ uint16_t OB1203::get_status()
     /* Wait for communication to complete */
     while(R_IIC_COMMUNICATION == i2c_DevStatus);
   }
+#else
+  get_status_writeData[0] = REG_STATUS_0;
+  
+  /* Send out the data */
+  do
+  {
+    i2c_error = R_IICA0_Master_Send(i2c_addr, 
+                                    &get_status_writeData[0], 
+                                    sizeof(get_status_writeData), 
+                                    1);
+    busy = true;
+  }while((i2c_error==MD_ERROR1) || (i2c_error==MD_ERROR2));
+  
+  while(true==busy);
+  
+  do
+  {
+    i2c_error = R_IICA0_Master_Receive(i2c_addr, 
+                                       get_status_readData, 
+                                       sizeof(get_status_readData),
+                                       1);
+    busy = true;
+  }while((i2c_error==MD_ERROR1) || (i2c_error==MD_ERROR2));
+  
+  while(true==busy);
+    
 #endif
-  return (data[0]<<8 | data[1]);
+#endif //defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
+  return (get_status_readData[0]<<8 | get_status_readData[1]);
 }
 
 bool OB1203::dataIsNew()

@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements device driver for INTP module.
-* Creation Date: 3/7/2019
+* Creation Date: 3/8/2019
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -48,13 +48,13 @@ Global variables and functions
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
-* Function Name: r_intc3_interrupt
+* Function Name: r_intc0_interrupt
 * Description  : None
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-#pragma vector = INTP3_vect
-__interrupt static void r_intc3_interrupt(void)
+#pragma vector = INTP0_vect
+__interrupt static void r_intc0_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
     /* End user code. Do not edit comment generated here */

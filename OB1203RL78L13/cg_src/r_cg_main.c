@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements main function.
-* Creation Date: 3/7/2019
+* Creation Date: 3/8/2019
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -32,6 +32,7 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "r_cg_cgc.h"
 #include "r_cg_iica.h"
+#include "r_cg_lcd.h"
 #include "r_cg_intp.h"
 /* Start user code for include. Do not edit comment generated here */
 #include "OB1203.h"

@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements device driver for INTP module.
-* Creation Date: 3/7/2019
+* Creation Date: 3/8/2019
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -71,36 +71,33 @@ void R_INTC_Create(void)
     PIF6 = 0U;    /* clear INTP6 interrupt flag */
     PMK7 = 1U;    /* disable INTP7 operation */
     PIF7 = 0U;    /* clear INTP7 interrupt flag */
-    /* Set INTP3 high priority */
-    PPR13 = 0U;
-    PPR03 = 0U;
-    EGN0 = _08_INTP3_EDGE_FALLING_SEL;
-    /* Set INTP3 pin */
-    PFSEG2 &= 0xDFU;
-    PM3 |= 0x02U;
+    /* Set INTP0 high priority */
+    PPR10 = 0U;
+    PPR00 = 0U;
+    EGN0 = _01_INTP0_EDGE_FALLING_SEL;
 }
 
 /***********************************************************************************************************************
-* Function Name: R_INTC3_Start
-* Description  : This function clears INTP3 interrupt flag and enables interrupt.
+* Function Name: R_INTC0_Start
+* Description  : This function clears INTP0 interrupt flag and enables interrupt.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_INTC3_Start(void)
+void R_INTC0_Start(void)
 {
-    PIF3 = 0U;    /* clear INTP3 interrupt flag */
-    PMK3 = 0U;    /* enable INTP3 interrupt */
+    PIF0 = 0U;    /* clear INTP0 interrupt flag */
+    PMK0 = 0U;    /* enable INTP0 interrupt */
 }
 /***********************************************************************************************************************
-* Function Name: R_INTC3_Stop
-* Description  : This function disables INTP3 interrupt and clears interrupt flag.
+* Function Name: R_INTC0_Stop
+* Description  : This function disables INTP0 interrupt and clears interrupt flag.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_INTC3_Stop(void)
+void R_INTC0_Stop(void)
 {
-    PMK3 = 1U;    /* disable INTP3 interrupt */
-    PIF3 = 0U;    /* clear INTP3 interrupt flag */
+    PMK0 = 1U;    /* disable INTP0 interrupt */
+    PIF0 = 0U;    /* clear INTP0 interrupt flag */
 }
 
 /* Start user code for adding. Do not edit comment generated here */

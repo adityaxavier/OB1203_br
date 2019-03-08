@@ -3015,6 +3015,15 @@
             <name>$PROJ_DIR$\cg_src\r_cg_intp_user.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_lcd.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_lcd.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_lcd_user.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\cg_src\r_cg_macrodriver.h</name>
         </file>
         <file>
@@ -3025,6 +3034,21 @@
         </file>
         <file>
             <name>$PROJ_DIR$\cg_src\r_cg_userdefine.h</name>
+        </file>
+    </group>
+    <group>
+        <name>LCD</name>
+        <file>
+            <name>$PROJ_DIR$\LCD\lcd_panel.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\LCD\lcd_panel.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\LCD\ppg_lcd.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\LCD\ppg_lcd.h</name>
         </file>
     </group>
     <group>

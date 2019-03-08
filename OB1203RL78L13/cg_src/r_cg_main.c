@@ -48,12 +48,7 @@ Pragma directive
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
-#if !defined(USE_CG)
-r_iic_drv_info_t i2c;
-OB1203 ob1203(&i2c);
-#else
 OB1203 ob1203;
-#endif
 /* End user code. Do not edit comment generated here */
 
 /* Set option bytes */
@@ -98,16 +93,13 @@ static void R_MAIN_UserInit(void)
 {
     /* Start user code. Do not edit comment generated here */
     EI();
-#if 0
-    for(uint16_t wait = 0; wait < 12000; wait++)
-    {
-      __no_operation();
-    }
-#endif
+    
     while(ob1203.ready==false)
     {
       ob1203.reset();
     }
+    
+    
     
     /* End user code. Do not edit comment generated here */
 }

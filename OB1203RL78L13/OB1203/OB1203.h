@@ -2,13 +2,9 @@
 #define __OB1203_H__
 
 #if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
-#if !defined(USE_CG)
-#include "r_iic_drv_api.h"
-#elif defined(USE_CG)
 #include "r_cg_macrodriver.h"
 #include "r_cg_iica.h"
 #include "r_cg_userdefine.h"
-#endif
 #endif //#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
 //#define DEBUG
 
@@ -197,21 +193,13 @@
 
 class OB1203
 {
-#if !defined(USE_CG)
-  static r_iic_drv_info_t *current_i2c;
-  r_iic_drv_info_t *i2c;
-#endif
   uint8_t i2c_addr;
   
 public:
   
-#if !defined(USE_CG)
-  error_t i2c_error;
-  error_t i2c_DevStatus;
-#else
   static OB1203 * current;
   MD_STATUS i2c_error;
-#endif    
+
   bool ready;
   
   static volatile bool busy;
@@ -271,11 +259,9 @@ public:
   char diff;
   char alc;
   char sig_out;
-#if !defined(USE_CG)  
-  OB1203 (r_iic_drv_info_t *i2c_obj, uint8_t addr = OB1203_ADDR);
-#else
+
   OB1203 (uint8_t addr = OB1203_ADDR);
-#endif
+
   // Low-level operations
   void reset();
   uint16_t get_status();

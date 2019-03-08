@@ -123,7 +123,7 @@ void R_IICA0_StopCondition(void)
 * Return Value : status -
 *                    MD_OK or MD_ERROR1 or MD_ERROR2
 ***********************************************************************************************************************/
-MD_STATUS R_IICA0_Master_Send(uint8_t adr, uint8_t * tx_buf, uint16_t tx_num, uint8_t wait)
+MD_STATUS R_IICA0_Master_Send(uint8_t adr, uint8_t * const tx_buf, uint16_t tx_num, uint8_t wait)
 {
     MD_STATUS status = MD_OK;
 
@@ -175,7 +175,7 @@ MD_STATUS R_IICA0_Master_Send(uint8_t adr, uint8_t * tx_buf, uint16_t tx_num, ui
 * Return Value : status -
 *                    MD_OK or MD_ERROR1 or MD_ERROR2
 ***********************************************************************************************************************/
-MD_STATUS R_IICA0_Master_Receive(uint8_t adr, uint8_t * rx_buf, uint16_t rx_num, uint8_t wait)
+MD_STATUS R_IICA0_Master_Receive(uint8_t adr, uint8_t * const rx_buf, uint16_t rx_num, uint8_t wait)
 {
     MD_STATUS status = MD_OK;
 

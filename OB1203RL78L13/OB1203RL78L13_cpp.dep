@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
     <fileVersion>4</fileVersion>
-    <fileChecksum>642814052</fileChecksum>
+    <fileChecksum>2256007723</fileChecksum>
     <configuration>
         <name>Debug</name>
         <outputs>
@@ -85,6 +85,16 @@
             <file>$PROJ_DIR$\cg_src\r_cg_cgc.h</file>
             <file>$PROJ_DIR$\cg_src\r_cg_iica_user.c</file>
             <file>$PROJ_DIR$\cg_src\r_cg_cgc_user.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_cgc_user.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_cgc.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_main.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_iica_user.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_iica.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_intp.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_intp_user.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_systeminit.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\LibReplacement.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\LibReplacement.s</file>
         </outputs>
         <file>
             <name>[ROOT_NODE]</name>
@@ -92,6 +102,10 @@
                 <tool>
                     <name>ILINK</name>
                     <file> 32 10</file>
+                </tool>
+                <tool>
+                    <name>INTERNAL_HWSUPPORT</name>
+                    <file> 89</file>
                 </tool>
             </outputs>
         </file>
@@ -106,7 +120,7 @@
             <inputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 12 6 42 51 0 55 49 45 53 36 13 26 20 22 27 17 14</file>
+                    <file> 12 6 42 51 0 55 49 45 53 36 17 14</file>
                 </tool>
             </inputs>
         </file>
@@ -258,7 +272,7 @@
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 1 8 28 67 19 66 3 5 2 65 72 30 24 21</file>
+                    <file> 3 5 72 30 2 65 24 66 8 28 1 67 19 21</file>
                 </tool>
             </inputs>
         </file>
@@ -272,6 +286,10 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 56</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 84</file>
                 </tool>
             </outputs>
             <inputs>
@@ -323,6 +341,10 @@
                     <name>BICOMP</name>
                     <file> 48</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 87</file>
+                </tool>
             </outputs>
             <inputs>
                 <tool>
@@ -345,6 +367,10 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 59</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 85</file>
                 </tool>
             </outputs>
             <inputs>
@@ -369,6 +395,10 @@
                     <name>BICOMP</name>
                     <file> 34</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 86</file>
+                </tool>
             </outputs>
             <inputs>
                 <tool>
@@ -392,6 +422,10 @@
                     <name>BICOMP</name>
                     <file> 37</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 82</file>
+                </tool>
             </outputs>
             <inputs>
                 <tool>
@@ -400,7 +434,7 @@
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 66 67 19 77 68 72 30 24 65</file>
+                    <file> 66 72 67 19 65 77 68 30 24</file>
                 </tool>
             </inputs>
         </file>
@@ -414,6 +448,10 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 43</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 81</file>
                 </tool>
             </outputs>
             <inputs>
@@ -438,6 +476,10 @@
                     <name>BICOMP</name>
                     <file> 15</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 83</file>
+                </tool>
             </outputs>
             <inputs>
                 <tool>
@@ -461,6 +503,10 @@
                     <name>BICOMP</name>
                     <file> 40</file>
                 </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 80</file>
+                </tool>
             </outputs>
             <inputs>
                 <tool>
@@ -473,6 +519,21 @@
                 </tool>
             </inputs>
         </file>
+        <file>
+            <name>$PROJ_DIR$\Debug\Obj\LibReplacement.s</name>
+            <outputs>
+                <tool>
+                    <name>ARL78</name>
+                    <file> 88</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ARL78</name>
+                    <file> 30 19</file>
+                </tool>
+            </inputs>
+        </file>
         <forcedrebuild>
             <name>$PROJ_DIR$\main.cpp</name>
             <tool>C-STAT</tool>
@@ -480,10 +541,6 @@
         <forcedrebuild>
             <name>$PROJ_DIR$\main.cpp</name>
             <tool>ICCRL78</tool>
-        </forcedrebuild>
-        <forcedrebuild>
-            <name>[MULTI_TOOL]</name>
-            <tool>ILINK</tool>
         </forcedrebuild>
     </configuration>
     <configuration>

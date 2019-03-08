@@ -194,7 +194,6 @@
 class OB1203
 {
   uint8_t i2c_addr;
-  
 public:
   
   static OB1203 * current;

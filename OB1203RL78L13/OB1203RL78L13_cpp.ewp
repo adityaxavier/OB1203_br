@@ -306,7 +306,8 @@
                 </option>
                 <option>
                     <name>CCDefines</name>
-                    <state></state>
+                    <state>TEST_CODE</state>
+                    <state>USE_BRUTE_DELAY</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>

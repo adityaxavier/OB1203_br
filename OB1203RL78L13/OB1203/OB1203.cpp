@@ -65,7 +65,13 @@ void OB1203::reset()
       writeRegister(OB1203_ADDR,REG_MAIN_CTRL_0,SW_RESET);
       
       ready = false;
-      
+#if defined(USE_BRUTE_DELAY)      
+      /* 10ms delay */
+      for(volatile uint32_t wait = 0; wait < 12000; wait++)
+      {
+        __no_operation();
+      }
+#endif
       /* Wait for POR to complete. Check if device is back over the I2C bus. */
       {
         do

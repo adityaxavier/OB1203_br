@@ -184,7 +184,7 @@ void OB1203::readBlock(int addr, char startReg, char *data, int numBytes)
   /* Send out the Register to start from */
   do
   {
-    i2c_error = R_IICA0_Master_Send(i2c_addr, &readBlock_writeData[0], 2, 1);
+    i2c_error = R_IICA0_Master_Send(i2c_addr, &readBlock_writeData[0], 1, 1);
     if(i2c_error==MD_OK)
     {
       busy = true;

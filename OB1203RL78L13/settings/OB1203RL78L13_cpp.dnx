@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>1869089851</Checksum>
+        <Checksum>682864017</Checksum>
     </DebugChecksum>
     <CodeCoverage>
         <Enabled>_ 0</Enabled>
@@ -146,6 +146,13 @@
         <GraphEnabled>0</GraphEnabled>
         <ShowTimeLog>1</ShowTimeLog>
     </DataSample>
+    <Breakpoints>
+        <Bp0>_ "STD_CODE" "{$PROJ_DIR$\cg_src\r_cg_main.c}.236.5" 1 0 0 0 "" 0 ""</Bp0>
+        <Count>1</Count>
+    </Breakpoints>
+    <Monitor_Execution>
+        <Leave_target_running>0</Leave_target_running>
+    </Monitor_Execution>
     <TermIOLog>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
@@ -155,18 +162,12 @@
         <LogFile>_ ""</LogFile>
         <Category>_ 0</Category>
     </LogFile>
-    <TraceHelper>
-        <Enabled>0</Enabled>
-        <ShowSource>1</ShowSource>
-    </TraceHelper>
-    <Breakpoints>
-        <Count>0</Count>
-    </Breakpoints>
-    <Monitor_Execution>
-        <Leave_target_running>0</Leave_target_running>
-    </Monitor_Execution>
     <Aliases>
         <Count>0</Count>
         <SuppressDialog>0</SuppressDialog>
     </Aliases>
+    <TraceHelper>
+        <Enabled>0</Enabled>
+        <ShowSource>1</ShowSource>
+    </TraceHelper>
 </settings>

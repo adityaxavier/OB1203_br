@@ -125,6 +125,8 @@ const bool ppg2 = 1; //0 for HR, 1 for SpO2
 const bool meas_temp = 0;
 const bool trim_oscillator = 0;
 
+uint8_t control_config[0x3A-0x15+1];
+
 void defaultConfig(void) //populate the default settings here
 {
     //high accuracy oscillator trim overwrite option
@@ -228,7 +230,13 @@ void defaultConfig(void) //populate the default settings here
        ob1203.init_ps();
     }
     if(trim_oscillator)
-        ob1203.setOscTrim(); 
+        ob1203.setOscTrim();
+    
+    /* Read out the configuration */
+    ob1203.readBlock(OB1203_ADDR, 
+                     REG_MAIN_CTRL_0, 
+                     (char*)&control_config[0], 
+                     sizeof(control_config));
 }
 #endif
 

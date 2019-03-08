@@ -636,6 +636,21 @@ uint8_t OB1203::getNumFifoSamplesAvailable()
     return numSamples;
 }
 
+void OB1203::getNumFifoSamplesAvailable(char *fifo_info, char *sample_info)
+{
+    getFifoInfo(fifo_info);
+    uint8_t writePointer = fifo_info[0];
+    uint8_t readPointer = fifo_info [1];
+    uint8_t numSamples = writePointer;
+    if (writePointer<readPointer)
+    {
+        numSamples += 32;
+    }
+    numSamples -= readPointer;
+    sample_info[0] = numSamples; //num HR samples
+    sample_info[1] = (numSamples>>1); //num SpO2 samples
+    sample_info[2] = fifo_info[2];
+}
 
 void OB1203::getFifoSamples(uint8_t numSamples, char *fifoData)
 {

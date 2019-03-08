@@ -301,6 +301,8 @@ public:
   void init_spo2();
   void getFifoInfo(char *fifo_info);
   uint8_t getNumFifoSamplesAvailable();
+  void getNumFifoSamplesAvailable(char *fifo_info, char *sample_info);
+
   void getFifoSamples(uint8_t, char *);
   void parseFifoSamples(char, char *, uint32_t *);
   char get_part_ID(char *);

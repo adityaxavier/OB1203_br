@@ -112,6 +112,15 @@ Macro Definitions
 #define LCD_R_LOGO_ON_1        0x6431u
 #define LCD_R_LOGO_OFF_1       0x6430u
 
+/* Battery levels */
+#define BATT_LEVEL_0           0u
+#define BATT_LEVEL_1           1u
+#define BATT_LEVEL_2           2u
+#define BATT_LEVEL_3           3u
+#define BATT_LEVEL_4           4u
+    
+#define BATTERY_OUTLINE_ON     1u
+#define BATTERY_OUTLINE_OFF    0u
 /***********************************************************************************************************************
 Type definitions
 ***********************************************************************************************************************/

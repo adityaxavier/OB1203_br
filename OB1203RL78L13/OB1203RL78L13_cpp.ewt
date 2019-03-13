@@ -3274,6 +3274,15 @@
             <name>$PROJ_DIR$\cg_src\r_cg_main.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_port.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_port.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_port_user.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\cg_src\r_cg_systeminit.c</name>
         </file>
         <file>

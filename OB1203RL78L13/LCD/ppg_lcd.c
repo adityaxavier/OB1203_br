@@ -71,8 +71,8 @@ MD_STATUS R_PPG_LCD_Display_HRM(uint16_t rate)
     /* Prepare the temperature data */
     display_buffer[0] = (uint8_t)(ASCII_0 + ((rate / DIV_100) % MODULUS_1000));
     display_buffer[1] = (uint8_t)(ASCII_0 + ((rate / DIV_10) % MODULUS_10));
-    display_buffer[2] = ' ';
-    display_buffer[3] = (uint8_t)(ASCII_0 + (rate % MODULUS_10));
+    display_buffer[2] = (uint8_t)(ASCII_0 + (rate % MODULUS_10));
+    display_buffer[3] = ' ';
 
     Display_Panel_String(PANEL_LCD_LINE3, display_buffer);
     Display_Panel_String(PANEL_LCD_LINE1, " BPM");
@@ -100,7 +100,7 @@ MD_STATUS R_PPG_LCD_Display_SPO2(uint16_t percentX10)
     display_buffer[3] = (uint8_t)(ASCII_0 + (percentX10 % MODULUS_10));
 
     Display_Panel_String(PANEL_LCD_LINE3, display_buffer);
-    Display_Panel_String(PANEL_LCD_LINE1, "SpO2");
+    Display_Panel_String(PANEL_LCD_LINE1, " SpO2");
 
     return MD_OK;
 }
@@ -114,26 +114,26 @@ MD_STATUS R_PPG_LCD_Display_Battery(uint8_t percent)
 
 	if(percent > 75)
 	{
-		SECTD_Glyph_Map(BATT_LEVEL_4, BATTERY_OUTLINE_ON);
+		SECTD_Glyph_Map(BATT_LEVEL_4);
 	}
 	else if(percent > 50)
 	{
 		/* Turn on 1 battery bars */
-		SECTD_Glyph_Map(BATT_LEVEL_3, BATTERY_OUTLINE_ON);
+		SECTD_Glyph_Map(BATT_LEVEL_3);
 	}
 	else if(percent > 25)
 	{
 		/* Turn on 2 battery bars */
-		SECTD_Glyph_Map(BATT_LEVEL_2, BATTERY_OUTLINE_ON);
+		SECTD_Glyph_Map(BATT_LEVEL_2);
 	}
 	else if(percent > 5)
 	{
 		/* Turn on 1 battery bars */
-		SECTD_Glyph_Map(BATT_LEVEL_1, BATTERY_OUTLINE_ON);
+		SECTD_Glyph_Map(BATT_LEVEL_1);
 	}
 	else
 	{
-		SECTD_Glyph_Map(BATT_LEVEL_0, BATTERY_OUTLINE_ON);
+		SECTD_Glyph_Map(BATT_LEVEL_0);
 	}
 
 	return MD_OK;

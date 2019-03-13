@@ -606,7 +606,7 @@
         </DataElement>
       </SerializableData>
       <SerializableData name="PinNumber_59">
-        <DataElement key="InusedAs" value="">
+        <DataElement key="InusedAs" value="Port0##P05">
         </DataElement>
       </SerializableData>
       <SerializableData name="PinNumber_60">
@@ -2478,7 +2478,7 @@
         </DataElement>
         <DataElement key="NoiseFilterFunction" value="False">
         </DataElement>
-        <DataElement key="PinInOut" value="IO">
+        <DataElement key="PinInOut" value="O">
         </DataElement>
         <DataElement key="PullUp" value="False">
         </DataElement>
@@ -3438,14 +3438,14 @@
         </DataElement>
         <DataElement key="error" value="NoError">
         </DataElement>
-        <DataElement key="inuse" value="Unused">
+        <DataElement key="inuse" value="Used">
         </DataElement>
         <SerializableData name="port0">
           <DataElement key="visible" value="True">
           </DataElement>
           <DataElement key="error" value="NoError">
           </DataElement>
-          <DataElement key="inuse" value="Unused">
+          <DataElement key="inuse" value="Used">
           </DataElement>
         </SerializableData>
         <SerializableData name="port1">
@@ -4018,21 +4018,21 @@
       <SerializableData name="Port">
         <DataElement key="visible" value="True">
         </DataElement>
-        <DataElement key="inuse" value="Unused">
+        <DataElement key="inuse" value="Locked">
         </DataElement>
         <SerializableData name="r_cg_port_c">
           <DataElement key="visible" value="True">
           </DataElement>
           <DataElement key="text" value="r_cg_port.c">
           </DataElement>
-          <DataElement key="inuse" value="Unused">
+          <DataElement key="inuse" value="Locked">
           </DataElement>
           <SerializableData name="R_PORT_Create">
             <DataElement key="visible" value="True">
             </DataElement>
             <DataElement key="text" value="R_PORT_Create">
             </DataElement>
-            <DataElement key="inuse" value="Unused">
+            <DataElement key="inuse" value="Locked">
             </DataElement>
           </SerializableData>
         </SerializableData>
@@ -4041,7 +4041,7 @@
           </DataElement>
           <DataElement key="text" value="r_cg_port_user.c">
           </DataElement>
-          <DataElement key="inuse" value="Unused">
+          <DataElement key="inuse" value="Locked">
           </DataElement>
           <SerializableData name="R_PORT_Create_UserInit">
             <DataElement key="visible" value="True">
@@ -4057,7 +4057,7 @@
           </DataElement>
           <DataElement key="text" value="r_cg_port.h">
           </DataElement>
-          <DataElement key="inuse" value="Unused">
+          <DataElement key="inuse" value="Locked">
           </DataElement>
         </SerializableData>
       </SerializableData>
@@ -8412,7 +8412,7 @@
         </SerializableData>
         <SerializableData name="P05">
           <SerializableData name="MODULE_UNUSED">
-            <DataElement key="Checked" value="True">
+            <DataElement key="Checked" value="False">
             </DataElement>
           </SerializableData>
           <SerializableData name="INPUT_MODE">
@@ -8420,7 +8420,7 @@
             </DataElement>
           </SerializableData>
           <SerializableData name="OUTPUT_MODE">
-            <DataElement key="Checked" value="False">
+            <DataElement key="Checked" value="True">
             </DataElement>
           </SerializableData>
           <SerializableData name="PULLUP_ON">
@@ -8436,7 +8436,7 @@
             </DataElement>
           </SerializableData>
           <SerializableData name="OUTPUT_1">
-            <DataElement key="Checked" value="False">
+            <DataElement key="Checked" value="True">
             </DataElement>
           </SerializableData>
         </SerializableData>
@@ -61330,14 +61330,20 @@
           <SerializableData name="ClassContent">
             <DataElement key="FunctionName" value="P05">
             </DataElement>
-            <DataElement key="InUse" value="False">
+            <DataElement key="InUse" value="True">
             </DataElement>
-            <DataElement key="FunctionIO" value="None">
+            <DataElement key="FunctionIO" value="O">
             </DataElement>
             <DataElement key="FunctionState" value="0">
             </DataElement>
             <DataElement key="FunctionNote" value="">
             </DataElement>
+            <SerializableData name="InUsePins">
+              <SerializableData name="CG">
+                <DataElement key="0" value="59">
+                </DataElement>
+              </SerializableData>
+            </SerializableData>
           </SerializableData>
         </SerializableData>
         <SerializableData name="P04">
@@ -65358,7 +65364,7 @@
           <SerializableData name="ClassContent">
             <DataElement key="PinNumber" value="59">
             </DataElement>
-            <DataElement key="InUse" value="False">
+            <DataElement key="InUse" value="True">
             </DataElement>
             <DataElement key="PinNote" value="">
             </DataElement>
@@ -65372,6 +65378,10 @@
             </DataElement>
             <DataElement key="PinDlvDirty" value="False">
             </DataElement>
+            <SerializableData name="InUseFunctions">
+              <DataElement key="0" value="P05">
+              </DataElement>
+            </SerializableData>
           </SerializableData>
         </SerializableData>
         <SerializableData name="62">

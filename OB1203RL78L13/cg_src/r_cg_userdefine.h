@@ -33,6 +33,20 @@ User definitions
 ***********************************************************************************************************************/
 
 /* Start user code for function. Do not edit comment generated here */
+#define ASCII_0			 ('0')
+
+#define DIV_10                   (10)
+#define DIV_100                  (100)
+#define DIV_1000                 (1000)
+
+#define MULT_10 		 (10)
+#define MULT_100                 (100)
+#define MULT_1000                (1000)
+
+#define MODULUS_10 		 (10)
+#define MODULUS_100              (100)
+#define MODULUS_1000             (1000)
+
 void OB1203_callback_tx_complete(void);
 void OB1203_callback_rx_complete(void);
 void OB1203_callback_error(MD_STATUS status);

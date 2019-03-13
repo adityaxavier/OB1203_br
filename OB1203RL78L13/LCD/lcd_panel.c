@@ -71,7 +71,7 @@ void Init_Display_Panel (void)
     PFSEG6 &= (uint8_t)~_02_PFSEG48_SEG;
 
     /* Make sure that IVERF0 is not used as this is used for LED 1 */
-    PFSEG3 &= (uint8_t)~_04_PFDEG_DEFAULT;
+    PFSEG3 &= (uint8_t)~_04_PFDEG_IVREF0;
 
     /* Enable the LCD */
     R_LCD_Start();
@@ -234,23 +234,23 @@ void SECTA_Glyph_Map (const uint8_t glyph, const uint16_t digit)
         /* First Digit */
         case 0:
         {
-            PinPtr1 = &SEG11_DEF;
-            PinPtr2 = &SEG10_DEF;
+            PinPtr1 = (volatile uint8_t *)&SEG11_DEF;
+            PinPtr2 = (volatile uint8_t *)&SEG10_DEF;
         }
         break;
         
         /* Second Digit */
         case 1:
         {
-            PinPtr1 = &SEG13_DEF;
-            PinPtr2 = &SEG12_DEF;
+            PinPtr1 = (volatile uint8_t *)&SEG13_DEF;
+            PinPtr2 = (volatile uint8_t *)&SEG12_DEF;
         }    
         break;
         
         /* Decimal Point */
         case 2:
         {
-            PinPtr1 = &SEG14_DEF;
+            PinPtr1 = (volatile uint8_t *)&SEG14_DEF;
             PinPtr2 = PDL_NO_PTR;
         }
         break;
@@ -258,8 +258,8 @@ void SECTA_Glyph_Map (const uint8_t glyph, const uint16_t digit)
         /* Third Digit */
         case 3:
         {
-            PinPtr1 = &SEG15_DEF;
-            PinPtr2 = &SEG14_DEF;
+            PinPtr1 = (volatile uint8_t *)&SEG15_DEF;
+            PinPtr2 = (volatile uint8_t *)&SEG14_DEF;
         }    
         break;
         
@@ -322,31 +322,31 @@ void SECTB_Glyph_Map (const uint8_t glyph, const uint16_t digit)
         /* First Digit */    
         case 0:
         {
-            PinPtr1 = &SEG28_DEF;
-            PinPtr2 = &SEG29_DEF;
+            PinPtr1 = (volatile uint8_t *)&SEG28_DEF;
+            PinPtr2 = (volatile uint8_t *)&SEG29_DEF;
         }
         break;
 
         /* Second Digit */        
         case 1:
         {
-            PinPtr1 = &SEG26_DEF;
-            PinPtr2 = &SEG27_DEF;
+            PinPtr1 = (volatile uint8_t *)&SEG26_DEF;
+            PinPtr2 = (volatile uint8_t *)&SEG27_DEF;
         }    
         break;
         
         /* Third Digit */
         case 2:
         {
-            PinPtr1 = &SEG24_DEF;
-            PinPtr2 = &SEG25_DEF;
+            PinPtr1 = (volatile uint8_t *)&SEG24_DEF;
+            PinPtr2 = (volatile uint8_t *)&SEG25_DEF;
         }    
         break;
         
         /* Colon/Decimal Point */
         case 3:
         {
-            PinPtr1 = &SEG23_DEF;
+            PinPtr1 = (volatile uint8_t *)&SEG23_DEF;
             PinPtr2 = PDL_NO_PTR;
         }    
         break;
@@ -354,16 +354,16 @@ void SECTB_Glyph_Map (const uint8_t glyph, const uint16_t digit)
         /* Fourth Digit */        
         case 4:
         {
-            PinPtr1 = &SEG21_DEF;
-            PinPtr2 = &SEG22_DEF;
+            PinPtr1 = (volatile uint8_t *)&SEG21_DEF;
+            PinPtr2 = (volatile uint8_t *)&SEG22_DEF;
         }    
         break;
 
         /* Fifth Digit */        
         case 5:
         {
-            PinPtr1 = &SEG19_DEF;
-            PinPtr2 = &SEG20_DEF;
+            PinPtr1 = (volatile uint8_t *)&SEG19_DEF;
+            PinPtr2 = (volatile uint8_t *)&SEG20_DEF;
         }    
         break;
         
@@ -491,49 +491,49 @@ void SECTC_Glyph_Map (const uint8_t glyph, const uint16_t digit)
         /* Second Digit */    
         case 1:
         {
-            PinPtr1 = &SEG0_DEF;
-            PinPtr2 = &SEG1_DEF;
-            PinPtr3 = &SEG38_DEF;
+            PinPtr1 = (volatile uint8_t *)&SEG0_DEF;
+            PinPtr2 = (volatile uint8_t *)&SEG1_DEF;
+            PinPtr3 = (volatile uint8_t *)&SEG38_DEF;
         }
         break;
         
         /* Third Digit */    
         case 2:
         {
-            PinPtr1 = &SEG2_DEF;
-            PinPtr2 = &SEG3_DEF;
-            PinPtr3 = &SEG36_DEF;
-            PinPtr4 = &SEG37_DEF;
+            PinPtr1 = (volatile uint8_t *)&SEG2_DEF;
+            PinPtr2 = (volatile uint8_t *)&SEG3_DEF;
+            PinPtr3 = (volatile uint8_t *)&SEG36_DEF;
+            PinPtr4 = (volatile uint8_t *)&SEG37_DEF;
         }
         break;
         
         /* Four Digit */    
         case 3:
         {
-            PinPtr1 = &SEG4_DEF;
-            PinPtr2 = &SEG5_DEF;
-            PinPtr3 = &SEG34_DEF;
-            PinPtr4 = &SEG35_DEF;
+            PinPtr1 = (volatile uint8_t *)&SEG4_DEF;
+            PinPtr2 = (volatile uint8_t *)&SEG5_DEF;
+            PinPtr3 = (volatile uint8_t *)&SEG34_DEF;
+            PinPtr4 = (volatile uint8_t *)&SEG35_DEF;
         }
         break;
         
         /* Fifth Digit */
         case 4:
         {
-            PinPtr1 = &SEG6_DEF;
-            PinPtr2 = &SEG7_DEF;
-            PinPtr3 = &SEG32_DEF;
-            PinPtr4 = &SEG33_DEF;
+            PinPtr1 = (volatile uint8_t *)&SEG6_DEF;
+            PinPtr2 = (volatile uint8_t *)&SEG7_DEF;
+            PinPtr3 = (volatile uint8_t *)&SEG32_DEF;
+            PinPtr4 = (volatile uint8_t *)&SEG33_DEF;
         }
         break;
         
         /* Sixth Digit */
         case 5:
         {
-            PinPtr1 = &SEG8_DEF;
-            PinPtr2 = &SEG9_DEF;
-            PinPtr3 = &SEG30_DEF;
-            PinPtr4 = &SEG31_DEF;
+            PinPtr1 = (volatile uint8_t *)&SEG8_DEF;
+            PinPtr2 = (volatile uint8_t *)&SEG9_DEF;
+            PinPtr3 = (volatile uint8_t *)&SEG30_DEF;
+            PinPtr4 = (volatile uint8_t *)&SEG31_DEF;
         }
         break;
         
@@ -1121,7 +1121,7 @@ void Clear_Display (void)
     unsigned char      i;
      
      /* Initialise pointer to start of registers */
-    volatile uint8_t * RegPtr = &SEG0_DEF;
+    volatile uint8_t * RegPtr = (volatile uint8_t *)&SEG0_DEF;
 
     /* Execute the instructions in the loop 40 times */
     for (i = 0; i < 40; i++)
@@ -1277,7 +1277,7 @@ void Display_Panel_String (const uint8_t position, const char * const string)
             for (i = 0; i < 6; i++)
             {
                 /* Validate Input */
-                flag = Validate_Input((const uint8_t) string[i], &output_buf);
+                flag = Validate_Input(string[i], &output_buf);
                 
                 /* Is Hex Number? */
                 if ((flag == 1) || (flag == 2) || ((i == 3) && (flag == 4)) || ((i == 6) && (flag == 3)))
@@ -1296,7 +1296,7 @@ void Display_Panel_String (const uint8_t position, const char * const string)
             /* Cycle through Each Section */
             for (i = 0; i < 5; i++)
             {
-                flag = Validate_Input((const uint8_t)string[i], &output_buf);
+                flag = Validate_Input(string[i], &output_buf);
                 
                 /* Is Alphanumeric or Supported Symbol? */
                 if (flag)
@@ -1318,7 +1318,7 @@ void Display_Panel_String (const uint8_t position, const char * const string)
             for (i = 0; i < 4; i++)
             {
                 /* Validate Input */
-                flag = Validate_Input((const uint8_t)string[i], &output_buf);
+                flag = Validate_Input(string[i], &output_buf);
             
                 /* Is Number? */
                 if ((flag == 1) || (flag == 2) || (flag == 4))
@@ -1346,7 +1346,7 @@ void Display_Panel_String (const uint8_t position, const char * const string)
             if ((string[0] == 'F') || (string[0] == 'f'))
             {
                 /* Validate Input */
-                flag = Validate_Input((const uint8_t)string[1], &output_buf);
+                flag = Validate_Input(string[1], &output_buf);
             
                 /* Is Number ? */
                 if (flag == 1)

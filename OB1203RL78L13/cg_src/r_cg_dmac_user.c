@@ -18,11 +18,11 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_cgc.c
+* File Name    : r_cg_dmac_user.c
 * Version      : Applilet4 for RL78/L13 V1.04.02.03 [24 May 2018]
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
-* Description  : This file implements device driver for CGC module.
+* Description  : This file implements device driver for DMAC module.
 * Creation Date: 3/13/2019
 ***********************************************************************************************************************/
 
@@ -30,7 +30,7 @@
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "r_cg_cgc.h"
+#include "r_cg_dmac.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -48,36 +48,19 @@ Global variables and functions
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
-* Function Name: R_CGC_Create
-* Description  : This function initializes the clock generator.
+* Function Name: r_dmac0_interrupt
+* Description  : None
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_CGC_Create(void)
+#pragma vector = INTDMA0_vect
+__interrupt static void r_dmac0_interrupt(void)
 {
-    volatile uint32_t w_count;
-
-    /* Set fMX */
-    CMC = _00_CGC_HISYS_PORT | _10_CGC_SUB_OSC | _00_CGC_SUBMODE_LOW;
-    MSTOP = 1U;
-    /* Set fMAIN */
-    MCM0 = 0U;
-    /* Set fSUB */
-    XTSTOP = 0U;
-
-    /* Change the waiting time according to the system */
-    for (w_count = 0U; w_count <= CGC_SUBWAITTIME; w_count++)
-    {
-        NOP();
-    }
-    
-    OSMC = _00_CGC_SUBINHALT_ON | _00_CGC_RTC_IT_LCD_CLK_FSUB;
-    /* Set fCLK */
-    CSS = 0U;
-    /* Set fIH */
-    HIOSTOP = 0U;
+    /* Start user code. Do not edit comment generated here */
+  extern void write_done(void);
+  write_done();
+    /* End user code. Do not edit comment generated here */
 }
-
 
 /* Start user code for adding. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */

@@ -18,11 +18,11 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_cgc.c
+* File Name    : r_cg_dmac.c
 * Version      : Applilet4 for RL78/L13 V1.04.02.03 [24 May 2018]
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
-* Description  : This file implements device driver for CGC module.
+* Description  : This file implements device driver for DMAC module.
 * Creation Date: 3/13/2019
 ***********************************************************************************************************************/
 
@@ -30,7 +30,7 @@
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "r_cg_cgc.h"
+#include "r_cg_dmac.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -44,40 +44,69 @@ Pragma directive
 /***********************************************************************************************************************
 Global variables and functions
 ***********************************************************************************************************************/
+uint8_t g_Dmac0[1024];        /* dmac0 RAM address symbol */
 /* Start user code for global. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
-* Function Name: R_CGC_Create
-* Description  : This function initializes the clock generator.
+* Function Name: R_DMAC0_Create
+* Description  : This function initializes the DMA0 transfer.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_CGC_Create(void)
+void R_DMAC0_Create(void)
 {
-    volatile uint32_t w_count;
-
-    /* Set fMX */
-    CMC = _00_CGC_HISYS_PORT | _10_CGC_SUB_OSC | _00_CGC_SUBMODE_LOW;
-    MSTOP = 1U;
-    /* Set fMAIN */
-    MCM0 = 0U;
-    /* Set fSUB */
-    XTSTOP = 0U;
-
-    /* Change the waiting time according to the system */
-    for (w_count = 0U; w_count <= CGC_SUBWAITTIME; w_count++)
+    DRC0 = _80_DMA_OPERATION_ENABLE;
+    NOP();
+    NOP();
+    DMAMK0 = 1U; /* disable INTDMA0 interrupt */
+    DMAIF0 = 0U; /* clear INTDMA0 interrupt flag */
+    /* Set INTDMA0 low priority */
+    DMAPR10 = 1U;
+    DMAPR00 = 1U;
+    DMC0 = _40_DMA_TRANSFER_DIR_RAM2SFR | _00_DMA_DATA_SIZE_8 | _0A_DMA_TRIGGER_ST2;
+    DSA0 = _48_DMA0_SFR_ADDRESS;
+    DRA0 = (uint16_t)g_Dmac0;
+    DBC0 = _0000_DMA0_BYTE_COUNT;
+    DEN0 = 0U; /* disable DMA0 operation */
+}
+/***********************************************************************************************************************
+* Function Name: R_DMAC0_Start
+* Description  : This function enables DMA0 transfer.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_DMAC0_Start(void)
+{
+    DMAIF0 = 0U; /* clear INTDMA0 interrupt flag */
+    DMAMK0 = 0U; /* enable INTDMA0 interrupt */
+    DEN0 = 1U;
+    DST0 = 1U;
+}
+/***********************************************************************************************************************
+* Function Name: R_DMAC0_Stop
+* Description  : This function disables DMA0 transfer.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_DMAC0_Stop(void)
+{
+    if (DST0 != 0U)
     {
-        NOP();
+        DST0 = 0U;
     }
     
-    OSMC = _00_CGC_SUBINHALT_ON | _00_CGC_RTC_IT_LCD_CLK_FSUB;
-    /* Set fCLK */
-    CSS = 0U;
-    /* Set fIH */
-    HIOSTOP = 0U;
+    NOP();
+    NOP();
+    DEN0 = 0U; /* disable DMA0 operation */
+    DMAMK0 = 1U; /* disable INTDMA0 interrupt */
+    DMAIF0 = 0U; /* clear INTDMA0 interrupt flag */
 }
 
-
 /* Start user code for adding. Do not edit comment generated here */
+void R_DMAC0_SetAddressCount(uint16_t address, uint16_t const count)
+{
+	DRA0 = address;
+	DBC0 = count;
+}
 /* End user code. Do not edit comment generated here */

@@ -23,8 +23,8 @@ Calculated values are displayed on the Native LCD screen.
 | INTB		| JA2-7
 | SDA		| JA1-25
 | SCL		| JA1-26
-| VLED		| 3V3
-| VDD		| 3V3
+| VLED		| 3V3  (J7)
+| VDD		| 3V3  (J7)
 
 
 ## Evaluation Platform ##

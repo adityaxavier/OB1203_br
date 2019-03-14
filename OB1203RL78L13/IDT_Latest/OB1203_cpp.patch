@@ -1,5 +1,5 @@
---- C:/Users/onkar.raut/Documents/2019H1/Firmware/IDT/OB1203RL78L13/IDT_Latest/OB1203.cpp	Thu Mar 14 11:50:56 2019
-+++ C:/Users/onkar.raut/Documents/2019H1/Firmware/IDT/OB1203RL78L13/OB1203/OB1203.cpp	Thu Mar 14 12:07:21 2019
+--- IDT_Latest/OB1203.cpp	Thu Mar 14 11:50:56 2019
++++ OB1203/OB1203.cpp	Thu Mar 14 14:25:04 2019
 @@ -0,0 +1,4 @@
 +#if defined(DEBUG)
 +#include <stdio.h>
@@ -57,7 +57,7 @@
 +  i2c_addr = addr;
 +  i2c_error = MD_OK;
 +#endif //defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
-@@ -30,7 +47,60 @@
+@@ -30,7 +47,61 @@
 -void OB1203::writeBlock(int addr, char startReg, char *data, char numBytes) {
 -/*writes data from an array beginning at the startReg*/
 -//    pc.printf("entering writeBlock with data %02x %02x\r\n",data[0],data[1]);
@@ -123,13 +123,14 @@
 +        if((status_reg_vals & 0x8000) == 0)
 +        {
 +          ready = true;
++          LOG(LOG_INFO,"OB1203 Initialized");
 +        }
 +      }
-@@ -38 +108,2 @@
+@@ -38 +109,2 @@
 -    i2c->write(addr,writeData,numBytes+1);
 +  }
 +#endif //defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
-@@ -41,0 +113,75 @@
+@@ -41,0 +114,74 @@
 +void OB1203::writeRegister(int addr, char reg, char val) 
 +{
 +  current = this;
@@ -163,9 +164,8 @@
 +{
 +  current = this;
 +  /*writes data from an array beginning at the startReg*/
-+#if defined(DEBUG)
-+  printf("entering writeBlock with data %02x %02x\r\n",data[0],data[1]);
-+#endif
++
++  LOG(LOG_DEBUG,"entering writeBlock with data %02x %02x\r\n",data[0],data[1]);
 +  
 +#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
 +  uint8_t * writeRegister_writeData = new uint8_t[numBytes + 1];
@@ -289,30 +289,24 @@
 +    
 +#endif //defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
 +  return (get_status_readData[0]<<8 | get_status_readData[1]);
-@@ -105 +300,3 @@ void OB1203::setOscTrim()
+@@ -105 +300 @@ void OB1203::setOscTrim()
 -//    pc.printf("writing %02x to REG %02x\r\n",osc_trim,REG_OSC_TRIM);
-+#if defined(DEBUG)
-+    printf("writing %02x to REG %02x\r\n",osc_trim,REG_OSC_TRIM);
-+#endif
-@@ -114 +311,3 @@ void OB1203::setMainConfig()
++    LOG(LOG_DEBUG,"writing %02x to REG %02x\r\n",osc_trim,REG_OSC_TRIM);
+@@ -114 +309 @@ void OB1203::setMainConfig()
 -//    pc.printf("main config 1 to write %02x\r\n",writeData[1]);
-+#if defined(DEBUG)
-+    printf("main config 1 to write %02x\r\n",writeData[1]);
-+#endif
-@@ -321,0 +521 @@ void OB1203::init_hr()
++    LOG(LOG_DEBUG,"main config 1 to write %02x\r\n",writeData[1]);
+@@ -321,0 +517 @@ void OB1203::init_hr()
 +#if defined(DEBUG)    
-@@ -323,2 +523,3 @@ void OB1203::init_hr()
+@@ -323,2 +519,3 @@ void OB1203::init_hr()
 -    //readBlock(OB1203_ADDR,REG_PS_INT_CFG_1,readData,1);
 -//    pc.printf("int config 1 = %02X\r\n",readData[0]);
 +    readBlock(OB1203_ADDR,REG_PS_INT_CFG_1,readData,1);
-+    printf("int config 1 = %02X\r\n",readData[0]);
++    LOG(LOG_DEBUG,"int config 1 = %02X\r\n",readData[0]);
 +#endif
-@@ -344 +545,3 @@ void OB1203::init_spo2()
+@@ -344 +541 @@ void OB1203::init_spo2()
 -//    pc.printf("int config 1 = %02X\r\n",readData[0]);
-+#if defined(DEBUG)    
-+    printf("int config 1 = %02X\r\n",readData[0]);
-+#endif
-@@ -364,2 +567,9 @@ uint32_t OB1203::twoandhalfBytes2uint32(char *data
++    LOG(LOG_DEBUG,"int config 1 = %02X\r\n",readData[0]);
+@@ -364,2 +561,9 @@ uint32_t OB1203::twoandhalfBytes2uint32(char *data
 -    //coverts a string of 3 bytes with LSB first into unsigned long MSB last
 -    return (uint32_t)( ((data[start_byte+2] & 0x0F)<<16) | (uint32_t(data[start_byte+1])<<8) | uint32_t(data[start_byte]) ) ;
 +  /* coverts a string of 3 bytes with LSB first into unsigned long MSB last */
@@ -324,32 +318,34 @@
 +  out |= (data[start_byte+0] & 0x0F);
 +  
 +  return out;
-@@ -372,2 +582,2 @@ char OB1203::get_ls_data(uint32_t *data)
+@@ -371,3 +575,2 @@ char OB1203::get_ls_data(uint32_t *data)
+-    readBlock(OB1203_ADDR,REG_STATUS_0,byte_data,21);  
 -    #ifdef DEBUG
 -        pc.printf("%02x %02x  %02x %02x  %02x %02x %02x  %02x %02x %02x  %02x %02x %02x  %02x %02x  %02x %02x %02x %02x %02x $02x\r\n",
-+    #if defined(DEBUG)
-+        printf("%02x %02x  %02x %02x  %02x %02x %02x  %02x %02x %02x  %02x %02x %02x  %02x %02x  %02x %02x %02x %02x %02x %02x\r\n",
-@@ -378,2 +588,2 @@ char OB1203::get_ls_data(uint32_t *data)
++    readBlock(OB1203_ADDR,REG_STATUS_0,byte_data,21);
++        LOG(LOG_DEBUG,"%02x %02x  %02x %02x  %02x %02x %02x  %02x %02x %02x  %02x %02x %02x  %02x %02x  %02x %02x %02x %02x %02x %02x\r\n",
+@@ -378,3 +581,2 @@ char OB1203::get_ls_data(uint32_t *data)
 -        byte_data[16],byte_data[17],byte_data[18]),
 -        byte_data[19],byte_data[20];
+-    #endif
 +        byte_data[16],byte_data[17],byte_data[18],
 +        byte_data[19],byte_data[20]);
-@@ -397,2 +607,2 @@ char OB1203::get_ps_data(uint32_t *data)
+@@ -397,3 +599 @@ char OB1203::get_ps_data(uint32_t *data)
 -    #ifdef DEBUG
 -        pc.printf( "%02x %02x %02x %02x\r\n", byte_data[0], byte_data[1], byte_data[2], byte_data[3] );
-+    #if defined(DEBUG)
-+        printf( "%02x %02x %02x %02x\r\n", byte_data[0], byte_data[1], byte_data[2], byte_data[3] );
-@@ -409,2 +619,2 @@ char OB1203::get_ps_ls_data(uint32_t *data)
+-    #endif
++        LOG(LOG_DEBUG, "%02x %02x %02x %02x\r\n", byte_data[0], byte_data[1], byte_data[2], byte_data[3] );
+@@ -409,2 +609 @@ char OB1203::get_ps_ls_data(uint32_t *data)
 -    #ifdef DEBUG
 -        pc.printf("%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x $02x\r\n",
-+    #if defined(DEBUG)
-+        printf("%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x\r\n",
-@@ -414,2 +624,2 @@ char OB1203::get_ps_ls_data(uint32_t *data)
++        LOG(LOG_DEBUG,"%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x\r\n",
+@@ -414,3 +613,2 @@ char OB1203::get_ps_ls_data(uint32_t *data)
 -        byte_data[15],byte_data[16],byte_data[17],byte_data[18] ),
 -        byte_data[19],byte_data[20];
+-    #endif
 +        byte_data[15],byte_data[16],byte_data[17],byte_data[18],
 +        byte_data[19],byte_data[20]);
-@@ -436,0 +647,9 @@ void OB1203::getFifoInfo(char *fifo_info)
+@@ -436,0 +635,9 @@ void OB1203::getFifoInfo(char *fifo_info)
 +uint8_t OB1203::getNumFifoSamplesAvailable()
 +{
 +    uint8_t numSamples = writePointer;
@@ -359,3 +355,8 @@
 +    }
 +    return numSamples;
 +}
+@@ -539,2 +746,2 @@ void OB1203::do_agc(uint32_t data, bool ch)
+-    //pc.printf("ch %d in %d,",ch,in_range[ch]);
+-    //if(ch) pc.printf("ir_in_range %d, r_in_range %d\r\n",ir_in_range,r_in_range);
++    //LOG(LOG_DEBUG,"ch %d in %d,",ch,in_range[ch]);
++    //if(ch) LOG(LOG_DEBUG,"ir_in_range %d, r_in_range %d\r\n",ir_in_range,r_in_range);

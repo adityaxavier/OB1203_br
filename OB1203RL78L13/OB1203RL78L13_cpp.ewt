@@ -3326,6 +3326,9 @@
         <name>OB1203</name>
         <file>
             <name>$PROJ_DIR$\OB1203\OB1203.cpp</name>
+            <configuration>
+                <name>Debug</name>
+            </configuration>
         </file>
         <file>
             <name>$PROJ_DIR$\OB1203\OB1203.h</name>
@@ -3335,6 +3338,15 @@
         <name>SERIAL</name>
         <file>
             <name>$PROJ_DIR$\SERIAL\write.c</name>
+        </file>
+    </group>
+    <group>
+        <name>SPO2</name>
+        <file>
+            <name>$PROJ_DIR$\SPO2\SPO2.cpp</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\SPO2\SPO2.h</name>
         </file>
     </group>
     <group>

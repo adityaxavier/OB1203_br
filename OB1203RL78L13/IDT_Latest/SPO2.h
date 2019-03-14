@@ -1,12 +1,7 @@
 #ifndef __SPO2_H__
 #define __SPO2_H__
 
-#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
-#include "r_cg_macrodriver.h"
-#include "r_cg_iica.h"
-#include "r_cg_userdefine.h"
-#endif //#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
-
+#include "mbed.h"
 //#define NUM_FILTER_TAPS 32
 //#define NUM_FILTER_TAPS 18
 #define NUM_FILTER_TAPS 8
@@ -60,7 +55,7 @@ public:
     void add_sample(uint32_t ir_data, uint32_t r_data);
     void fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t start_correl, uint32_t search_step);
     bool check4max(int16_t *x, uint16_t len,uint16_t start_offset, int32_t start_correl);
-    void dither(int16_t *x, uint16_t len, uint16_t offset, const uint16_t *rel_vals, uint16_t num_vals, int32_t *correls, uint16_t *offsets);
+    void dither(int16_t *x, uint16_t len, uint16_t offset, const float *rel_vals, uint16_t num_vals, int32_t *correls, float *offsets);
     void get_corr_slope(int16_t *x, uint16_t len, uint16_t offset0, uint16_t offset1);
     bool find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess);
     void copy_data(void);

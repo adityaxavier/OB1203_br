@@ -47,6 +47,32 @@ User definitions
 #define MODULUS_100              (100)
 #define MODULUS_1000             (1000)
 
+#define LOG_FATAL    (1)
+#define LOG_ERR      (2)
+#define LOG_WARN     (3)
+#define LOG_INFO     (4)
+#define LOG_DEBUG      (5)
+
+#define DEBUG_STREAM    stdout
+#if defined(stdout)
+#define DEBUG_LVL       LOG_INFO
+#else
+#define DEBUG_LVL       (0)
+#endif
+
+#if defined(DEBUG_LVL)
+#define LOG(level, ...) do {  \
+                            if (level <= DEBUG_LVL) { \
+                                fprintf(DEBUG_STREAM,"%s:%d:", __FILE__, __LINE__); \
+                                fprintf(DEBUG_STREAM, __VA_ARGS__); \
+                                fprintf(DEBUG_STREAM, "\n"); \
+                                fflush(DEBUG_STREAM); \
+                            } \
+                        } while (0)
+#else
+#define LOG(level, ...)           
+#endif
+                          
 void OB1203_callback_tx_complete(void);
 void OB1203_callback_rx_complete(void);
 void OB1203_callback_error(MD_STATUS status);

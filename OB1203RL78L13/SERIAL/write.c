@@ -24,6 +24,7 @@
 #include "r_cg_macrodriver.h"
 #include "r_cg_userdefine.h"
 #include "r_cg_dmac.h"
+#include "r_cg_sau.h"
 
 #pragma module_name = "?__write"
 
@@ -65,15 +66,24 @@ size_t __write(int handle, const unsigned char * buffer, size_t size)
   
   /* Wait until any previous transfers are completed */
   while(false == ready);
-
-  /* Stop the DMAC */
-  R_DMAC0_Stop();
-  
+#if 1
+  /* Enable the DMA channel */
+  if(1 != DEN0)
+  {
+    DEN0 = 1;
+  }
   /* Set the new address and count */
-  R_DMAC0_SetAddressCount((uint16_t)buffer, size);
-
-  /* Start the DMAC to send out the bytes */
+  DRA0 = (uint16_t)&buffer[1];
+  DBC0 = (uint16_t)size-1;
+  
+  /* Start the DMAC operation */
   R_DMAC0_Start();
+  
+  /* Write the first byte to the DMAC controller */
+  TXD2 = *buffer;
+#else
+  R_UART2_Send((uint8_t *)buffer, size);
+#endif
   ready = false;
   
   return size;

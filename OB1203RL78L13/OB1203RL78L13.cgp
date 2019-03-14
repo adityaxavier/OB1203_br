@@ -6314,7 +6314,7 @@
                 </DataElement>
                 <DataElement key="text" value="r_uart2_callback_sendend">
                 </DataElement>
-                <DataElement key="inuse" value="Locked">
+                <DataElement key="inuse" value="Unused">
                 </DataElement>
               </SerializableData>
               <SerializableData name="r_uart2_callback_error">
@@ -6729,7 +6729,7 @@
               </DataElement>
               <DataElement key="text" value="R_DMAC0_Set_SoftwareTriggerOn">
               </DataElement>
-              <DataElement key="inuse" value="Locked">
+              <DataElement key="inuse" value="Unused">
               </DataElement>
             </SerializableData>
           </SerializableData>
@@ -10301,7 +10301,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauSquare">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -10323,7 +10323,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauExtCount">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -10345,7 +10345,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauFreDivider">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="False">
               </DataElement>
@@ -10367,7 +10367,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauIntervalMeasure">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -10389,7 +10389,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauLowHighMeasure">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -10411,7 +10411,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauDelayCount">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -10477,7 +10477,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauOneShotExternalMaster">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -10485,7 +10485,7 @@
               </DataElement>
             </SerializableData>
             <SerializableData name="ContentItem12">
-              <DataElement key="Pin" value="">
+              <DataElement key="Pin" value="TO01,TO02,TO03,TO04,TO05,TO06,TO07">
               </DataElement>
               <DataElement key="Int" value="">
               </DataElement>
@@ -10543,7 +10543,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauOneShotSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="False">
               </DataElement>
@@ -10565,7 +10565,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauPwmSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="False">
               </DataElement>
@@ -10587,7 +10587,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauMultiPwmSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="False">
               </DataElement>
@@ -18289,7 +18289,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauSquare">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18311,7 +18311,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauExtCount">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18333,7 +18333,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauFreDivider">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="False">
               </DataElement>
@@ -18377,7 +18377,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauLowHighMeasure">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18399,7 +18399,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauDelayCount">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18531,7 +18531,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauOneShotSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18553,7 +18553,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauPwmSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18575,7 +18575,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauMultiPwmSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18693,7 +18693,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauSquare">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18715,7 +18715,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauExtCount">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18737,7 +18737,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauFreDivider">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="False">
               </DataElement>
@@ -18759,7 +18759,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauIntervalMeasure">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18781,7 +18781,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauLowHighMeasure">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18803,7 +18803,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauDelayCount">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18869,7 +18869,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauOneShotExternalMaster">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18877,7 +18877,7 @@
               </DataElement>
             </SerializableData>
             <SerializableData name="ContentItem12">
-              <DataElement key="Pin" value="">
+              <DataElement key="Pin" value="TO03,TO04,TO05,TO06,TO07">
               </DataElement>
               <DataElement key="Int" value="">
               </DataElement>
@@ -18913,7 +18913,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauRemoteMaskMaster">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18935,7 +18935,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauOneShotSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18957,7 +18957,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauPwmSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18979,7 +18979,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauMultiPwmSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -25959,7 +25959,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauSquare">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -25981,7 +25981,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauExtCount">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26003,7 +26003,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauFreDivider">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="False">
               </DataElement>
@@ -26025,7 +26025,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauIntervalMeasure">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26047,7 +26047,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauLowHighMeasure">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26069,7 +26069,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauDelayCount">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26201,7 +26201,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauOneShotSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26223,7 +26223,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauPwmSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26245,7 +26245,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauMultiPwmSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26363,7 +26363,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauSquare">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26385,7 +26385,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauExtCount">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26407,7 +26407,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauFreDivider">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="False">
               </DataElement>
@@ -26429,7 +26429,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauIntervalMeasure">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26451,7 +26451,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauLowHighMeasure">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26473,7 +26473,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauDelayCount">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26539,7 +26539,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauOneShotExternalMaster">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26547,7 +26547,7 @@
               </DataElement>
             </SerializableData>
             <SerializableData name="ContentItem12">
-              <DataElement key="Pin" value="">
+              <DataElement key="Pin" value="TO05,TO06,TO07">
               </DataElement>
               <DataElement key="Int" value="">
               </DataElement>
@@ -26605,7 +26605,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauOneShotSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26627,7 +26627,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauPwmSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26649,7 +26649,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauMultiPwmSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -31705,7 +31705,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauSquare">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -31727,7 +31727,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauExtCount">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -31749,7 +31749,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauFreDivider">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="False">
               </DataElement>
@@ -31771,7 +31771,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauIntervalMeasure">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -31793,7 +31793,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauLowHighMeasure">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -31815,7 +31815,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauDelayCount">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -31823,7 +31823,7 @@
               </DataElement>
             </SerializableData>
             <SerializableData name="ContentItem9">
-              <DataElement key="Pin" value="">
+              <DataElement key="Pin" value="TO07">
               </DataElement>
               <DataElement key="Int" value="">
               </DataElement>
@@ -31845,7 +31845,7 @@
               </DataElement>
             </SerializableData>
             <SerializableData name="ContentItem10">
-              <DataElement key="Pin" value="">
+              <DataElement key="Pin" value="TO07">
               </DataElement>
               <DataElement key="Int" value="">
               </DataElement>
@@ -31867,7 +31867,7 @@
               </DataElement>
             </SerializableData>
             <SerializableData name="ContentItem11">
-              <DataElement key="Pin" value="TI06">
+              <DataElement key="Pin" value="TI06,TO07">
               </DataElement>
               <DataElement key="Int" value="">
               </DataElement>
@@ -31881,7 +31881,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauOneShotExternalMaster">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -31947,7 +31947,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauOneShotSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -31969,7 +31969,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauPwmSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -31991,7 +31991,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauMultiPwmSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -33551,7 +33551,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauSquare">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -33573,7 +33573,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauExtCount">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -33595,7 +33595,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauFreDivider">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="False">
               </DataElement>
@@ -33617,7 +33617,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauIntervalMeasure">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -33639,7 +33639,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauLowHighMeasure">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -33661,7 +33661,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauDelayCount">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -33793,7 +33793,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauOneShotSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -33815,7 +33815,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauPwmSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -33837,7 +33837,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauMultiPwmSlave">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex, CustomerMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex, CustomerMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -36911,7 +36911,7 @@
               </DataElement>
               <DataElement key="Attach" value="TKBO01-0">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -36933,7 +36933,7 @@
               </DataElement>
               <DataElement key="Attach" value="TKBO01-1">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -36955,7 +36955,7 @@
               </DataElement>
               <DataElement key="Attach" value="TKBO01-2">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -40481,7 +40481,7 @@
               </DataElement>
               <DataElement key="Attach" value="TKBO01-0">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -40503,7 +40503,7 @@
               </DataElement>
               <DataElement key="Attach" value="TKBO01-1">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -40525,7 +40525,7 @@
               </DataElement>
               <DataElement key="Attach" value="TKBO01-2">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -44051,7 +44051,7 @@
               </DataElement>
               <DataElement key="Attach" value="TKBO01-0">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -44073,7 +44073,7 @@
               </DataElement>
               <DataElement key="Attach" value="TKBO01-1">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -44095,7 +44095,7 @@
               </DataElement>
               <DataElement key="Attach" value="TKBO01-2">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -46611,43 +46611,43 @@
           </SerializableData>
         </SerializableData>
         <SerializableData name="chkANI16">
-          <DataElement key="Checked" value="True">
+          <DataElement key="Checked" value="False">
           </DataElement>
         </SerializableData>
         <SerializableData name="chkANI17">
-          <DataElement key="Checked" value="True">
+          <DataElement key="Checked" value="False">
           </DataElement>
         </SerializableData>
         <SerializableData name="chkANI18">
-          <DataElement key="Checked" value="True">
+          <DataElement key="Checked" value="False">
           </DataElement>
         </SerializableData>
         <SerializableData name="chkANI19">
-          <DataElement key="Checked" value="True">
+          <DataElement key="Checked" value="False">
           </DataElement>
         </SerializableData>
         <SerializableData name="chkANI20">
-          <DataElement key="Checked" value="True">
+          <DataElement key="Checked" value="False">
           </DataElement>
         </SerializableData>
         <SerializableData name="chkANI21">
-          <DataElement key="Checked" value="True">
+          <DataElement key="Checked" value="False">
           </DataElement>
         </SerializableData>
         <SerializableData name="chkANI22">
-          <DataElement key="Checked" value="True">
+          <DataElement key="Checked" value="False">
           </DataElement>
         </SerializableData>
         <SerializableData name="chkANI23">
-          <DataElement key="Checked" value="True">
+          <DataElement key="Checked" value="False">
           </DataElement>
         </SerializableData>
         <SerializableData name="chkANI24">
-          <DataElement key="Checked" value="True">
+          <DataElement key="Checked" value="False">
           </DataElement>
         </SerializableData>
         <SerializableData name="chkANI25">
-          <DataElement key="Checked" value="True">
+          <DataElement key="Checked" value="False">
           </DataElement>
         </SerializableData>
         <SerializableData name="cmbADChannel">
@@ -46716,7 +46716,7 @@
             </DataElement>
             <DataElement key="MutexType" value="NoMutex">
             </DataElement>
-            <DataElement key="Visible" value="True">
+            <DataElement key="Visible" value="False">
             </DataElement>
             <DataElement key="CustomValid" value="Valid">
             </DataElement>
@@ -46738,7 +46738,7 @@
             </DataElement>
             <DataElement key="MutexType" value="NoMutex">
             </DataElement>
-            <DataElement key="Visible" value="True">
+            <DataElement key="Visible" value="False">
             </DataElement>
             <DataElement key="CustomValid" value="Valid">
             </DataElement>
@@ -46760,7 +46760,7 @@
             </DataElement>
             <DataElement key="MutexType" value="NoMutex">
             </DataElement>
-            <DataElement key="Visible" value="True">
+            <DataElement key="Visible" value="False">
             </DataElement>
             <DataElement key="CustomValid" value="Valid">
             </DataElement>
@@ -46782,7 +46782,7 @@
             </DataElement>
             <DataElement key="MutexType" value="NoMutex">
             </DataElement>
-            <DataElement key="Visible" value="True">
+            <DataElement key="Visible" value="False">
             </DataElement>
             <DataElement key="CustomValid" value="Valid">
             </DataElement>
@@ -46804,7 +46804,7 @@
             </DataElement>
             <DataElement key="MutexType" value="NoMutex">
             </DataElement>
-            <DataElement key="Visible" value="True">
+            <DataElement key="Visible" value="False">
             </DataElement>
             <DataElement key="CustomValid" value="Valid">
             </DataElement>
@@ -46826,7 +46826,7 @@
             </DataElement>
             <DataElement key="MutexType" value="NoMutex">
             </DataElement>
-            <DataElement key="Visible" value="True">
+            <DataElement key="Visible" value="False">
             </DataElement>
             <DataElement key="CustomValid" value="Valid">
             </DataElement>
@@ -46848,7 +46848,7 @@
             </DataElement>
             <DataElement key="MutexType" value="NoMutex">
             </DataElement>
-            <DataElement key="Visible" value="True">
+            <DataElement key="Visible" value="False">
             </DataElement>
             <DataElement key="CustomValid" value="Valid">
             </DataElement>
@@ -46870,7 +46870,7 @@
             </DataElement>
             <DataElement key="MutexType" value="NoMutex">
             </DataElement>
-            <DataElement key="Visible" value="True">
+            <DataElement key="Visible" value="False">
             </DataElement>
             <DataElement key="CustomValid" value="Valid">
             </DataElement>
@@ -46892,7 +46892,7 @@
             </DataElement>
             <DataElement key="MutexType" value="NoMutex">
             </DataElement>
-            <DataElement key="Visible" value="True">
+            <DataElement key="Visible" value="False">
             </DataElement>
             <DataElement key="CustomValid" value="Valid">
             </DataElement>
@@ -46914,7 +46914,7 @@
             </DataElement>
             <DataElement key="MutexType" value="NoMutex">
             </DataElement>
-            <DataElement key="Visible" value="True">
+            <DataElement key="Visible" value="False">
             </DataElement>
             <DataElement key="CustomValid" value="Valid">
             </DataElement>
@@ -48433,11 +48433,11 @@
           </DataElement>
         </SerializableData>
         <SerializableData name="CMP_REFSELECTION_IVREF0">
-          <DataElement key="Checked" value="True">
+          <DataElement key="Checked" value="False">
           </DataElement>
         </SerializableData>
         <SerializableData name="CMP0_REFSELECTION_BGRVREF">
-          <DataElement key="Checked" value="False">
+          <DataElement key="Checked" value="True">
           </DataElement>
         </SerializableData>
         <SerializableData name="CMP0_EDGE_RISING">
@@ -51113,7 +51113,7 @@
               </SerializableData>
             </SerializableData>
             <SerializableData name="CALLBACK_TRANSMIT_END_USE">
-              <DataElement key="Checked" value="True">
+              <DataElement key="Checked" value="False">
               </DataElement>
             </SerializableData>
             <SerializableData name="RECEIVE_DATA_LENGTH_7_BITS">
@@ -54773,13 +54773,13 @@
           </DataElement>
         </SerializableData>
         <SerializableData name="DMA_TRANSFER_BYTE_COUNT_VALUE">
-          <DataElement key="Text" value="1024">
+          <DataElement key="Text" value="64">
           </DataElement>
         </SerializableData>
         <SerializableData name="DMA_SOURCE_TRIGGER_SIGNAL">
           <DataElement key="ContentItemCount" value="15">
           </DataElement>
-          <DataElement key="SelectedContentItem" value="Software trigger">
+          <DataElement key="SelectedContentItem" value="INTST2">
           </DataElement>
           <SerializableData name="ContentItem1">
             <DataElement key="Pin" value="">
@@ -68784,6 +68784,18 @@
           <DataElement key="DataValue" value="24000">
           </DataElement>
         </SerializableData>
+        <SerializableData name="VDD_MIN">
+          <DataElement key="DataValue" value="2.7">
+          </DataElement>
+        </SerializableData>
+      </SerializableData>
+      <SerializableData name="Receive_UART2">
+        <SerializableData name="VDD_MIN">
+          <DataElement key="DataValue" value="2.7">
+          </DataElement>
+        </SerializableData>
+      </SerializableData>
+      <SerializableData name="Both_UART2">
         <SerializableData name="VDD_MIN">
           <DataElement key="DataValue" value="2.7">
           </DataElement>

@@ -44,7 +44,7 @@ Pragma directive
 /***********************************************************************************************************************
 Global variables and functions
 ***********************************************************************************************************************/
-uint8_t g_Dmac0[1024];        /* dmac0 RAM address symbol */
+uint8_t g_Dmac0[64];        /* dmac0 RAM address symbol */
 /* Start user code for global. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 
@@ -67,7 +67,7 @@ void R_DMAC0_Create(void)
     DMC0 = _40_DMA_TRANSFER_DIR_RAM2SFR | _00_DMA_DATA_SIZE_8 | _0A_DMA_TRIGGER_ST2;
     DSA0 = _48_DMA0_SFR_ADDRESS;
     DRA0 = (uint16_t)g_Dmac0;
-    DBC0 = _0000_DMA0_BYTE_COUNT;
+    DBC0 = _0040_DMA0_BYTE_COUNT;
     DEN0 = 0U; /* disable DMA0 operation */
 }
 /***********************************************************************************************************************
@@ -104,9 +104,5 @@ void R_DMAC0_Stop(void)
 }
 
 /* Start user code for adding. Do not edit comment generated here */
-void R_DMAC0_SetAddressCount(uint16_t address, uint16_t const count)
-{
-	DRA0 = address;
-	DBC0 = count;
-}
+
 /* End user code. Do not edit comment generated here */

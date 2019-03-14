@@ -287,7 +287,6 @@ MD_STATUS R_UART2_Send(uint8_t * const tx_buf, uint16_t tx_num);
 MD_STATUS R_UART2_Receive(uint8_t * const rx_buf, uint16_t rx_num);
 static void r_uart2_callback_error(uint8_t err_type);
 static void r_uart2_callback_receiveend(void);
-static void r_uart2_callback_sendend(void);
 static void r_uart2_callback_softwareoverrun(uint16_t rx_data);
 
 /* Start user code for function. Do not edit comment generated here */

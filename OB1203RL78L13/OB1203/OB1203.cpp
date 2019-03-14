@@ -141,30 +141,42 @@ void OB1203::writeBlock(int addr, char startReg, char *data, char numBytes)
   current = this;
   /*writes data from an array beginning at the startReg*/
 #if defined(DEBUG)
-  pc.printf("entering writeBlock with data %02x %02x\r\n",data[0],data[1]);
+  printf("entering writeBlock with data %02x %02x\r\n",data[0],data[1]);
 #endif
   
 #if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
   uint8_t * writeRegister_writeData = new uint8_t[numBytes + 1];
   
-  /* Wait for previous transmission to complete */
-  while(busy == true);
-  
-  /* Send out the data */
-  do
+  if(NULL != writeRegister_writeData)
   {
-    i2c_error = R_IICA0_Master_Send(i2c_addr, 
-                                    &writeRegister_writeData[0], 
-                                    ((uint8_t)numBytes+1), 
-                                    1);
-    if(i2c_error==MD_OK)
+    writeRegister_writeData[0] = startReg;
+    
+    for(uint16_t itr = 0; itr < numBytes; itr++)
     {
-      busy = true;
+      writeRegister_writeData[itr + 1] = data[itr];
     }
     
-    while(true == busy);
-  }while((i2c_error==MD_ERROR1) || (i2c_error==MD_ERROR2));
-  
+    
+    /* Wait for previous transmission to complete */
+    while(busy == true);
+    
+    /* Send out the data */
+    do
+    {
+      i2c_error = R_IICA0_Master_Send(i2c_addr, 
+                                      &writeRegister_writeData[0], 
+                                      ((uint8_t)numBytes+1), 
+                                      1);
+      if(i2c_error==MD_OK)
+      {
+        busy = true;
+      }
+      
+      while(true == busy);
+    }while((i2c_error==MD_ERROR1) || (i2c_error==MD_ERROR2));
+    
+    delete(writeRegister_writeData);
+  }
   delete(writeRegister_writeData);
 #endif //defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
 }
@@ -283,7 +295,7 @@ void OB1203::setOscTrim()
     char writeData[1];
     writeData[0] = osc_trim;
 #if defined(DEBUG)
-    pc.printf("writing %02x to REG %02x\r\n",osc_trim,REG_OSC_TRIM);
+    printf("writing %02x to REG %02x\r\n",osc_trim,REG_OSC_TRIM);
 #endif
     writeBlock(OB1203_ADDR,REG_OSC_TRIM,writeData,1);
 }
@@ -294,7 +306,7 @@ void OB1203::setMainConfig()
     writeData[0] = ls_sai | ls_mode | ls_en; //MAIN_CTRL_0
     writeData[1] = temp_en | ps_sai_en | ppg_ps_mode | ppg_ps_en; //MAIN_CTRL_1
 #if defined(DEBUG)
-    pc.printf("main config 1 to write %02x\r\n",writeData[1]);
+    printf("main config 1 to write %02x\r\n",writeData[1]);
 #endif
     writeBlock(OB1203_ADDR,REG_MAIN_CTRL_0,writeData,2); 
 }
@@ -502,7 +514,7 @@ void OB1203::init_hr()
 #if defined(DEBUG)    
     char readData[1];
     readBlock(OB1203_ADDR,REG_PS_INT_CFG_1,readData,1);
-    pc.printf("int config 1 = %02X\r\n",readData[0]);
+    printf("int config 1 = %02X\r\n",readData[0]);
 #endif
     setPPG_PSgain_cfg();
     setPPGcurrent();
@@ -524,7 +536,7 @@ void OB1203::init_spo2()
     char readData[1];
     readBlock(OB1203_ADDR,REG_PS_INT_CFG_1,readData,1);
 #if defined(DEBUG)    
-    pc.printf("int config 1 = %02X\r\n",readData[0]);
+    printf("int config 1 = %02X\r\n",readData[0]);
 #endif
     setPPG_PSgain_cfg();
     setPPGcurrent();
@@ -560,8 +572,8 @@ char OB1203::get_ls_data(uint32_t *data)
 {  
     char byte_data[21];
     readBlock(OB1203_ADDR,REG_STATUS_0,byte_data,21);  
-    #ifdef DEBUG
-        pc.printf("%02x %02x  %02x %02x  %02x %02x %02x  %02x %02x %02x  %02x %02x %02x  %02x %02x  %02x %02x %02x %02x %02x $02x\r\n",
+    #if defined(DEBUG)
+        printf("%02x %02x  %02x %02x  %02x %02x %02x  %02x %02x %02x  %02x %02x %02x  %02x %02x  %02x %02x %02x %02x %02x $02x\r\n",
         byte_data[0],byte_data[1],byte_data[2],byte_data[3],
         byte_data[4],byte_data[5],byte_data[6],byte_data[7],
         byte_data[8],byte_data[9],byte_data[10],byte_data[11],
@@ -585,8 +597,8 @@ char OB1203::get_ps_data(uint32_t *data)
 {  
     char byte_data[4];
     readBlock(OB1203_ADDR,REG_STATUS_0,byte_data,4);  
-    #ifdef DEBUG
-        pc.printf( "%02x %02x %02x %02x\r\n", byte_data[0], byte_data[1], byte_data[2], byte_data[3] );
+    #if defined(DEBUG)
+        printf( "%02x %02x %02x %02x\r\n", byte_data[0], byte_data[1], byte_data[2], byte_data[3] );
     #endif
 
     data[0] = ((uint32_t)byte_data[3])<<8 | ((uint32_t)byte_data[2]); //ps data
@@ -597,8 +609,8 @@ char OB1203::get_ps_ls_data(uint32_t *data)
 {  
     char byte_data[21];
     readBlock(OB1203_ADDR,REG_STATUS_0,byte_data,21);  
-    #ifdef DEBUG
-        pc.printf("%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x $02x\r\n",
+    #if defined(DEBUG)
+        printf("%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x $02x\r\n",
         byte_data[0],byte_data[1],byte_data[2],byte_data[3],byte_data[4],
         byte_data[5],byte_data[6],byte_data[7],byte_data[8],byte_data[9],
         byte_data[10],byte_data[11],byte_data[12],byte_data[13],byte_data[14],

@@ -105,10 +105,6 @@ __interrupt static void r_uart2_interrupt_send(void)
         gp_uart2_tx_address++;
         g_uart2_tx_count--;
     }
-    else
-    {
-        r_uart2_callback_sendend();
-    }
 }
 /***********************************************************************************************************************
 * Function Name: r_uart2_callback_receiveend
@@ -129,17 +125,6 @@ static void r_uart2_callback_receiveend(void)
 * Return Value : None
 ***********************************************************************************************************************/
 static void r_uart2_callback_softwareoverrun(uint16_t rx_data)
-{
-    /* Start user code. Do not edit comment generated here */
-    /* End user code. Do not edit comment generated here */
-}
-/***********************************************************************************************************************
-* Function Name: r_uart2_callback_sendend
-* Description  : This function is a callback function when UART2 finishes transmission.
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-static void r_uart2_callback_sendend(void)
 {
     /* Start user code. Do not edit comment generated here */
     /* End user code. Do not edit comment generated here */

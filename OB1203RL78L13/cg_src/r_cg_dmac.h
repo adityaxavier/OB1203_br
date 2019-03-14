@@ -77,7 +77,7 @@ Macro definitions (Register bit)
 Macro definitions
 ***********************************************************************************************************************/
 #define _48_DMA0_SFR_ADDRESS                (0x48U)
-#define _0000_DMA0_BYTE_COUNT               (0x0000U)
+#define _0040_DMA0_BYTE_COUNT               (0x0040U)
 
 /***********************************************************************************************************************
 Typedef definitions
@@ -91,6 +91,6 @@ void R_DMAC0_Start(void);
 void R_DMAC0_Stop(void);
 
 /* Start user code for function. Do not edit comment generated here */
-void R_DMAC0_SetAddressCount(uint16_t address, uint16_t const count);
+
 /* End user code. Do not edit comment generated here */
 #endif

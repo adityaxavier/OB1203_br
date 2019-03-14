@@ -38,6 +38,9 @@ Includes
 #include "r_cg_dmac.h"
 #include "r_cg_intp.h"
 /* Start user code for include. Do not edit comment generated here */
+#if defined(TEST_CODE)
+#include <stdio.h>
+#endif
 #include "OB1203.h"
 #include "lcd_panel.h"
 #include "ppg_lcd.h"
@@ -108,6 +111,10 @@ static void R_MAIN_UserInit(void)
   
   EI();
 #if defined(TEST_CODE)
+  R_UART2_Start();
+  printf("Hello!\r\n");
+  printf("World!\r\n");
+  
   /* 10ms delay */
   Init_Display_Panel();
   

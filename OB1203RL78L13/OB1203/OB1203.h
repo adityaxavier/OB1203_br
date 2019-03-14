@@ -203,6 +203,7 @@ public:
   
   static volatile bool busy;
   static void callback(void);
+  
   char osc_trim;
   char ls_res;
   char ls_rate;
@@ -258,6 +259,11 @@ public:
   char diff;
   char alc;
   char sig_out;
+  volatile bool ir_in_range;
+  volatile bool r_in_range;
+  volatile bool prev_in_range;
+  volatile bool updateFastMode;
+  volatile bool updateCurrent;
 
   OB1203 (uint8_t addr = OB1203_ADDR);
 
@@ -319,10 +325,7 @@ public:
   uint32_t reg_max;
   
   
-  //    const uint32_t targetCounts[2];
-  
-  bool update;
-  
+  //    const uint32_t targetCounts[2];  
 };
 
 

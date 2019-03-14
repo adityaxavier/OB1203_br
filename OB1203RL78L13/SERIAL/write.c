@@ -28,7 +28,7 @@
 
 #pragma module_name = "?__write"
 
-static bool ready = true;
+static volatile bool ready = true;
 
 /*
  * This function is invoked by the DMAC Interrupt handler when all bytes

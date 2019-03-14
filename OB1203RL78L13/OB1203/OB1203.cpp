@@ -1,3 +1,6 @@
+#if defined(DEBUG)
+#include <stdio.h>
+#endif
 #include <stddef.h>
 #include "OB1203.h"
 
@@ -422,11 +425,13 @@ void OB1203::setFifoConfig()
 
 void OB1203::resetFIFO()
 {
-    char writeData[2];
+    char writeData[3];
     writeData[0]=0;
     writeData[1]=0;
-    writeBlock(OB1203_ADDR,REG_FIFO_WR_PTR,writeData,2);//set write and read pointer to zero--next sample is newest
+    writeData[2]=0;
     writeRegister(OB1203_ADDR,REG_MAIN_CTRL_1, (temp_en | ps_sai_en | ppg_ps_mode | 0) ); //turn PPG off MAIN_CTRL_1;
+    writeBlock(OB1203_ADDR,REG_FIFO_WR_PTR,writeData,3);//set write, read pointer and overflow to zero--next sample is newest
+    get_status();//clear any interrupt
     writeRegister(OB1203_ADDR,REG_MAIN_CTRL_1, (temp_en | ps_sai_en | ppg_ps_mode | ppg_ps_en) ); //MAIN_CTRL_1;
 }
 
@@ -450,6 +455,7 @@ void OB1203::init_rgb()
 
 void OB1203::init_ps()
 {
+    reset();
     /*Configures PS mode but not thresholds or interrupts. RGB/ALS and BIO off.
     Use: set class variables using header declarations. Then call this function.*/
     char writeData[2];  
@@ -467,14 +473,15 @@ void OB1203::init_ps()
     setPSthresh();
     //interrupt configuration
     ls_int_en = LS_INT_OFF;
-    setIntConfig();
     setPPG_PSgain_cfg();
     setPScurrent(); 
     //config PS
     ls_en = LS_OFF;
     ppg_ps_en = 1;
+//    ps_int_en = PS_INT_ON;
     ppg_ps_mode = PS_MODE;
-    setLEDTrim();
+    setIntConfig();
+//    setLEDTrim();
     setMainConfig();
 }
 
@@ -573,13 +580,13 @@ char OB1203::get_ls_data(uint32_t *data)
     char byte_data[21];
     readBlock(OB1203_ADDR,REG_STATUS_0,byte_data,21);  
     #if defined(DEBUG)
-        printf("%02x %02x  %02x %02x  %02x %02x %02x  %02x %02x %02x  %02x %02x %02x  %02x %02x  %02x %02x %02x %02x %02x $02x\r\n",
+        printf("%02x %02x  %02x %02x  %02x %02x %02x  %02x %02x %02x  %02x %02x %02x  %02x %02x  %02x %02x %02x %02x %02x %02x\r\n",
         byte_data[0],byte_data[1],byte_data[2],byte_data[3],
         byte_data[4],byte_data[5],byte_data[6],byte_data[7],
         byte_data[8],byte_data[9],byte_data[10],byte_data[11],
         byte_data[12],byte_data[13],byte_data[14],byte_data[15],
-        byte_data[16],byte_data[17],byte_data[18]),
-        byte_data[19],byte_data[20];
+        byte_data[16],byte_data[17],byte_data[18],
+        byte_data[19],byte_data[20]);
     #endif
      
 
@@ -610,12 +617,12 @@ char OB1203::get_ps_ls_data(uint32_t *data)
     char byte_data[21];
     readBlock(OB1203_ADDR,REG_STATUS_0,byte_data,21);  
     #if defined(DEBUG)
-        printf("%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x $02x\r\n",
+        printf("%02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x %02x\r\n",
         byte_data[0],byte_data[1],byte_data[2],byte_data[3],byte_data[4],
         byte_data[5],byte_data[6],byte_data[7],byte_data[8],byte_data[9],
         byte_data[10],byte_data[11],byte_data[12],byte_data[13],byte_data[14],
-        byte_data[15],byte_data[16],byte_data[17],byte_data[18] ),
-        byte_data[19],byte_data[20];
+        byte_data[15],byte_data[16],byte_data[17],byte_data[18],
+        byte_data[19],byte_data[20]);
     #endif
      
     data[0] = ((uint32_t)byte_data[3])<<8 | ((uint32_t)byte_data[2]); //ps
@@ -637,7 +644,6 @@ void OB1203::getFifoInfo(char *fifo_info)
     fifoOverflow = fifo_info[2];
 }
 
-
 uint8_t OB1203::getNumFifoSamplesAvailable()
 {
     uint8_t numSamples = writePointer;
@@ -650,19 +656,20 @@ uint8_t OB1203::getNumFifoSamplesAvailable()
 
 void OB1203::getNumFifoSamplesAvailable(char *fifo_info, char *sample_info)
 {
+    /*sample_info [3] = {numSamplesHR, numSamplesSpO2, overflow*/
+    
     getFifoInfo(fifo_info);
-    uint8_t writePointer = fifo_info[0];
-    uint8_t readPointer = fifo_info [1];
-    uint8_t numSamples = writePointer;
+    char numSamples = writePointer;
     if (writePointer<readPointer)
     {
-        numSamples += 32;
+        numSamples += 32; 
     }
     numSamples -= readPointer;
     sample_info[0] = numSamples; //num HR samples
     sample_info[1] = (numSamples>>1); //num SpO2 samples
     sample_info[2] = fifo_info[2];
 }
+
 
 void OB1203::getFifoSamples(uint8_t numSamples, char *fifoData)
 {
@@ -696,31 +703,58 @@ void OB1203::do_agc(uint32_t data, bool ch)
     const uint16_t step = STEP;
     const uint32_t targetCounts[2] = {IR_TARGET_COUNTS, R_TARGET_COUNTS};
      //ch = 0 for IR, 1 for R (channel)
-     if( data > targetCounts[ch] + (in_range[ch]>in_range_persist ? tol2: tol1) )
+    
+    if( data > targetCounts[ch] + ( (in_range[ch]>in_range_persist) ? tol2: tol1) ) //too high
     {       
-        if(data>targetCounts[ch] + tol2)
-            in_range[ch]=0;
+        if(data> targetCounts[ch] + tol2) in_range[ch]=0;
         
-       
         if( (ch ? r_current : ir_current)>step)
         {
             (ch ? r_current : ir_current) -= step;
-            update = 1;
+            updateCurrent = 1;
         }
     }
-    else if( data < targetCounts[ch] - (in_range[ch]>in_range_persist ? tol2 : tol1) )
+    else if( data < targetCounts[ch] - ( (in_range[ch]>in_range_persist) ? tol2 : tol1) ) //too low
     {
-        if(data<targetCounts[ch] - tol2)
+        if(data < targetCounts[ch] - tol2)
             in_range[ch]=0;
-        if( (ch ? r_current : ir_current) +step<maxCurrent[ch]) //no need to go to full current
+        if( (ch ? r_current : ir_current) +step < maxCurrent[ch]) //no need to go to full current
         {
             (ch ? r_current : ir_current) += step;
-            update = 1;
+            updateCurrent = 1;
         }
     }
     else
     {
-        if( (data > (targetCounts[ch]-tol1) ) && (data < (targetCounts[ch]+tol1)) )
-            in_range[ch]++;
+        if( (data > (targetCounts[ch]-tol1) ) && (data < (targetCounts[ch]+tol1)) ) //just right
+        {
+                if (in_range[ch] <= in_range_persist)
+                {
+                    in_range[ch]++;
+                }
+        }
     }
+    if (in_range[ch] > in_range_persist)
+    {
+        (ch ? r_in_range : ir_in_range) = 1;
+    }
+    else
+    {
+         (ch ? r_in_range : ir_in_range) = 0;
+    }
+    if(prev_in_range && !(ir_in_range && r_in_range)) {
+        prev_in_range =0;
+        updateFastMode = 1;
+        afull_int_en = AFULL_INT_OFF;
+        ppg_int_en = PPG_INT_ON;
+    }
+    
+    else if(!prev_in_range && ir_in_range && r_in_range) {
+        prev_in_range = 1;
+        updateFastMode = 1;
+        afull_int_en = AFULL_INT_ON;
+        ppg_int_en = PPG_INT_OFF;
+    }
+    //pc.printf("ch %d in %d,",ch,in_range[ch]);
+    //if(ch) pc.printf("ir_in_range %d, r_in_range %d\r\n",ir_in_range,r_in_range);
 }

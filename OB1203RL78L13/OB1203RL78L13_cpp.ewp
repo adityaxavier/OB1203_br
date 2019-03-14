@@ -308,6 +308,7 @@
                     <name>CCDefines</name>
                     <state>TEST_CODE</state>
                     <state>USE_BRUTE_DELAY</state>
+                    <state>DEBUG</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>

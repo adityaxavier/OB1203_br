@@ -12,7 +12,7 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
-        <Checksum>3252741454</Checksum>
+        <Checksum>3171703828</Checksum>
     </DebugChecksum>
     <CodeCoverage>
         <Enabled>_ 0</Enabled>
@@ -160,8 +160,7 @@
         <ShowSource>1</ShowSource>
     </TraceHelper>
     <Breakpoints>
-        <Bp0>_ "STD_CODE" "{$PROJ_DIR$\SERIAL\write.c}.83.3" 0 0 0 0 "" 0 ""</Bp0>
-        <Count>1</Count>
+        <Count>0</Count>
     </Breakpoints>
     <Monitor_Execution>
         <Leave_target_running>0</Leave_target_running>

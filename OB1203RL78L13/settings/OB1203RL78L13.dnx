@@ -44,12 +44,24 @@
         <Enabled>0</Enabled>
         <ShowSource>1</ShowSource>
     </Trace1>
-    <Aliases>
-        <Count>0</Count>
-        <SuppressDialog>0</SuppressDialog>
-    </Aliases>
     <Simulator>
         <Freq>10000000</Freq>
         <FreqHi>0</FreqHi>
     </Simulator>
+    <Breakpoints>
+        <Count>0</Count>
+    </Breakpoints>
+    <Monitor_Execution>
+        <Leave_target_running>0</Leave_target_running>
+    </Monitor_Execution>
+    <Start_Stop>
+        <StartEnabled>0</StartEnabled>
+        <StartSymbol />
+        <StopEnabled>0</StopEnabled>
+        <StopSymbol />
+    </Start_Stop>
+    <Aliases>
+        <Count>0</Count>
+        <SuppressDialog>0</SuppressDialog>
+    </Aliases>
 </settings>

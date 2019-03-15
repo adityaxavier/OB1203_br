@@ -63,9 +63,9 @@ User definitions
 #if defined(DEBUG_LVL)
 #define LOG(level, ...) do {  \
                             if (level <= DEBUG_LVL) { \
-                                fprintf(DEBUG_STREAM,"%s:%d:", __FILE__, __LINE__); \
+                              if(level <= LOG_ERR) { fprintf(DEBUG_STREAM,"%s:%d:", __FILE__, __LINE__); }\
                                 fprintf(DEBUG_STREAM, __VA_ARGS__); \
-                                fprintf(DEBUG_STREAM, "\n"); \
+                                fprintf(DEBUG_STREAM, "\r\n"); \
                                 fflush(DEBUG_STREAM); \
                             } \
                         } while (0)

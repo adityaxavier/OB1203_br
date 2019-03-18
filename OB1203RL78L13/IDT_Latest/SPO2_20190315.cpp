@@ -622,9 +622,9 @@ void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t 
         high_side=c; //the high side sample is the one we exited the loop on.
     }
     if(final_offset <= min_offset) {
-        final_offset = min_offset; //force the algorithm to bonk at max found check.
+        final_offset1f = min_offset<<FIXED_BITS; //force the algorithm to bonk at max found check.
     } else if(final_offset >=max_offset) {
-        final_offset = max_offset; //force the algorithm to bonk at max found check.
+        final_offset1f = max_offset<<FIXED_BITS; //force the algorithm to bonk at max found check.
     } else { //only run this if final_offset is not one of the boundaries
         lowest = (high_side < low_side) ? high_side : low_side;
         if(final_correl-lowest == 0) {

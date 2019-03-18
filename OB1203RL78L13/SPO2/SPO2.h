@@ -17,13 +17,14 @@
 #define ARRAY_LENGTH 301 //twice sample length plus 1
 #define SAMPLE_RATE 100 //sps
 #define SAMPLE_RATE_MIN 6000 //spm
-#define OFFSET_FOR_SLOPE_CALC 16 //half of max offset for 180 bpm
+#define OFFSET_FOR_SLOPE_CALC 8 //half of max offset for 180 bpm
 #define DEFAULT_GUESS 75 //80 BPM at 100sps
 #define NUM_HR_AVGS 8
 #define NUM_SPO2_AVGS 8
 #define NUM_COARSE_POINTS 5
 #define SMALL_STEP 1
 #define MID_STEP 2
+#define BIG_STEP 6
 #define MAX_HR_CHANGE1f 2 //can change 20% per sample
 #define MAX_SPO2_DROP1f -1 //can change -6.25% per sample (includes 4 bits of precision
 #define DROP_MIDDLE 4 //enumerations of methods
@@ -60,18 +61,18 @@ public:
     void add_sample(uint32_t ir_data, uint32_t r_data);
     void fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t start_correl, uint32_t search_step);
     bool check4max(int16_t *x, uint16_t len,uint16_t start_offset, int32_t start_correl);
-    void dither(int16_t *x, uint16_t len, uint16_t offset, const uint16_t *rel_vals, uint16_t num_vals, int32_t *correls, uint16_t *offsets);
+    //void dither(int16_t *x, uint16_t len, uint16_t offset, const uint16_t *rel_vals, uint16_t num_vals, int32_t *correls, uint16_t *offsets);
     void get_corr_slope(int16_t *x, uint16_t len, uint16_t offset0, uint16_t offset1);
     bool find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess);
     void copy_data(void);
     void calc_hr(void);
     void consensus(void);
-    float abs_float(float val);
 //    int16_t fir( int16_t (*x)[2][NUM_FILTER_TAPS], uint8_t channel, uint16_t ptr, const int32_t *coefs, const uint8_t bit_prec);
     uint32_t uint_sqrt(uint32_t val);
     void do_algorithm_part1();
     void do_algorithm_part2();
-    void avg8Samples();
+//    void avg8Samples();
+    void get_sum_squares();
 //variables
    
     uint16_t data_ptr;  
@@ -105,8 +106,8 @@ public:
     int32_t c0;
     int32_t m1f;
     
-    uint16_t current_spo21f;
-    uint16_t current_hr1f;
+    uint32_t current_spo21f;
+    uint32_t current_hr1f;
     uint16_t avg_hr;
     uint16_t avg_spo2;
     uint16_t sample_count;

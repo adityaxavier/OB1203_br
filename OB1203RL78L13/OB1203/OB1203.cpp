@@ -469,8 +469,7 @@ void OB1203::init_ps()
     setPSthresh();
     //interrupt configuration
     ls_int_en = LS_INT_OFF;
-    setPPG_PSgain_cfg();
-    setPScurrent(); 
+    setPPG_PSgain_cfg(); 
     //config PS
     ls_en = LS_OFF;
     ppg_ps_en = 1;

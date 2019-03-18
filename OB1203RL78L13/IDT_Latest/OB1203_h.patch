@@ -1,5 +1,5 @@
---- IDT_Latest/OB1203.h	Thu Mar 14 17:02:37 2019
-+++ OB1203/OB1203.h	Thu Mar 14 17:02:37 2019
+--- IDT_Latest/OB1203.h	Mon Mar 18 15:46:58 2019
++++ OB1203/OB1203.h	Mon Mar 18 13:06:23 2019
 @@ -4,3 +4,5 @@
 -#include "mbed.h"
 -//#include "SoftI2C.h"
@@ -9,22 +9,13 @@
 +#include "r_cg_iica.h"
 +#include "r_cg_userdefine.h"
 +#endif //#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
-@@ -175 +176,0 @@
--#define POR_TIME_MS 10 
-@@ -176,0 +178,6 @@
+@@ -185,0 +188 @@
 +
-+
-+
-+#define POR_TIME_MS 5 //a guess
-+
-+
-@@ -185,0 +193 @@
-+
-@@ -188,2 +196 @@ class OB1203
+@@ -188,2 +191 @@ class OB1203
 -    I2C *i2c;
 -
 +  uint8_t i2c_addr;
-@@ -191,61 +198,3 @@ class OB1203
+@@ -191,61 +193,3 @@ class OB1203
 -    char osc_trim;
 -    char ls_res;
 -    char ls_rate;
@@ -89,7 +80,7 @@
 +  
 +  static OB1203 * current;
 +  MD_STATUS i2c_error;
-@@ -253,8 +202,65 @@ class OB1203
+@@ -253,8 +197,65 @@ class OB1203
 -    // Low-level operations
 -    void reset();
 -    uint16_t get_status();
@@ -163,7 +154,7 @@
 +  volatile bool prev_in_range;
 +  volatile bool updateFastMode;
 +  volatile bool updateCurrent;
-@@ -262,34 +268 @@ class OB1203
+@@ -262,34 +263 @@ class OB1203
 -    // High-level operations
 -    void setOscTrim();
 -    bool dataIsNew();
@@ -199,7 +190,7 @@
 -    void parseFifoSamples(char, char *, uint32_t *);
 -    char get_part_ID(char *);
 +  OB1203 (uint8_t addr = OB1203_ADDR);
-@@ -296,0 +270,41 @@ class OB1203
+@@ -296,0 +265,41 @@ class OB1203
 +  // Low-level operations
 +  void reset();
 +  uint16_t get_status();
@@ -241,7 +232,7 @@
 +  void getFifoInfo(char *fifo_info);
 +  uint8_t getNumFifoSamplesAvailable();
 +  void getNumFifoSamplesAvailable(char *fifo_info, char *sample_info);
-@@ -298,15 +312,17 @@ class OB1203
+@@ -298,15 +307,17 @@ class OB1203
 -    //agc functions
 -    void do_agc(uint32_t,bool);
 -    

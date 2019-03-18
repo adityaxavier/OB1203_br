@@ -1,5 +1,5 @@
---- IDT_Latest/SPO2.cpp	Thu Mar 14 17:02:37 2019
-+++ SPO2/SPO2.cpp	Thu Mar 14 17:02:37 2019
+--- IDT_Latest/SPO2.cpp	Mon Mar 18 15:47:59 2019
++++ SPO2/SPO2.cpp	Mon Mar 18 15:34:21 2019
 @@ -1 +1,3 @@
 -#include "mbed.h"
 +#if defined(DEBUG)
@@ -7,285 +7,480 @@
 +#endif
 @@ -5 +6,0 @@
 -#include <iostream>
-@@ -15,2 +15,0 @@ The sample buffers are then int16's and data will
+@@ -15 +15,0 @@ The sample buffers are then int16's and data will
 -extern Serial pc;
--
-@@ -30 +29 @@ void SPO2::do_algorithm_part1()
+@@ -45 +45 @@ void SPO2::do_algorithm_part1()
 -    pc.printf("sample_count %d\r\n",sample_count);
 +    LOG(LOG_INFO, "sample_count %d\r\n",sample_count);
-@@ -34 +33 @@ void SPO2::do_algorithm_part1()
+@@ -47,2 +47,3 @@ void SPO2::do_algorithm_part1()
+-    if(sample_count>=ARRAY_LENGTH) {
 -        pc.printf("do alg part 1\r\n");
++    if(sample_count>=ARRAY_LENGTH)
++    {       
 +        LOG(LOG_INFO, "do alg part 1\r\n");
-@@ -53 +52 @@ void SPO2::do_algorithm_part2()
+@@ -50 +51 @@ void SPO2::do_algorithm_part1()
+-    }
++    }  
+@@ -64 +65 @@ void SPO2::do_algorithm_part2()
+-
++    
+@@ -67,6 +68,7 @@ void SPO2::do_algorithm_part2()
 -//    pc.printf("sample_count %d\r\n",sample_count);
-+    LOG(LOG_DEBUG, "sample_count %d\r\n",sample_count);
-@@ -56 +55 @@ void SPO2::do_algorithm_part2()
+-    if(sample_count>=ARRAY_LENGTH) {
 -        pc.printf("doing algorithm part 2\r\n");
+-        calc_R();
+-        calc_spo2();
+-
++    LOG(LOG_DEBUG, "sample_count %d\r\n",sample_count);
++    if(sample_count>=ARRAY_LENGTH)
++    {       
 +        LOG(LOG_INFO, "doing algorithm part 2\r\n");
-@@ -66 +65 @@ void SPO2::do_algorithm_part2()
++        calc_R();        
++        calc_spo2(); 
++        
+@@ -74 +76 @@ void SPO2::do_algorithm_part2()
+-
++        
+@@ -76,3 +78,4 @@ void SPO2::do_algorithm_part2()
+-
+-        if(final_correl <= 0) { //hr really bonked
 -            pc.printf("alg fail\r\n");
++        
++        if(final_correl <= 0) //hr really bonked
++        {
 +            LOG(LOG_DEBUG, "alg fail\r\n");
-@@ -71 +70 @@ void SPO2::do_algorithm_part2()
+@@ -83 +86 @@ void SPO2::do_algorithm_part2()
 -        pc.printf("pre concensus %.1f, %.1f\r\n",(float)current_spo21f/(float)(1<<FIXED_BITS), (float)current_hr1f/(float)(1<<FIXED_BITS));
 +        LOG(LOG_INFO, "pre concensus %.1f, %.1f\r\n",(float)current_spo21f/(float)(1<<FIXED_BITS), (float)current_hr1f/(float)(1<<FIXED_BITS));
-@@ -73 +72 @@ void SPO2::do_algorithm_part2()
+@@ -85,3 +88,5 @@ void SPO2::do_algorithm_part2()
 -        pc.printf("post concensus %.1f, %.1f, first? %d, %d\r\n",(float)current_spo21f/(float)(1<<FIXED_BITS), (float)current_hr1f/(float)(1<<FIXED_BITS), first_hr, first_spo2);
-+        LOG(LOG_INFO, "post concensus %.1f, %.1f, first? %d, %d\r\n",(float)current_spo21f/(float)(1<<FIXED_BITS), (float)current_hr1f/(float)(1<<FIXED_BITS), first_hr, first_spo2);
-@@ -77 +76 @@ void SPO2::do_algorithm_part2()
+-    } else {
 -        //pc.printf("collecting data\r\n");
++        LOG(LOG_INFO, "post concensus %.1f, %.1f, first? %d, %d\r\n",(float)current_spo21f/(float)(1<<FIXED_BITS), (float)current_hr1f/(float)(1<<FIXED_BITS), first_hr, first_spo2);
++    }
++    else
++    {
 +        LOG(LOG_DEBUG, "collecting data\r\n");
-@@ -90 +89 @@ void SPO2::do_algorithm_part2()
+@@ -94,5 +99,7 @@ void SPO2::do_algorithm_part2()
+-
+-
+-    if(current_hr1f) {
+-        if(first_hr) { //initalize average
 -            //pc.printf("init hr avg\r\n");
++    
++    
++    if(current_hr1f)
++    {
++        if(first_hr)//initalize average
++        {
 +            LOG(LOG_DEBUG, "init hr avg\r\n");
-@@ -119 +118 @@ void SPO2::do_algorithm_part2()
+@@ -103 +110,3 @@ void SPO2::do_algorithm_part2()
+-        } else { //increment index and num avgs
++        }
++        else //increment index and num avgs
++        {
+@@ -108 +117,2 @@ void SPO2::do_algorithm_part2()
+-        if(num_hr_avgs > NUM_HR_AVGS) { //subtract oldest sample if number of averages is greater than max
++        if(num_hr_avgs > NUM_HR_AVGS) //subtract oldest sample if number of averages is greater than max
++        {
+@@ -115 +125,3 @@ void SPO2::do_algorithm_part2()
+-    } else {
++    }
++    else
++    {
+@@ -118,3 +130,5 @@ void SPO2::do_algorithm_part2()
+-    if(current_spo21f) {
+-        if(first_spo2) { //initalize average
 -            //pc.printf("init spo2 avg\r\n");
++    if(current_spo21f)
++    {
++        if(first_spo2)//initalize average
++        {
 +            LOG(LOG_DEBUG, "init spo2 avg\r\n");
-@@ -145 +144 @@ void SPO2::do_algorithm_part2()
+@@ -125,2 +139,4 @@ void SPO2::do_algorithm_part2()
+-
+-        } else { //increment index and num avgs
++            
++        }
++        else //increment index and num avgs
++        {
+@@ -131 +147,2 @@ void SPO2::do_algorithm_part2()
+-        if(num_spo2_avgs > NUM_SPO2_AVGS) { //subtract oldest sample if number of averages is greater than max
++        if(num_spo2_avgs > NUM_SPO2_AVGS) //subtract oldest sample if number of averages is greater than max
++        {
+@@ -138 +155,3 @@ void SPO2::do_algorithm_part2()
+-    } else {
++    }
++    else
++    {
+@@ -141 +160 @@ void SPO2::do_algorithm_part2()
 -    pc.printf("%.2f, %.2f, %.2f, %.2f, %.4f\r\n",(float)avg_spo2/(float)(1<<FIXED_BITS),(float)avg_hr/(float)(1<<FIXED_BITS),(float)current_spo21f/float(1<<FIXED_BITS),(float)current_hr1f/(float)(1<<FIXED_BITS),R);
 +    LOG(LOG_INFO, "%.2f, %.2f, %.2f, %.2f, %.4f\r\n",(float)avg_spo2/(float)(1<<FIXED_BITS),(float)avg_hr/(float)(1<<FIXED_BITS),(float)current_spo21f/float(1<<FIXED_BITS),(float)current_hr1f/(float)(1<<FIXED_BITS),R);
-@@ -186 +185 @@ void SPO2::consensus()
+@@ -180,3 +199,3 @@ void SPO2::consensus()
 -    //pc.printf("n_samples = %d, %d\r\n",n_hr_samples,n_spo2_samples);
+-
+-
 +    LOG(LOG_DEBUG,"n_samples = %d, %d\r\n",n_hr_samples,n_spo2_samples);
-@@ -217 +216 @@ void SPO2::consensus()
++    
++    
+@@ -206,4 +225,8 @@ void SPO2::consensus()
 -            //pc.printf("use latest spo2--00s, ");
+-        } else {
+-            if(spo2_diff/spo2_avg < MAX_SPO2_DROP1f) {
+-                if( (prev_diff/prev_avg) > MAX_HR_CHANGE1f) {
 +            LOG(LOG_DEBUG,"use latest spo2--00s, ");
-@@ -227 +226 @@ void SPO2::consensus()
++        }
++        else
++        {
++            if(spo2_diff/spo2_avg < MAX_SPO2_DROP1f)
++            {
++                if( (prev_diff/prev_avg) > MAX_HR_CHANGE1f)
++                {
+@@ -212,5 +235 @@ void SPO2::consensus()
 -                    //pc.printf("use latest spo2, ");
+-                } else {
+-                    carryover = USE_PREV; //use first sample
+-                    current_spo21f = prev_avg;
+-                    //pc.printf("drop latest spo2, ");
 +                    LOG(LOG_DEBUG,"use latest spo2, ");
-@@ -233 +232 @@ void SPO2::consensus()
--                     //pc.printf("drop latest spo2, ");  
+@@ -217,0 +237,6 @@ void SPO2::consensus()
++                else
++                {
++                     carryover = USE_PREV; //use first sample
++                     current_spo21f = prev_avg;  
 +                     LOG(LOG_DEBUG,"drop latest spo2, ");  
-@@ -240 +239 @@ void SPO2::consensus()
++                }
+@@ -222 +247 @@ void SPO2::consensus()
 -                    //pc.printf("and first spo2, ");
 +                    LOG(LOG_DEBUG,"and first spo2, ");
-@@ -248 +247 @@ void SPO2::consensus()
+@@ -224 +249,3 @@ void SPO2::consensus()
+-            } else if( (prev_diff/prev_avg) > MAX_HR_CHANGE1f) {
++            }
++            else if( (prev_diff/prev_avg) > MAX_HR_CHANGE1f)
++            {
+@@ -228,2 +255,4 @@ void SPO2::consensus()
 -                //pc.printf("drop first spo2, ");
+-            } else {
 +                LOG(LOG_DEBUG,"drop first spo2, ");
-@@ -253 +252 @@ void SPO2::consensus()
++            }
++            else
++            {
+@@ -231 +260 @@ void SPO2::consensus()
 -                //pc.printf("use all spo2, ");
 +                LOG(LOG_DEBUG,"use all spo2, ");
-@@ -272 +271 @@ void SPO2::consensus()
--        hr_diff = abs_float(hr_diff); //absolute value
-+        hr_diff = abs(hr_diff); //absolute value
-@@ -288,2 +287,2 @@ void SPO2::consensus()
--        hr_diff = abs_float(hr_diff); //absolute value
--        diff_from_oldest = abs_float(diff_from_oldest);
-+        hr_diff = abs(hr_diff); //absolute value
-+        diff_from_oldest = abs(diff_from_oldest);
-@@ -294 +293 @@ void SPO2::consensus()
+@@ -236 +265 @@ void SPO2::consensus()
+-    n_spo2_samples = (n_spo2_samples > 2) ? 2 : n_spo2_samples;  //limit to 2
++    n_spo2_samples = (n_spo2_samples > 2) ? 2 : n_spo2_samples;  //limit to 2   
+@@ -238,2 +267,2 @@ void SPO2::consensus()
+-
+-
++    
++    
+@@ -245 +274,2 @@ void SPO2::consensus()
+-    if(n_hr_samples ==1) {
++    if(n_hr_samples ==1)
++    {
+@@ -250 +280,2 @@ void SPO2::consensus()
+-        if( (hr_diff /hr_avg) > MAX_HR_CHANGE1f ) {
++        if( (hr_diff /hr_avg) > MAX_HR_CHANGE1f ) 
++        {
+@@ -253 +284,3 @@ void SPO2::consensus()
+-    } else if(n_hr_samples == 2) {
++    }
++    else if(n_hr_samples == 2)
++    {
+@@ -264,2 +297,3 @@ void SPO2::consensus()
+-
+-        if( (prev_avg == 0) || (hr_avg == 0) ) {
++        
++        if( (prev_avg == 0) || (hr_avg == 0) )
++        {
+@@ -267 +301 @@ void SPO2::consensus()
 -            //pc.printf("use latest hr--00s\r\n");
 +            LOG(LOG_DEBUG,"use latest hr--00s\r\n");
-@@ -305 +304 @@ void SPO2::consensus()
+@@ -269,3 +303,7 @@ void SPO2::consensus()
+-        } else {
+-            if( (hr_diff/hr_avg) > MAX_HR_CHANGE1f ) {
+-                if( (prev_diff/prev_avg) > MAX_HR_CHANGE1f) {
++        }
++        else
++        {
++            if( (hr_diff/hr_avg) > MAX_HR_CHANGE1f )
++            {
++                if( (prev_diff/prev_avg) > MAX_HR_CHANGE1f)
++                {
+@@ -274,3 +312,5 @@ void SPO2::consensus()
 -                    //pc.printf("use latest hr");
-+                    LOG(LOG_DEBUG,"use latest hr");
-@@ -309 +308 @@ void SPO2::consensus()
+-                } else {
 -                    //pc.printf("drop latest hr, ");
++                    LOG(LOG_DEBUG,"use latest hr");
++                }
++                else
++                {
 +                    LOG(LOG_DEBUG,"drop latest hr, ");
-@@ -318 +317 @@ void SPO2::consensus()
--                   // pc.printf("and first hr");
-+                   // LOG(LOG_DEBUG,"and first hr");
-@@ -323 +322 @@ void SPO2::consensus()
+@@ -278 +318 @@ void SPO2::consensus()
+-                    current_hr1f = prev_avg;
++                    current_hr1f = prev_avg;    
+@@ -280 +320,2 @@ void SPO2::consensus()
+-                if( (carryover == USE_LATEST) && ( (diff_from_oldest/oldest_avg) < MAX_HR_CHANGE1f) ) {
++                if( (carryover == USE_LATEST) && ( (diff_from_oldest/oldest_avg) < MAX_HR_CHANGE1f) )
++                {
+@@ -284,4 +325,6 @@ void SPO2::consensus()
+-                    // pc.printf("and first hr");
+-                }
+-            } else if( (prev_diff/prev_avg) > MAX_HR_CHANGE1f) {
 -                //pc.printf("drop first hr");
++                   // LOG(LOG_DEBUG,"and first hr");
++                }  
++            }
++            else if( (prev_diff/prev_avg) > MAX_HR_CHANGE1f)
++            {
 +                LOG(LOG_DEBUG,"drop first hr");
-@@ -330 +329 @@ void SPO2::consensus()
+@@ -291,2 +334,4 @@ void SPO2::consensus()
+-            } else {
 -                //pc.printf("use all hr");
++            }
++            else
++            {
 +                LOG(LOG_DEBUG,"use all hr");
-@@ -333 +332 @@ void SPO2::consensus()
+@@ -295 +340 @@ void SPO2::consensus()
 -            //pc.printf("\r\n");
 +            LOG(LOG_DEBUG,"\r\n");
-@@ -345 +344 @@ void SPO2::consensus()
+@@ -299,2 +344,2 @@ void SPO2::consensus()
+-    n_hr_samples = (n_hr_samples > 2) ? 2 : n_hr_samples;  //limit to 2
+-    //end hr analysis
++    n_hr_samples = (n_hr_samples > 2) ? 2 : n_hr_samples;  //limit to 2   
++    //end hr analysis    
+@@ -307 +352 @@ void SPO2::consensus()
 -////            pc.printf("x = %d\r\n",(*x)[channel][ptr]);
 +//            LOG(LOG_DEBUG,"x = %d\r\n",(*x)[channel][ptr]);
-@@ -369 +368 @@ void SPO2::get_idx() {//creates an array of index
+@@ -324,2 +369,2 @@ void SPO2::copy_data(uint8_t channel)
+-    Output is AC1f-->extended precision array*/
+-    for (int n=0; n<ARRAY_LENGTH; n++) {
++Output is AC1f-->extended precision array*/
++    for (int n=0;n<ARRAY_LENGTH;n++) {
+@@ -331,3 +376,2 @@ void SPO2::copy_data(uint8_t channel)
+-void SPO2::get_idx()  //creates an array of index pointers mapping 0 to the oldest sample,1 to the next oldest sample, ... ARRAY_LENGTH to the most recent sample.
+-{
 -    //pc.printf("printing pointers\r\n");
++void SPO2::get_idx() {//creates an array of index pointers mapping 0 to the oldest sample,1 to the next oldest sample, ... ARRAY_LENGTH to the most recent sample.
 +    LOG(LOG_DEBUG,"printing pointers\r\n");
-@@ -372 +371 @@ void SPO2::get_idx() {//creates an array of index
+@@ -336 +380 @@ void SPO2::copy_data(uint8_t channel)
 -        //pc.printf("%d, %d, ",n,idx[n]);
 +        LOG(LOG_DEBUG,"%d, %d, ",n,idx[n]);
-@@ -376 +375 @@ void SPO2::get_idx() {//creates an array of index
+@@ -340 +384 @@ void SPO2::copy_data(uint8_t channel)
 -        //pc.printf("%d\r\n",idx[n]);
 +        LOG(LOG_DEBUG,"%d\r\n",idx[n]);
-@@ -388 +387 @@ is quite constant and changes in SpO2 are usually
+@@ -353 +397 @@ void SPO2::get_DC()
 -//        pc.printf("channel = %d, DC_data:\r\n",channel);
 +          LOG(LOG_DEBUG,"channel = %d, DC_data:\r\n",channel);
-@@ -392 +391 @@ is quite constant and changes in SpO2 are usually
+@@ -357 +401 @@ void SPO2::get_DC()
 -//            pc.printf("%d\r\n",dc_data[channel][n]);
 +              LOG(LOG_DEBUG,"%lu\r\n",dc_data[channel][n]);
-@@ -395 +394 @@ is quite constant and changes in SpO2 are usually
+@@ -360 +404 @@ void SPO2::get_DC()
 -//        pc.printf("channel %d mean = %d\r\n",channel,mean1f[channel]);
 +        LOG(LOG_DEBUG,"channel %u mean = %ld\r\n",channel,mean1f[channel]);
-@@ -410 +409 @@ void SPO2::avg8Samples()
--        //pc.printf("%d, %d\r\n",sum_buffer[n],AC1f[idx[n]]);//printf the unaveraged and averaged values
-+        LOG(LOG_DEBUG,"%ld, %d\r\n",sum_buffer[n],AC1f[idx[n]]);//printf the unaveraged and averaged values
-@@ -418 +417 @@ void SPO2::avg8Samples()
--        //pc.printf("%d, %d\r\n",sum_buffer[buffer_ind], AC1f[idx[n]]); //print the unaveraged and averaged values.
-+        LOG(LOG_DEBUG,"%ld, %d\r\n",sum_buffer[buffer_ind], AC1f[idx[n]]); //print the unaveraged and averaged values.
-@@ -449 +448 @@ void SPO2::get_rms()
+@@ -375 +419 @@ void SPO2::get_DC()
+-//        //pc.printf("%d, %d\r\n",sum_buffer[n],AC1f[idx[n]]);//printf the unaveraged and averaged values
++//        LOG(LOG_DEBUG,"%ld, %d\r\n",sum_buffer[n],AC1f[idx[n]]);//printf the unaveraged and averaged values
+@@ -377 +421,2 @@ void SPO2::get_DC()
+-//    for(int n=num2Avg; n<ARRAY_LENGTH; n++) { //run filter on the rest of the samples
++//    for(int n=num2Avg; n<ARRAY_LENGTH; n++) //run filter on the rest of the samples
++//    {
+@@ -382 +427 @@ void SPO2::get_DC()
+-//        //pc.printf("%d, %d\r\n",sum_buffer[buffer_ind], AC1f[idx[n]]); //print the unaveraged and averaged values.
++//        LOG(LOG_DEBUG,"%ld, %d\r\n",sum_buffer[buffer_ind], AC1f[idx[n]]); //print the unaveraged and averaged values.
+@@ -409,2 +454,3 @@ void SPO2::get_rms()
+-    for (int channel = 0; channel<2; channel++) {
+-
++     for (int channel = 0; channel<2; channel++) 
++     {
++        
+@@ -413,3 +459,2 @@ void SPO2::get_rms()
 -//        pc.printf("AC1f for channel %d\r\n",channel);
+-//        avg8Samples();
+-
 +        LOG(LOG_DEBUG,"AC1f for channel %d\r\n",channel);
-@@ -460 +459 @@ void SPO2::get_rms()
++        
+@@ -419,2 +464,2 @@ void SPO2::get_rms()
+-        for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
+-            //calc slope
++        for (uint16_t n=0; n<ARRAY_LENGTH; n++) 
++        { //calc slope
+@@ -424 +469 @@ void SPO2::get_rms()
 -//        pc.printf("slop1ef before divide = %d\r\n",slope1f);
 +        LOG(LOG_DEBUG,"slop1ef before divide = %ld\r\n",slope1f);
-@@ -462,2 +461,2 @@ void SPO2::get_rms()
+@@ -426,2 +471,2 @@ void SPO2::get_rms()
 -//        pc.printf("slope1f = %d\r\n",slope1f);
 -//        pc.printf("AC1f[idx[n]] with slope removed\r\n");
 +        LOG(LOG_DEBUG,"slope1f = %ld\r\n",slope1f);
 +        LOG(LOG_DEBUG,"AC1f[idx[n]] with slope removed\r\n");
-@@ -469 +468 @@ void SPO2::get_rms()
+@@ -429 +474,2 @@ void SPO2::get_rms()
+-        for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
++        for (uint16_t n=0; n<ARRAY_LENGTH; n++) 
++        {
+@@ -432 +478 @@ void SPO2::get_rms()
 -//            pc.printf("%d, %d, %d\r\n",ind,idx[n],AC1f[idx[n]]);
 +            LOG(LOG_DEBUG,"%d, %d, %d\r\n",ind,idx[n],AC1f[idx[n]]);
-@@ -477 +476 @@ void SPO2::get_rms()
+@@ -435 +481 @@ void SPO2::get_rms()
+-            /*Test whether we need to do the entire array or not.
++            /*Test whether we need to do the entire array or not. 
+@@ -440 +486 @@ void SPO2::get_rms()
 -//            pc.printf("var1f = %d\r\n",var1f);
 +            LOG(LOG_DEBUG,"var1f = %lu\r\n",var1f);
-@@ -479 +478 @@ void SPO2::get_rms()
+@@ -445 +491 @@ void SPO2::get_rms()
+-                    pc.printf("%d\r\n",AC1f[idx[n]]);
++                    LOG(LOG_INFO,"%d\r\n",AC1f[idx[n]]);
+@@ -449 +495 @@ void SPO2::get_rms()
 -        pc.printf("var1f = %d\r\n",var1f);
 +        LOG(LOG_INFO,"var1f = %lu\r\n",var1f);
-@@ -481 +480 @@ void SPO2::get_rms()
+@@ -451 +497 @@ void SPO2::get_rms()
 -        pc.printf("channel %d, mean1f = %d, rms1f = %d\r\n",channel,mean1f[channel],rms1f[channel]);
 +        LOG(LOG_INFO,"channel %u, mean1f = %ld, rms1f = %lu\r\n",channel,mean1f[channel],rms1f[channel]);
-@@ -503 +502 @@ void SPO2::calc_R()
+@@ -461 +507 @@ void SPO2::calc_R()
+-    IR: (11 bits+4bits fp=15bits) we  shift 17 bits to 32 bits
++    IR: (11 bits+4bits fp=15bits) we  shift 17 bits to 32 bits 
+@@ -473 +519 @@ void SPO2::calc_R()
 -    pc.printf("R=%f\r\n",R);
 +    LOG(LOG_INFO,"R=%f\r\n",R);
-@@ -525 +524 @@ void SPO2::calc_spo2()
+@@ -482 +528 @@ void SPO2::calc_spo2()
+-    //float c[6] = {-26639, 80950, -97713, 58474,  -17367, 2147};
++    //float c[6] = {-26639, 80950, -97713, 58474,  -17367, 2147}; 
+@@ -484 +530 @@ void SPO2::calc_spo2()
+-    float Rsq = R*R;
++    float Rsq = R*R; 
+@@ -492 +538,2 @@ void SPO2::calc_spo2()
+-    for(uint8_t n=0; n<5; n++) {
++    for(uint8_t n=0;n<5;n++)
++    {
+@@ -494 +541 @@ void SPO2::calc_spo2()
 -//        pc.printf("n = %d, c[n] = %f, Rs[n] = %f, term = %f\r\n, current_spo2 = %f",n,c[n],Rs[n],Rs[n]*c[n], spo2);
 +        LOG(LOG_DEBUG,"n = %d, c[n] = %f, Rs[n] = %f, term = %f\r\n, current_spo2 = %f",n,c[n],Rs[n],Rs[n]*c[n], spo2);
-@@ -528 +527 @@ void SPO2::calc_spo2()
+@@ -497 +544 @@ void SPO2::calc_spo2()
 -    pc.printf("spo2 = %.2f\r\n",spo2);
 +    LOG(LOG_INFO,"spo2 = %.2f\r\n",spo2);
-@@ -543 +542 @@ void SPO2::calc_hr()
+@@ -506 +553 @@ void SPO2::calc_hr()
+-    if(final_offset1f == 0) {
++    if(final_offset1f == 0){
+@@ -509 +556 @@ void SPO2::calc_hr()
 -        current_hr1f = ((SAMPLE_RATE_MIN<<FIXED_BITS)<<FIXED_BITS) / final_offset1f;
 +        current_hr1f = ((uint32_t)((uint32_t)SAMPLE_RATE_MIN<<FIXED_BITS)<<FIXED_BITS) / final_offset1f;
-@@ -545 +544 @@ void SPO2::calc_hr()
+@@ -511 +558 @@ void SPO2::calc_hr()
 -    pc.printf("HR = %f, %d\r\n",(float)current_hr1f/(float)(1<<FIXED_BITS), current_hr1f);
-+    LOG(LOG_INFO,"HR = %f, %d\r\n",(float)current_hr1f/(float)(1<<FIXED_BITS), current_hr1f);
-@@ -561 +560 @@ int32_t SPO2::corr(int16_t *x, uint16_t start_ptr,
++    LOG(LOG_INFO,"HR = %f, %lu\r\n",(float)current_hr1f/(float)(1<<FIXED_BITS), current_hr1f);
+@@ -516,0 +564,2 @@ void SPO2::add_sample(uint32_t ir_data, uint32_t r
++    dc_data[IR][data_ptr] = ir_data;
++    dc_data[RED][data_ptr] = r_data;
+@@ -535 +584 @@ void SPO2::add_sample(uint32_t ir_data, uint32_t r
+-        pc.printf("%d, %d\r\n",dc_data[IR][data_ptr],dc_data[RED][data_ptr]);
++        LOG(LOG_INFO,"%d, %d\r\n",dc_data[IR][data_ptr],dc_data[RED][data_ptr]);
+@@ -548 +597 @@ int32_t SPO2::corr(int16_t *x, uint16_t start_ptr,
 -    //pc.printf("start corr\r\n");
 +    LOG(LOG_DEBUG,"start corr\r\n");
-@@ -566 +565 @@ int32_t SPO2::corr(int16_t *x, uint16_t start_ptr,
+@@ -553 +602 @@ int32_t SPO2::corr(int16_t *x, uint16_t start_ptr,
 -//    pc.printf("cnt = %d, len = %d\r\n",cnt,len);
 +    LOG(LOG_DEBUG,"cnt = %d, len = %d\r\n",cnt,len);
-@@ -579 +578 @@ int32_t SPO2::corr(int16_t *x, uint16_t start_ptr,
+@@ -566 +615 @@ int32_t SPO2::corr(int16_t *x, uint16_t start_ptr,
 -//    pc.printf("offset = %d,corr = %d\r\n",offset,result);
 +    LOG(LOG_DEBUG,"offset = %u,corr = %ld\r\n",offset,result);
-@@ -611 +610 @@ void SPO2::fine_search(int16_t *x, uint16_t len, u
--//        pc.printf("c= %.0f, %d \r\n",final_offset, final_correl/2500);
-+        LOG(LOG_DEBUG,"c= %lu, %ld \r\n",final_offset, final_correl/2500);
-@@ -631 +630 @@ void SPO2::fine_search(int16_t *x, uint16_t len, u
--//            pc.printf("%.0f, %d\r\n",final_offset, final_correl/2500);
-+            LOG(LOG_DEBUG,"%lu, %ld\r\n",final_offset, final_correl/2500);
-@@ -635 +634 @@ void SPO2::fine_search(int16_t *x, uint16_t len, u
--    //pc.printf("before interp: %0.1f, (%d %d %d)\r\n", final_offset,low_side,final_correl,high_side);
-+    LOG(LOG_DEBUG,"before interp: %lu, (%ld %ld %ld)\r\n", final_offset,low_side,final_correl,high_side);
-@@ -638 +637 @@ void SPO2::fine_search(int16_t *x, uint16_t len, u
--        pc.printf("adjacents negative--false peak\r\n");
-+        LOG(LOG_INFO,"adjacents negative--false peak\r\n");
-@@ -658 +657 @@ void SPO2::fine_search(int16_t *x, uint16_t len, u
+@@ -575 +624 @@ void SPO2::fine_search(int16_t *x, uint16_t len, u
+-    pc.printf("fine search at %d\r\n",start_offset);
++    LOG(LOG_INFO,"fine search at %lu\r\n",start_offset);
+@@ -588 +637 @@ void SPO2::fine_search(int16_t *x, uint16_t len, u
+-            pc.printf("%d, %d \r\n",offset, c/2500);
++            LOG(LOG_INFO,"%u, %ld \r\n",offset, c/2500);
+@@ -610 +659 @@ void SPO2::fine_search(int16_t *x, uint16_t len, u
+-                pc.printf("%d, %d \r\n",offset, c/2500);
++                LOG(LOG_INFO,"%u, %ld \r\n",offset, c/2500);
+@@ -632,2 +681,3 @@ void SPO2::fine_search(int16_t *x, uint16_t len, u
+-        } else {
 -//                pc.printf("dtot = %d, d_HL = %d\r\n", final_correl-lowest,high_side-low_side);
++            }
++            else {    
 +                LOG(LOG_DEBUG,"dtot = %ld, d_HL = %ld\r\n", final_correl-lowest,high_side-low_side);
-@@ -674 +673 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint
+@@ -649 +699 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint
 -            pc.printf("start = %d, success at %.2f, correl = %d\r\n", start_offset, (float)final_offset1f/(float)(1<<FIXED_BITS), final_correl);
 +            LOG(LOG_INFO,"start = %u, success at %.2f, correl = %ld\r\n", start_offset, (float)final_offset1f/(float)(1<<FIXED_BITS), final_correl);
-@@ -677 +676 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint
+@@ -652 +702 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint
 -        pc.printf("start = %d, fail at %.2f correl = %d\r\n", start_offset, (float)final_offset1f/(float)(1<<FIXED_BITS), final_correl);
 +        LOG(LOG_INFO,"start = %u, fail at %.2f correl = %ld\r\n", start_offset, (float)final_offset1f/(float)(1<<FIXED_BITS), final_correl);
-@@ -682,2 +681 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint
--
--void SPO2::dither(int16_t *x, uint16_t len, uint16_t offset, const float *rel_vals, uint16_t num_vals, int32_t *correls, float *offsets)
-+void SPO2::dither(int16_t *x, uint16_t len, uint16_t offset, const uint16_t *rel_vals, uint16_t num_vals, int32_t *correls, uint16_t *offsets)
-@@ -685,7 +683,7 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint
--    /*dither will run the correlation function for offsets specified relative to
--    a nominal offset.
--    x: the array to autocorrelate
--    len: the length of the array to use
--    rel_vals: an array with scale factors to use for the offset, e.g. (0.7.0.9, 1, 1.1, 1.3)
--    Make sure correls and offsets are appropriate arrays with enough size
--    */
-+   /*dither will run the correlation function for offsets specified relative to
-+   a nominal offset.
-+   x: the array to autocorrelate
-+   len: the length of the array to use
-+   rel_vals: an array with scale factors to use for the offset, e.g. (0.7.0.9, 1, 1.1, 1.3)
-+   Make sure correls and offsets are appropriate arrays with enough size
-+   */
-@@ -693,4 +691,4 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint
--    //condition inputs
--    if (offset>len) {
--        offset=len-1;
--    }
-+   //condition inputs
-+   if (offset>len) {
-+       offset=len-1;
-+   }
-@@ -698,14 +696,14 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint
--    for (uint16_t n=0; n<num_vals; n++) {
--        offsets[n] = floor(rel_vals[n]*offset);
--        if (offsets[n] < min_offset) {
--            offsets[n] = min_offset;
--        } else if (offsets[n] > max_offset) {
--            offsets[n] = max_offset;
--        }
--        correls[n] = corr(x,start_ptr,len,offsets[n]);
--    }
--    for (int n=0; n<NUM_COARSE_POINTS; n++)
--    {
--        pc.printf("%d ",correls[n]/2500);
--    }
--    pc.printf("\r\n");
-+   for (uint16_t n=0; n<num_vals; n++) {
-+       offsets[n] = (rel_vals[n]*offset)>>5; //divide by 32
-+       if (offsets[n] < min_offset) {
-+           offsets[n] = min_offset;
-+       } else if (offsets[n] > max_offset) {
-+           offsets[n] = max_offset;
-+       }
-+       correls[n] = corr(x,start_ptr,len,offsets[n]);
-+   }
-+   for (int n=0; n<NUM_COARSE_POINTS; n++)
-+   {
-+       LOG(LOG_INFO,"%ld ",correls[n]/2500);
-+   }
-+   LOG(LOG_INFO,"\r\n");
-@@ -716 +714 @@ void SPO2::get_corr_slope(int16_t *x, uint16_t len
+@@ -682 +732 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint
+-//    pc.printf("coarse offsets: ");
++//    LOG(LOG_INFO,"coarse offsets: ");
+@@ -684 +734 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint
+-//        pc.printf("%d ",offsets[n]);
++//        LOG(LOG_INFO,"%d ",offsets[n]);
+@@ -686 +736 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint
+-//    pc.printf("\r\ncorrels: ");
++//    LOG(LOG_INFO,"\r\ncorrels: ");
+@@ -688 +738 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint
+-//        pc.printf("%d ",correls[n]/2000);
++//        LOG(LOG_INFO,"%d ",correls[n]/2000);
+@@ -690 +740 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint
+-//    pc.printf("\r\n");
++//    LOG(LOG_INFO,"\r\n");
+@@ -695 +745 @@ void SPO2::get_corr_slope(int16_t *x, uint16_t len
 -    pc.printf("start get_corr_slope\r\n");
 +    LOG(LOG_INFO,"start get_corr_slope\r\n");
-@@ -721,2 +719,2 @@ void SPO2::get_corr_slope(int16_t *x, uint16_t len
+@@ -700,2 +750,2 @@ void SPO2::get_corr_slope(int16_t *x, uint16_t len
 -    //pc.printf("c0 %d, c1 %d, m %f\r\n",c0,c1,m);
 -    pc.printf("c0 = %d, c1 = %d, m1f = %d\r\n",c0, c1, m1f);
 +    LOG(LOG_DEBUG,"c0 %ld, c1 %ld, m %ld\r\n",c0,c1,m1f);
 +    LOG(LOG_INFO,"c0 = %ld, c1 = %ld, m1f = %ld\r\n",c0, c1, m1f);
-@@ -732,2 +730,2 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+@@ -711,2 +761,2 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
 -    pc.printf("start find max correl\r\n");
 -//    pc.printf("len = %d, offset_guess = %d\r\n",max_length, offset_guess);
 +    LOG(LOG_INFO,"start find max correl\r\n");
 +    LOG(LOG_DEBUG,"len = %d, offset_guess = %d\r\n",max_length, offset_guess);
-@@ -744 +742 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+@@ -716 +766 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+-
++    
+@@ -718 +768 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+-
++    
+@@ -720 +770 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+-
++ 
+@@ -724 +774 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
 -    //pc.printf("max_offset after get_corr_slope = %d\r\n",max_offset);
-+    LOG(LOG_DEBUG,"max_offset after get_corr_slope = %d\r\n",max_offset);
-@@ -746 +744 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
--    pc.printf("offset_guess = %d\r\n",offset_guess);
-+    LOG(LOG_INFO,"offset_guess = %d\r\n",offset_guess);
-@@ -749,2 +747,2 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
--    //pc.printf("new offset_guess %d\r\n",offset_guess);
--    //pc.printf("before dither %d, ", offset_guess);
-+    LOG(LOG_DEBUG,"new offset_guess %d\r\n",offset_guess);
-+    LOG(LOG_DEBUG,"before dither %d, ", offset_guess);
-@@ -752 +750 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
--    const float coarse_search[NUM_COARSE_POINTS] = {0.85,0.92,1,1.1,1.2};
-+    const uint16_t coarse_search[NUM_COARSE_POINTS] = {27, 29, 32, 35, 39}; //32nds
-@@ -754 +752 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
--    float offsets[NUM_COARSE_POINTS];
-+    uint16_t offsets[NUM_COARSE_POINTS];
-@@ -765 +763 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
--    pc.printf("max_ind =%d\r\n",max_ind);
-+    LOG(LOG_INFO,"max_ind =%d\r\n",max_ind);
-@@ -768 +766 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
--    //pc.printf("after dither %d, ",offset_guess);
-+    LOG(LOG_DEBUG,"after dither %d, ",offset_guess);
-@@ -771,2 +769,2 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
--    //note you can't just rely on this or you could lock into a harmonic.
++    //LOG(LOG_INFO,"max_offset after get_corr_slope = %d\r\n",max_offset);
+@@ -738 +788 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+-    pc.printf("%d, %d\r\n%d, %d\r\n", MIN_OFFSET-BIG_STEP,c1,MIN_OFFSET,c2);
++    LOG(LOG_INFO,"%d, %ld\r\n%d, %ld\r\n", MIN_OFFSET-BIG_STEP,c1,MIN_OFFSET,c2);
+@@ -741 +791 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+-            pc.printf("searching for min\r\n");
++            LOG(LOG_INFO,"searching for min\r\n");
+@@ -754 +804 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+-            pc.printf("%d %d\r\n",try_offset,c3);
++            LOG(LOG_INFO,"%d %ld\r\n",try_offset,c3);
+@@ -761 +811 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+-//                pc.printf("dtot = %d, d_HL = %d\r\n", final_correl-lowest,high_side-low_side);
++//                LOG(LOG_DEBUG,"dtot = %d, d_HL = %d\r\n", final_correl-lowest,high_side-low_side);
+@@ -763 +813 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+-                pc.printf("d2 = %d\r\n",d2);
++                LOG(LOG_INFO,"d2 = %ld\r\n",d2);
+@@ -765 +815 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+-                pc.printf("guessing double the min at %d\r\n",offset_guess);
++                LOG(LOG_INFO,"guessing double the min at %d\r\n",offset_guess);
+@@ -770 +820 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+-            pc.printf("searching for max\r\n");
++            LOG(LOG_INFO,"searching for max\r\n");
+@@ -783 +833 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+-                pc.printf("%d %d\r\n",try_offset,c3);
++                LOG(LOG_INFO,"%u %ld\r\n",try_offset,c3);
+@@ -791 +841 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+-//                pc.printf("dtot = %d, d_HL = %d\r\n", final_correl-lowest,high_side-low_side);
++//                LOG(LOG_DEBUG,"dtot = %d, d_HL = %d\r\n", final_correl-lowest,high_side-low_side);
+@@ -793 +843 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+-                pc.printf("d2 = %d\r\n",d2);
++                LOG(LOG_INFO,"d2 = %ld\r\n",d2);
+@@ -795 +845 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+-                pc.printf("guessing near the max at %d\r\n",offset_guess);
++                LOG(LOG_INFO,"guessing near the max at %d\r\n",offset_guess);
+@@ -810 +860 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
 -        pc.printf("trying prev sol'n\r\n");
-+      //note you can't just rely on this or you could lock into a harmonic.
 +        LOG(LOG_INFO,"trying prev sol'n\r\n");
-@@ -784 +782 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
--    //pc.printf("final_offset %0.1f\r\n",final_offset);
+@@ -821 +871,2 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_
+-//pc.printf("final_offset %0.1f\r\n",final_offset);
++    
 +    LOG(LOG_DEBUG,"final_offset %ld\r\n",final_offset1f);

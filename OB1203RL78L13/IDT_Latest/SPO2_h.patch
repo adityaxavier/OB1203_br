@@ -1,5 +1,5 @@
---- IDT_Latest/SPO2.h	Thu Mar 14 17:02:37 2019
-+++ SPO2/SPO2.h	Thu Mar 14 17:02:37 2019
+--- IDT_Latest/SPO2.h	Mon Mar 18 15:47:34 2019
++++ SPO2/SPO2.h	Mon Mar 18 14:33:20 2019
 @@ -4 +4,6 @@
 -#include "mbed.h"
 +#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
@@ -8,6 +8,3 @@
 +#include "r_cg_userdefine.h"
 +#endif //#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
 +
-@@ -58 +63 @@ class SPO2
--    void dither(int16_t *x, uint16_t len, uint16_t offset, const float *rel_vals, uint16_t num_vals, int32_t *correls, float *offsets);
-+    void dither(int16_t *x, uint16_t len, uint16_t offset, const uint16_t *rel_vals, uint16_t num_vals, int32_t *correls, uint16_t *offsets);

@@ -13,8 +13,14 @@ this subtracts the DC level no matter what it is doing: linear or quadratic or w
 The sample buffers are then int16's and data will be operated on in-place.
 */
 
-const int32_t sum_squares=2272550;//676700;  (for 100 sample array) //2272550 for 150 sample array; //sum of n^2 for -sample length to + sample length, with sample length = 150 and array length = 301 or 2*sum(1^2+ 2^2...150^2)
+//#define PRINT_RAW //print raw, filtered data
+//#define PRINT_AC1F //print DC and slope removed
 
+//int32_t sum_squares=2272550; //(for 150 sample array) sum of n^2 for -sample length to + sample length, with sample length = 150 and array length = 301 or 2*sum(1^2+ 2^2...150^2)
+
+//int32_t sum_squares=676700;  //(for 100 sample array) sum of n^2 for -sample length to + sample length, with sample length = 100 and array length = 201 or 2*sum(1^2+ 2^2...100^2)
+
+int32_t sum_squares;
 
 //const int32_t  h[32] = {3,1,-3,-8,-8,2,16,22,11,-19,-48,-47,4,100,208,279,279,208,100,4,-47,-48,-19,11,22,16,2,-8,-8,-3,1,3}; //10 bits of fixed precision included
 //const int32_t h[12] = {-12,-13,16,89,185,254,254,185,89,16,-13,-12};
@@ -23,6 +29,16 @@ const int32_t sum_squares=2272550;//676700;  (for 100 sample array) //2272550 fo
 //const uint8_t h_bit_prec = 10; //real filter coefficients are 2^bit_prec smaller
 //const int32_t h[NUM_FILTER_TAPS] = {1,1,1,1,1,1,1,1}; //running average
 //const uint8_t h_bit_prec = 3;
+
+void SPO2::get_sum_squares()
+{
+    sum_squares = 0;
+    for (int n=1; n<SAMPLE_LENGTH; n++) {
+        sum_squares += n*n;
+    }
+    sum_squares = sum_squares<<1;
+}
+
 
 void SPO2::do_algorithm_part1()
 {
@@ -37,7 +53,7 @@ void SPO2::do_algorithm_part1()
 
 void SPO2::do_algorithm_part2()
 {
-    
+
     static uint16_t hr_avgs[NUM_HR_AVGS];
     static uint16_t sum_hr = 0;
     static uint8_t hr_avg_ind = 0;
@@ -156,14 +172,12 @@ SPO2::SPO2()
     data_ptr=0;
 }
 
-float SPO2::abs_float(float val)
-{
-    return (val < 0 )? -val : val;
-}
+
 
 
 void SPO2::consensus()
-{//Compares 3 values. If latest 2 samples have big differense, it carries over previous avg. If prev difference is large it uses latest average.
+{
+    //Compares 3 values. If latest 2 samples have big differense, it carries over previous avg. If prev difference is large it uses latest average.
 //If both differences are large, it uses the latest value. If only the middle value is off, it drops it.
     static int32_t hr_rms_buffer[3];
     static int32_t spo2_rms_buffer[3];
@@ -189,18 +203,14 @@ void SPO2::consensus()
     if(n_spo2_samples==0 ) spo2_rms_ind = 2;
     spo2_rms_ind = (spo2_rms_ind+1)%3;
     spo2_rms_buffer[spo2_rms_ind] = current_spo21f;
-    if(n_spo2_samples ==1)
-    {
+    if(n_spo2_samples ==1) {
         ind2 = (hr_rms_ind+2)%3;
         spo2_diff = spo2_rms_buffer[spo2_rms_ind] - spo2_rms_buffer[ ind2];
         spo2_avg = spo2_rms_buffer[ind2] + spo2_diff/2;
-        if( (spo2_diff /spo2_avg) < MAX_SPO2_DROP1f )  //only consider large drops becuase large rises are biologically possible in one heart beat
-        {
+        if( (spo2_diff /spo2_avg) < MAX_SPO2_DROP1f ) { //only consider large drops becuase large rises are biologically possible in one heart beat
             first_spo2 =1; //reset with current value
         }
-    }
-    else if(n_spo2_samples == 2)
-    {
+    } else if(n_spo2_samples == 2) {
         prev_diff = spo2_diff;
         prev_avg = spo2_avg;
         ind2 = (spo2_rms_ind+2)%3;
@@ -209,9 +219,8 @@ void SPO2::consensus()
         spo2_avg = spo2_rms_buffer[ind2] + spo2_diff/2;
         diff_from_oldest = spo2_rms_buffer[spo2_rms_ind] - spo2_rms_buffer[ind1]; //newest - oldest
         oldest_avg = spo2_rms_buffer[ind1] + diff_from_oldest/2;
-        
-        if ( (prev_avg == 0) || (hr_avg == 0) )
-        {
+
+        if ( (prev_avg == 0) || (hr_avg == 0) ) {
             first_spo2 = 1;
             LOG(LOG_DEBUG,"use latest spo2--00s, ");
         }
@@ -231,13 +240,12 @@ void SPO2::consensus()
                      current_spo21f = prev_avg;  
                      LOG(LOG_DEBUG,"drop latest spo2, ");  
                 }
-                if( (carryover == USE_LATEST) && ( (diff_from_oldest/oldest_avg) < MAX_HR_CHANGE1f) )
-                {
+                if( (carryover == USE_LATEST) && ( (diff_from_oldest/oldest_avg) < MAX_HR_CHANGE1f) ) {
                     carryover = DROP_MIDDLE; // drop middle sample
                     current_spo21f = (spo2_rms_buffer[spo2_rms_ind] + spo2_rms_buffer[ind1] ) /2; //avg of oldest and newest
                     first_spo2 = 1;
                     LOG(LOG_DEBUG,"and first spo2, ");
-                }  
+                }
             }
             else if( (prev_diff/prev_avg) > MAX_HR_CHANGE1f)
             {
@@ -356,7 +364,8 @@ void SPO2::consensus()
 
 
 void SPO2::copy_data(uint8_t channel)
-{/*copies all data from the dc_data buffers to temporary buffer and subtracts the DC level 
+{
+    /*copies all data from the dc_data buffers to temporary buffer and subtracts the DC level
 Output is AC1f-->extended precision array*/
     for (int n=0;n<ARRAY_LENGTH;n++) {
         AC1f[n] = (dc_data[channel][n]<<FIXED_BITS) - mean1f[channel]; //load the ~11bit or less AC data into an array with fixed precision for DC removal, etc.
@@ -379,11 +388,12 @@ void SPO2::get_idx() {//creates an array of index pointers mapping 0 to the olde
 
 
 void SPO2::get_DC()
-{/*calculates the mean DC level being subtracted in mean and residual DC level 
-for each channel and stores is in res_dc. THe mean is used for SpO2 calculations.
-There is a lag in the mean and rms but this should not be significant as the mean
-is quite constant and changes in SpO2 are usually due to rms.*/
-    for(uint8_t channel=0;channel<2;channel++) {
+{
+    /*calculates the mean DC level being subtracted in mean and residual DC level
+    for each channel and stores is in res_dc. THe mean is used for SpO2 calculations.
+    There is a lag in the mean and rms but this should not be significant as the mean
+    is quite constant and changes in SpO2 are usually due to rms.*/
+    for(uint8_t channel=0; channel<2; channel++) {
           LOG(LOG_DEBUG,"channel = %d, DC_data:\r\n",channel);
         mean1f[channel] = 0; //get the running mean
         for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
@@ -396,37 +406,38 @@ is quite constant and changes in SpO2 are usually due to rms.*/
 }
 
 
-void SPO2::avg8Samples()
-{
-    uint8_t buffer_ind =0;
-    const uint8_t num2Avg = 8;
-    int32_t running_sum = 0;
-    int32_t sum_buffer[num2Avg];
-    for (int n=0; n<num2Avg; n++) {//fill buffer with first 8 samples
-        sum_buffer[n] = AC1f[idx[n]]; //add a new sample to the buffer
-        running_sum += sum_buffer[n]; //add a new sample to the running sum
-        AC1f[idx[n]] = running_sum / (n+1); //get running average of first samples
-        LOG(LOG_DEBUG,"%ld, %d\r\n",sum_buffer[n],AC1f[idx[n]]);//printf the unaveraged and averaged values
-    }
-    for(int n=num2Avg; n<ARRAY_LENGTH; n++) //run filter on the rest of the samples
-    {
-        running_sum -= sum_buffer[buffer_ind];  //remove oldest sample from sum
-        sum_buffer[buffer_ind] = AC1f[idx[n]]; //overwrite old sample in buffer with new sample
-        running_sum += sum_buffer[buffer_ind]; //add new sample to sum
-        AC1f[idx[n]] = running_sum >> 3; //replace array value by average
-        LOG(LOG_DEBUG,"%ld, %d\r\n",sum_buffer[buffer_ind], AC1f[idx[n]]); //print the unaveraged and averaged values.
-        buffer_ind++; //increment buffer index
-        buffer_ind &= 0x07; //loop index
-    }
-}
+//void SPO2::avg8Samples()
+//{
+//    uint8_t buffer_ind =0;
+//    const uint8_t num2Avg = 8;
+//    int32_t running_sum = 0;
+//    int32_t sum_buffer[num2Avg];
+//    for (int n=0; n<num2Avg; n++) {//fill buffer with first 8 samples
+//        sum_buffer[n] = AC1f[idx[n]]; //add a new sample to the buffer
+//        running_sum += sum_buffer[n]; //add a new sample to the running sum
+//        AC1f[idx[n]] = running_sum / (n+1); //get running average of first samples
+//        LOG(LOG_DEBUG,"%ld, %d\r\n",sum_buffer[n],AC1f[idx[n]]);//printf the unaveraged and averaged values
+//    }
+//    for(int n=num2Avg; n<ARRAY_LENGTH; n++) //run filter on the rest of the samples
+//    {
+//        running_sum -= sum_buffer[buffer_ind];  //remove oldest sample from sum
+//        sum_buffer[buffer_ind] = AC1f[idx[n]]; //overwrite old sample in buffer with new sample
+//        running_sum += sum_buffer[buffer_ind]; //add new sample to sum
+//        AC1f[idx[n]] = running_sum >> 3; //replace array value by average
+//        LOG(LOG_DEBUG,"%ld, %d\r\n",sum_buffer[buffer_ind], AC1f[idx[n]]); //print the unaveraged and averaged values.
+//        buffer_ind++; //increment buffer index
+//        buffer_ind &= 0x07; //loop index
+//    }
+//}
 
-uint32_t SPO2::uint_sqrt(uint32_t val) 
-{ //integer sqrt function from http://www.azillionmonkeys.com/qed/sqroot.html
+uint32_t SPO2::uint_sqrt(uint32_t val)
+{
+    //integer sqrt function from http://www.azillionmonkeys.com/qed/sqroot.html
     uint32_t temp, g=0, b = 0x8000, bshft = 15;
     do {
         if (val >= (temp = (((g << 1) + b)<<bshft--))) {
-           g += b;
-           val -= temp;
+            g += b;
+            val -= temp;
         }
     } while (b >>= 1);
     return g;
@@ -435,18 +446,17 @@ uint32_t SPO2::uint_sqrt(uint32_t val)
 
 void SPO2::get_rms()
 {
-     int32_t slope1f = 0;
-     int16_t ind;
-     uint32_t var1f;
-     get_idx(); //fill an array with indices
-     get_DC(); //calculate residual DC level 
+    int32_t slope1f = 0;
+    int16_t ind;
+    uint32_t var1f;
+    get_idx(); //fill an array with indices
+    get_DC(); //calculate residual DC level
      for (int channel = 0; channel<2; channel++) 
      {
         
         var1f = 0;
         copy_data(channel); //copies data to AC1f[n] array (extended precision) and removes DC
         LOG(LOG_DEBUG,"AC1f for channel %d\r\n",channel);
-        avg8Samples();
         
         //remove slope
         slope1f = 0;
@@ -475,6 +485,13 @@ void SPO2::get_rms()
             var1f += ( (uint32_t)abs(AC1f[idx[n]]>>2 ))*( (uint32_t)abs(AC1f[idx[n]>>2] )); //getting 2 bit shifts here, taking out extra bit shift for overhead
             LOG(LOG_DEBUG,"var1f = %lu\r\n",var1f);
         }
+        #ifdef PRINT_AC1F
+            if(channel == IR) { //print filtered data for IR channel
+                for (int n = 0; n<ARRAY_LENGTH; n++) {
+                    LOG(LOG_INFO,"%d\r\n",AC1f[idx[n]]);
+                }
+            }
+        #endif
         LOG(LOG_INFO,"var1f = %lu\r\n",var1f);
         rms1f[channel] = uint_sqrt(var1f/(uint32_t)ARRAY_LENGTH ); //square root halfs the bit shifts back to 2, so this is more like RMS0.5f -- OH WELL (it is 4x bigger, not 16x bigger)
         LOG(LOG_INFO,"channel %u, mean1f = %ld, rms1f = %lu\r\n",channel,mean1f[channel],rms1f[channel]);
@@ -496,8 +513,8 @@ void SPO2::calc_R()
     R: 5bit+4bits FP=9bits. We shift by 17 bits to 26 bits
     then we divide by 18 bits which leaves 8 bits. This is bare bones
     a 3 fixed point (nibble) shifts*/
-    
-    
+
+
     R = ((float)rms1f[RED]/(float)mean1f[RED])  / ((float)rms1f[IR]/(float)mean1f[IR]); //3ms
     LOG(LOG_INFO,"R=%f\r\n",R);
 }
@@ -533,15 +550,12 @@ void SPO2::calc_spo2()
 
 void SPO2::calc_hr()
 {
-    if(final_offset1f == 0)
-    {
+    if(final_offset1f == 0){
         current_hr1f = 0;
-    }
-    else
-    {
+    } else {
         current_hr1f = ((uint32_t)((uint32_t)SAMPLE_RATE_MIN<<FIXED_BITS)<<FIXED_BITS) / final_offset1f;
     }
-    LOG(LOG_INFO,"HR = %f, %d\r\n",(float)current_hr1f/(float)(1<<FIXED_BITS), current_hr1f);
+    LOG(LOG_INFO,"HR = %f, %lu\r\n",(float)current_hr1f/(float)(1<<FIXED_BITS), current_hr1f);
 }
 
 
@@ -549,9 +563,32 @@ void SPO2::add_sample(uint32_t ir_data, uint32_t r_data)
 {
     dc_data[IR][data_ptr] = ir_data;
     dc_data[RED][data_ptr] = r_data;
-    prev_data_ptr = data_ptr; //keeping track of this in case I want to print the data   
+    const uint8_t num2avg=8;
+    static uint16_t num_samples = 0;
+    static uint8_t buffer_index = 0;
+    static uint32_t avg_buffer[2][num2avg];
+    static uint32_t running_sum[2] = {0,0};
+    if (num_samples == num2avg) {
+        running_sum[IR] -= avg_buffer[IR][buffer_index];
+        running_sum[RED] -= avg_buffer[RED][buffer_index];
+    } else {
+        num_samples++;
+    }
+    running_sum[IR] += ir_data;
+    running_sum[RED] += r_data;
+    avg_buffer[IR][buffer_index] = ir_data;
+    avg_buffer[RED][buffer_index] = r_data;
+    dc_data[IR][data_ptr] = running_sum[IR]/num_samples;
+    dc_data[RED][data_ptr] = running_sum[RED]/num_samples;
+    #ifdef PRINT_RAW
+        LOG(LOG_INFO,"%d, %d\r\n",dc_data[IR][data_ptr],dc_data[RED][data_ptr]);
+    #endif
+    buffer_index++;
+    buffer_index = (buffer_index==num2avg) ? 0 : buffer_index;
+    prev_data_ptr = data_ptr; //keeping track of this in case I want to print the data
     data_ptr++;
     data_ptr = (data_ptr>=ARRAY_LENGTH)? 0 : data_ptr; //index roll over
+    
 }
 
 
@@ -584,9 +621,10 @@ void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t 
     /*fine search for correlation peak using defined step size (index units).
     Finds peak and interpolates the maximum and saves the answer with fixed precision.
     */
+    LOG(LOG_INFO,"fine search at %lu\r\n",start_offset);
     uint32_t final_offset;
     uint16_t offset = start_offset;
-    int32_t c1;
+    int32_t c;
     int32_t high_side;
     int32_t low_side;
     int32_t lowest;
@@ -595,70 +633,58 @@ void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t 
     while(1) { //search toward lower offset, higher frequency
         offset -= search_step;
         if (offset>=min_offset) {
-            c1 = corr(x,start_ptr,len,offset);
-            if (c1<=final_correl) {
+            c = corr(x,start_ptr,len,offset);
+            LOG(LOG_INFO,"%u, %ld \r\n",offset, c/2500);
+            if (c<=final_correl) {
                 break; //Getting worse. Stop.
             } else {
                 high_side = final_correl; //load prev sample as new larger offset sample for fit
-                final_correl = c1; //better, use new result; keep going
+                final_correl = c; //better, use new result; keep going
                 final_offset = offset;
             }
         } else {
-            c1 = start_correl;
+            c = start_correl;
             break;
         }
-        LOG(LOG_DEBUG,"c= %lu, %ld \r\n",final_offset, final_correl/2500);
+        
     }
-    low_side = c1;  //the low-side sample is the one we exited the loop on
+    low_side = c;  //the low-side sample is the one we exited the loop on
 
     if (final_correl == start_correl) { //didn't find something bigger at lower offsets, check higher
         offset = start_offset;
         while(1) {
             offset += search_step;
             if (offset<max_offset) {
-                c1 = corr(x,start_ptr,len,offset); //search lower frequency
-                if (c1 <= final_correl) {
+                c = corr(x,start_ptr,len,offset); //search lower frequency
+                LOG(LOG_INFO,"%u, %ld \r\n",offset, c/2500);
+                if (c <= final_correl) {
                     break; //getting worse; stop
                 } else {
                     low_side = final_correl;
-                    final_correl = c1; //better, use new results; keep going
+                    final_correl = c; //better, use new results; keep going
                     final_offset = offset;
                 }
             } else {
                 break; //out of range; stop
             }
-            LOG(LOG_DEBUG,"%lu, %ld\r\n",final_offset, final_correl/2500);
         }
-        high_side=c1; //the high side sample is the one we exited the loop on.
+        high_side=c; //the high side sample is the one we exited the loop on.
     }
-    LOG(LOG_DEBUG,"before interp: %lu, (%ld %ld %ld)\r\n", final_offset,low_side,final_correl,high_side);
-    if( (final_correl <=0) || (low_side <=0) || (high_side <=0) ) //no where near a real maximum
-    {
-        LOG(LOG_INFO,"adjacents negative--false peak\r\n");
-        final_offset = min_offset; //force the algorithm to bonk at max found check.
-    }
-    else
-    { 
-        if(final_offset <= min_offset)
-        {
-            final_offset = min_offset; //force the algorithm to bonk at max found check.
-        }
-        else if(final_offset >=max_offset)
-        {
-            final_offset = max_offset; //force the algorithm to bonk at max found check.
-        }
-        else //only run this if final_offset is not one of the boundaries
-        {
-            lowest = (high_side < low_side) ? high_side : low_side;
-            if(final_correl-lowest == 0) {
-                final_offset1f = final_offset<<FIXED_BITS;
+    if(final_offset <= min_offset) {
+        final_offset1f = min_offset<<FIXED_BITS; //force the algorithm to bonk at max found check.
+    } else if(final_offset >=max_offset) {
+        final_offset1f = max_offset<<FIXED_BITS; //force the algorithm to bonk at max found check.
+    } else { //only run this if final_offset is not one of the boundaries
+        lowest = (high_side < low_side) ? high_side : low_side;
+        if(final_correl-lowest == 0) {
+            final_offset1f = final_offset<<FIXED_BITS;
             }
             else {    
                 LOG(LOG_DEBUG,"dtot = %ld, d_HL = %ld\r\n", final_correl-lowest,high_side-low_side);
-                final_offset1f = (final_offset<<FIXED_BITS) + ( ( (((int32_t)search_step)<<FIXED_BITS) /2)*(high_side - low_side) ) / (final_correl-lowest); //interpolate a better answer
-            }
+            final_offset1f = (final_offset<<FIXED_BITS) + ( ( (((int32_t)search_step)<<FIXED_BITS) /2)*(high_side - low_side) ) / (final_correl-lowest); //interpolate a better answer
         }
     }
+//    }
 }
 
 
@@ -678,36 +704,41 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint16_t start_offset, int32_t sta
     return max_found;
 }
 
-void SPO2::dither(int16_t *x, uint16_t len, uint16_t offset, const uint16_t *rel_vals, uint16_t num_vals, int32_t *correls, uint16_t *offsets)
-{
-   /*dither will run the correlation function for offsets specified relative to
-   a nominal offset.
-   x: the array to autocorrelate
-   len: the length of the array to use
-   rel_vals: an array with scale factors to use for the offset, e.g. (0.7.0.9, 1, 1.1, 1.3)
-   Make sure correls and offsets are appropriate arrays with enough size
-   */
 
-   //condition inputs
-   if (offset>len) {
-       offset=len-1;
-   }
-
-   for (uint16_t n=0; n<num_vals; n++) {
-       offsets[n] = (rel_vals[n]*offset)>>5; //divide by 32
-       if (offsets[n] < min_offset) {
-           offsets[n] = min_offset;
-       } else if (offsets[n] > max_offset) {
-           offsets[n] = max_offset;
-       }
-       correls[n] = corr(x,start_ptr,len,offsets[n]);
-   }
-   for (int n=0; n<NUM_COARSE_POINTS; n++)
-   {
-       LOG(LOG_INFO,"%ld ",correls[n]/2500);
-   }
-   LOG(LOG_INFO,"\r\n");
-}
+//void SPO2::dither(int16_t *x, uint16_t len, uint16_t offset, const uint16_t *rel_vals, uint16_t num_vals, int32_t *correls, uint16_t *offsets)
+//{
+//    /*dither will run the correlation function for offsets specified relative to
+//    a nominal offset.
+//    x: the array to autocorrelate
+//    len: the length of the array to use
+//    rel_vals: an array with scale factors to use for the offset, e.g. (0.7.0.9, 1, 1.1, 1.3)
+//    Make sure correls and offsets are appropriate arrays with enough size
+//    */
+//
+//    //condition inputs
+//    if (offset>len) {
+//        offset=len-1;
+//    }
+//
+//    for (uint16_t n=0; n<num_vals; n++) {
+//        offsets[n] = (rel_vals[n]*offset)>>5; //divide by 32
+//        if (offsets[n] < min_offset) {
+//            offsets[n] = min_offset;
+//        } else if (offsets[n] > max_offset) {
+//            offsets[n] = max_offset;
+//        }
+//        correls[n] = corr(x,start_ptr,len,offsets[n]);
+//    }
+//    LOG(LOG_INFO,"coarse offsets: ");
+//    for (int n=0; n<NUM_COARSE_POINTS; n++) {
+//        LOG(LOG_INFO,"%d ",offsets[n]);
+//    }
+//    LOG(LOG_INFO,"\r\ncorrels: ");
+//    for (int n=0; n<NUM_COARSE_POINTS; n++) {
+//        LOG(LOG_INFO,"%d ",correls[n]/2000);
+//    }
+//    LOG(LOG_INFO,"\r\n");
+//}
 
 void SPO2::get_corr_slope(int16_t *x, uint16_t len, uint16_t offset0, uint16_t offset1)
 {
@@ -738,47 +769,106 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
     uint16_t samples2use = max_length;
  
     //determine how fast autocorrelation is dropping
-    get_corr_slope(x,max_length,0,OFFSET_FOR_SLOPE_CALC);
-    LOG(LOG_DEBUG,"max_offset after get_corr_slope = %d\r\n",max_offset);
-    offset_guess =  (4*(c0/((-m1f)>>FIXED_BITS)))>>FIXED_BITS;
-    LOG(LOG_INFO,"offset_guess = %d\r\n",offset_guess);
-    if(offset_guess < MIN_OFFSET) offset_guess = DEFAULT_GUESS; 
-    if(offset_guess > MAX_OFFSET) offset_guess = DEFAULT_GUESS;
-    LOG(LOG_DEBUG,"new offset_guess %d\r\n",offset_guess);
-    LOG(LOG_DEBUG,"before dither %d, ", offset_guess);
-    //coarse search--break out of local maximum
-    const uint16_t coarse_search[NUM_COARSE_POINTS] = {27, 29, 32, 35, 39}; //32nds
-    int32_t correls[NUM_COARSE_POINTS];
-    uint16_t offsets[NUM_COARSE_POINTS];
-    dither(x,samples2use,offset_guess,coarse_search,NUM_COARSE_POINTS,correls,offsets);
-    
-    uint16_t max_ind = 0;
-    start_correl = correls[0];
-    for(uint16_t n=1; n<NUM_COARSE_POINTS; n++) {
-        if (correls[n] > start_correl) {
-            start_correl = correls[n];
-            max_ind = n;
+    //get_corr_slope(x,max_length,0,OFFSET_FOR_SLOPE_CALC);
+
+    //LOG(LOG_INFO,"max_offset after get_corr_slope = %d\r\n",max_offset);
+    bool rising = 0;
+    uint8_t fail = 0;
+    uint16_t try_offset =MIN_OFFSET-BIG_STEP ;
+    int32_t c1;
+    int32_t c2;
+    int32_t c3;
+    int32_t highest;
+    int32_t lowest;
+    int32_t d2;
+    c1 = corr(x,start_ptr,samples2use,try_offset);\
+    try_offset +=BIG_STEP;
+    c2 = corr(x,start_ptr,samples2use,try_offset);
+    rising = (c2 > c1) ? 1 : 0; //skip to search for a peak if rising, else look for a minimum and double it.
+    LOG(LOG_INFO,"%d, %ld\r\n%d, %ld\r\n", MIN_OFFSET-BIG_STEP,c1,MIN_OFFSET,c2);
+    if(!rising) {
+        while(!rising) { //keep going until you find a minimum
+            LOG(LOG_INFO,"searching for min\r\n");
+            try_offset += BIG_STEP;
+            if(try_offset> MAX_OFFSET) {
+                fail = 1; //still falling and ran out of samples
+                break;
+            }
+            c3 = corr(x,start_ptr,samples2use,try_offset);
+            if (c3>c2) {
+                rising  = 1;
+            } else {
+                c2 = c3;
+                c1 = c2;
+            }
+            LOG(LOG_INFO,"%d %ld\r\n",try_offset,c3);
+        }
+        if(!fail) {
+            highest = (c1 > c3) ? c1 : c3;
+            if(c2-highest == 0) {
+                offset_guess  = try_offset-BIG_STEP;
+            } else {
+//                LOG(LOG_DEBUG,"dtot = %d, d_HL = %d\r\n", final_correl-lowest,high_side-low_side);
+                d2 =  ( ( ( (int32_t)BIG_STEP<<FIXED_BITS)*(c1 - c3) ) / (highest-c2) )>>FIXED_BITS; //twice the delta
+                LOG(LOG_INFO,"d2 = %ld\r\n",d2);
+                offset_guess = (uint16_t)( ( ( (int16_t)try_offset-(int16_t)BIG_STEP)<<1) + (int16_t)d2) ; //interpolate a better answer 
+                LOG(LOG_INFO,"guessing double the min at %d\r\n",offset_guess);
+            }
+        }
+    } else {//already rising
+        while(rising) {//keep going until you find a drop
+            LOG(LOG_INFO,"searching for max\r\n");
+            try_offset += BIG_STEP;
+            if(try_offset>MAX_OFFSET) {
+                fail = 2; //still rising and ran out of samples
+                break;
+            } else {
+                c3 = corr(x,start_ptr,samples2use,try_offset);
+                if (c3<c2) { 
+                    rising  = 0;
+                } else {
+                    c2= c3;
+                    c1= c2;
+                }
+                LOG(LOG_INFO,"%u %ld\r\n",try_offset,c3);
+            }
+        }
+        if(!fail) {
+            lowest = (c3 < c1) ? c3 : c1;
+            if(c2-lowest == 0) {
+                offset_guess  = try_offset-BIG_STEP;
+            } else {
+//                LOG(LOG_DEBUG,"dtot = %d, d_HL = %d\r\n", final_correl-lowest,high_side-low_side);
+                d2 = ( ( ( (int32_t)BIG_STEP<<FIXED_BITS)*(c3 - c1) ) / (c2-lowest) )>>(FIXED_BITS+1);
+                LOG(LOG_INFO,"d2 = %ld\r\n",d2);
+                offset_guess = (uint16_t)( ( (int16_t)try_offset-(int16_t)BIG_STEP) + (int16_t)d2) ; //interpolate a better answer 
+                LOG(LOG_INFO,"guessing near the max at %d\r\n",offset_guess);
+            }
+        } else {
+            offset_guess = DEFAULT_GUESS;
         }
     }
-    LOG(LOG_INFO,"max_ind =%d\r\n",max_ind);
-    offset_guess = offsets[max_ind];
-
-    LOG(LOG_DEBUG,"after dither %d, ",offset_guess);
+    //condition inputs
+    if(offset_guess < MIN_OFFSET) offset_guess = DEFAULT_GUESS;
+    if(offset_guess > MAX_OFFSET) offset_guess = DEFAULT_GUESS;
+    
+    start_correl = corr(x,start_ptr,samples2use,offset_guess);
+    
     max_found = check4max(x, samples2use, offset_guess, start_correl);
     if (prev_valid & !max_found) { //go ahead and try the previous value if the other bonked.
-      //note you can't just rely on this or you could lock into a harmonic.
+        //note you can't just rely on this or you could lock into a harmonic.
         LOG(LOG_INFO,"trying prev sol'n\r\n");
         max_found = check4max(x, samples2use, prev_offset, start_correl);
     }
-    
+
     if(!max_found) {
         final_correl = 0;
         final_offset1f = 0;
         prev_valid = 0;
-    }
-    else {
+    } else {
         prev_valid = 1;
     }
+    
     LOG(LOG_DEBUG,"final_offset %ld\r\n",final_offset1f);
 
     return max_found;

@@ -174,12 +174,7 @@
 #define FIFO_ROLL_OFF       0
 #define AFULL_ADVANCE_WARNING(x)   (x & 0x0F)
 
-
-
-
-
-#define POR_TIME_MS 5 //a guess
-
+#define POR_TIME_MS 10 
 
 #define IR_TARGET_COUNTS 196608
 #define R_TARGET_COUNTS 196608

@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements device driver for INTP module.
-* Creation Date: 3/13/2019
+* Creation Date: 3/20/2019
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -32,6 +32,7 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "r_cg_intp.h"
 /* Start user code for include. Do not edit comment generated here */
+#include <stddef.h>
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
 
@@ -45,6 +46,7 @@ Pragma directive
 Global variables and functions
 ***********************************************************************************************************************/
 /* Start user code for global. Do not edit comment generated here */
+extern void (*p_IntB_Event)(void);
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
@@ -57,6 +59,10 @@ Global variables and functions
 __interrupt static void r_intc0_interrupt(void)
 {
     /* Start user code. Do not edit comment generated here */
+  if(NULL != p_IntB_Event)
+  {
+    p_IntB_Event();
+  }
     /* End user code. Do not edit comment generated here */
 }
 

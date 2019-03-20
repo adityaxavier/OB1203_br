@@ -110,7 +110,7 @@
                 </option>
                 <option>
                     <name>GenStackSize</name>
-                    <state>512</state>
+                    <state>1024</state>
                 </option>
                 <option>
                     <name>GenNearHeapSize</name>
@@ -306,7 +306,6 @@
                 </option>
                 <option>
                     <name>CCDefines</name>
-                    <state>TEST_CODE</state>
                     <state>USE_BRUTE_DELAY</state>
                     <state>DEBUG</state>
                 </option>
@@ -378,6 +377,7 @@
                     <name>CCIncludePath2</name>
                     <state>$PROJ_DIR$\cg_src</state>
                     <state>$PROJ_DIR$\OB1203</state>
+                    <state>$PROJ_DIR$\SPO2</state>
                     <state>$PROJ_DIR$\LCD</state>
                 </option>
                 <option>
@@ -2031,6 +2031,15 @@
             <name>$PROJ_DIR$\cg_src\r_cg_intp_user.c</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_it.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_it.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_it_user.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\cg_src\r_cg_lcd.c</name>
         </file>
         <file>
@@ -2053,6 +2062,15 @@
         </file>
         <file>
             <name>$PROJ_DIR$\cg_src\r_cg_port_user.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_rtc.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_rtc.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_rtc_user.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\cg_src\r_cg_sau.c</name>
@@ -2112,4 +2130,7 @@
     <group>
         <name>UNITY</name>
     </group>
+    <file>
+        <name>$PROJ_DIR$\main.cpp</name>
+    </file>
 </project>

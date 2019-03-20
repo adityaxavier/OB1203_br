@@ -126,11 +126,11 @@
         </DataElement>
       </SerializableData>
       <SerializableData name="Interrput_26">
-        <DataElement key="InusedAs" value="">
+        <DataElement key="InusedAs" value="INTRTC">
         </DataElement>
       </SerializableData>
       <SerializableData name="Interrput_27">
-        <DataElement key="InusedAs" value="">
+        <DataElement key="InusedAs" value="INTIT">
         </DataElement>
       </SerializableData>
       <SerializableData name="Interrput_28">
@@ -3610,7 +3610,7 @@
         </DataElement>
         <DataElement key="error" value="NoError">
         </DataElement>
-        <DataElement key="inuse" value="Unused">
+        <DataElement key="inuse" value="Used">
         </DataElement>
       </SerializableData>
       <SerializableData name="IT">
@@ -3618,7 +3618,7 @@
         </DataElement>
         <DataElement key="error" value="NoError">
         </DataElement>
-        <DataElement key="inuse" value="Unused">
+        <DataElement key="inuse" value="Used">
         </DataElement>
       </SerializableData>
       <SerializableData name="PCLBUZ">
@@ -4768,21 +4768,21 @@
       <SerializableData name="RTC">
         <DataElement key="visible" value="True">
         </DataElement>
-        <DataElement key="inuse" value="Unused">
+        <DataElement key="inuse" value="Locked">
         </DataElement>
         <SerializableData name="r_cg_rtc_c">
           <DataElement key="visible" value="True">
           </DataElement>
           <DataElement key="text" value="r_cg_rtc.c">
           </DataElement>
-          <DataElement key="inuse" value="Unused">
+          <DataElement key="inuse" value="Locked">
           </DataElement>
           <SerializableData name="R_RTC_Create">
             <DataElement key="visible" value="True">
             </DataElement>
             <DataElement key="text" value="R_RTC_Create">
             </DataElement>
-            <DataElement key="inuse" value="Unused">
+            <DataElement key="inuse" value="Locked">
             </DataElement>
           </SerializableData>
           <SerializableData name="R_RTC_Start">
@@ -4790,7 +4790,7 @@
             </DataElement>
             <DataElement key="text" value="R_RTC_Start">
             </DataElement>
-            <DataElement key="inuse" value="Unused">
+            <DataElement key="inuse" value="Locked">
             </DataElement>
           </SerializableData>
           <SerializableData name="R_RTC_Stop">
@@ -4798,7 +4798,7 @@
             </DataElement>
             <DataElement key="text" value="R_RTC_Stop">
             </DataElement>
-            <DataElement key="inuse" value="Unused">
+            <DataElement key="inuse" value="Locked">
             </DataElement>
           </SerializableData>
           <SerializableData name="R_RTC_Set_HourSystem">
@@ -4814,7 +4814,7 @@
             </DataElement>
             <DataElement key="text" value="R_RTC_Get_CounterValue">
             </DataElement>
-            <DataElement key="inuse" value="Unused">
+            <DataElement key="inuse" value="Locked">
             </DataElement>
           </SerializableData>
           <SerializableData name="R_RTC_Set_CounterValue">
@@ -4822,7 +4822,7 @@
             </DataElement>
             <DataElement key="text" value="R_RTC_Set_CounterValue">
             </DataElement>
-            <DataElement key="inuse" value="Unused">
+            <DataElement key="inuse" value="Locked">
             </DataElement>
           </SerializableData>
           <SerializableData name="R_RTC_Set_AlarmOn">
@@ -4862,7 +4862,7 @@
             </DataElement>
             <DataElement key="text" value="R_RTC_Set_ConstPeriodInterruptOn">
             </DataElement>
-            <DataElement key="inuse" value="Unused">
+            <DataElement key="inuse" value="Locked">
             </DataElement>
           </SerializableData>
           <SerializableData name="R_RTC_Set_ConstPeriodInterruptOff">
@@ -4870,7 +4870,7 @@
             </DataElement>
             <DataElement key="text" value="R_RTC_Set_ConstPeriodInterruptOff">
             </DataElement>
-            <DataElement key="inuse" value="Unused">
+            <DataElement key="inuse" value="Locked">
             </DataElement>
           </SerializableData>
           <SerializableData name="R_RTC_Set_RTC1HZOn">
@@ -4903,7 +4903,7 @@
           </DataElement>
           <DataElement key="text" value="r_cg_rtc_user.c">
           </DataElement>
-          <DataElement key="inuse" value="Unused">
+          <DataElement key="inuse" value="Locked">
           </DataElement>
           <SerializableData name="R_RTC_Create_UserInit">
             <DataElement key="visible" value="True">
@@ -4918,7 +4918,7 @@
             </DataElement>
             <DataElement key="text" value="r_rtc_interrupt">
             </DataElement>
-            <DataElement key="inuse" value="Unused">
+            <DataElement key="inuse" value="Locked">
             </DataElement>
           </SerializableData>
           <SerializableData name="r_rtc_callback_constperiod">
@@ -4926,7 +4926,7 @@
             </DataElement>
             <DataElement key="text" value="r_rtc_callback_constperiod">
             </DataElement>
-            <DataElement key="inuse" value="Unused">
+            <DataElement key="inuse" value="Locked">
             </DataElement>
           </SerializableData>
           <SerializableData name="r_rtc_callback_alarm">
@@ -4943,28 +4943,28 @@
           </DataElement>
           <DataElement key="text" value="r_cg_rtc.h">
           </DataElement>
-          <DataElement key="inuse" value="Unused">
+          <DataElement key="inuse" value="Locked">
           </DataElement>
         </SerializableData>
       </SerializableData>
       <SerializableData name="IT">
         <DataElement key="visible" value="True">
         </DataElement>
-        <DataElement key="inuse" value="Unused">
+        <DataElement key="inuse" value="Locked">
         </DataElement>
         <SerializableData name="r_cg_it_c">
           <DataElement key="visible" value="True">
           </DataElement>
           <DataElement key="text" value="r_cg_it.c">
           </DataElement>
-          <DataElement key="inuse" value="Unused">
+          <DataElement key="inuse" value="Locked">
           </DataElement>
           <SerializableData name="R_IT_Create">
             <DataElement key="visible" value="True">
             </DataElement>
             <DataElement key="text" value="R_IT_Create">
             </DataElement>
-            <DataElement key="inuse" value="Unused">
+            <DataElement key="inuse" value="Locked">
             </DataElement>
           </SerializableData>
           <SerializableData name="R_IT_Start">
@@ -4972,7 +4972,7 @@
             </DataElement>
             <DataElement key="text" value="R_IT_Start">
             </DataElement>
-            <DataElement key="inuse" value="Unused">
+            <DataElement key="inuse" value="Locked">
             </DataElement>
           </SerializableData>
           <SerializableData name="R_IT_Stop">
@@ -4980,7 +4980,7 @@
             </DataElement>
             <DataElement key="text" value="R_IT_Stop">
             </DataElement>
-            <DataElement key="inuse" value="Unused">
+            <DataElement key="inuse" value="Locked">
             </DataElement>
           </SerializableData>
           <SerializableData name="R_IT_Set_PowerOff">
@@ -4997,7 +4997,7 @@
           </DataElement>
           <DataElement key="text" value="r_cg_it_user.c">
           </DataElement>
-          <DataElement key="inuse" value="Unused">
+          <DataElement key="inuse" value="Locked">
           </DataElement>
           <SerializableData name="R_IT_Create_UserInit">
             <DataElement key="visible" value="True">
@@ -5012,7 +5012,7 @@
             </DataElement>
             <DataElement key="text" value="r_it_interrupt">
             </DataElement>
-            <DataElement key="inuse" value="Unused">
+            <DataElement key="inuse" value="Locked">
             </DataElement>
           </SerializableData>
         </SerializableData>
@@ -5021,7 +5021,7 @@
           </DataElement>
           <DataElement key="text" value="r_cg_it.h">
           </DataElement>
-          <DataElement key="inuse" value="Unused">
+          <DataElement key="inuse" value="Locked">
           </DataElement>
         </SerializableData>
       </SerializableData>
@@ -6306,7 +6306,7 @@
                 </DataElement>
                 <DataElement key="text" value="r_uart2_callback_receiveend">
                 </DataElement>
-                <DataElement key="inuse" value="Locked">
+                <DataElement key="inuse" value="Unused">
                 </DataElement>
               </SerializableData>
               <SerializableData name="r_uart2_callback_sendend">
@@ -6322,7 +6322,7 @@
                 </DataElement>
                 <DataElement key="text" value="r_uart2_callback_error">
                 </DataElement>
-                <DataElement key="inuse" value="Locked">
+                <DataElement key="inuse" value="Unused">
                 </DataElement>
               </SerializableData>
               <SerializableData name="r_uart2_callback_softwareoverrun">
@@ -6330,7 +6330,7 @@
                 </DataElement>
                 <DataElement key="text" value="r_uart2_callback_softwareoverrun">
                 </DataElement>
-                <DataElement key="inuse" value="Locked">
+                <DataElement key="inuse" value="Unused">
                 </DataElement>
               </SerializableData>
             </SerializableData>
@@ -10499,7 +10499,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauMultiPwmMaster">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -18891,7 +18891,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauMultiPwmMaster">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -26561,7 +26561,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauMultiPwmMaster">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -31837,7 +31837,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauPwmMaster">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -31859,7 +31859,7 @@
               </DataElement>
               <DataElement key="Attach" value="TauOneShotSoftMaster">
               </DataElement>
-              <DataElement key="MutexType" value="NoMutex">
+              <DataElement key="MutexType" value="NoMutex, PinMutex">
               </DataElement>
               <DataElement key="Visible" value="True">
               </DataElement>
@@ -44625,11 +44625,11 @@
     <SerializableData name="RL78L13_RTC">
       <SerializableData name="RTC">
         <SerializableData name="MODULE_UNUSED">
-          <DataElement key="Checked" value="True">
+          <DataElement key="Checked" value="False">
           </DataElement>
         </SerializableData>
         <SerializableData name="MODULE_USED">
-          <DataElement key="Checked" value="False">
+          <DataElement key="Checked" value="True">
           </DataElement>
         </SerializableData>
         <SerializableData name="HOUR_SYSTEM">
@@ -44711,13 +44711,13 @@
           </DataElement>
         </SerializableData>
         <SerializableData name="CONSTANT_INTERRUPT_USED">
-          <DataElement key="Checked" value="False">
+          <DataElement key="Checked" value="True">
           </DataElement>
         </SerializableData>
         <SerializableData name="CONSTANT_INTERRUPT_VALUE">
           <DataElement key="ContentItemCount" value="12">
           </DataElement>
-          <DataElement key="SelectedContentItem" value="halfSecondfIL">
+          <DataElement key="SelectedContentItem" value="secondfSUB">
           </DataElement>
           <SerializableData name="ContentItem1">
             <DataElement key="Pin" value="">
@@ -44991,7 +44991,7 @@
         <SerializableData name="INTTERUPT_PRIOIRY">
           <DataElement key="ContentItemCount" value="4">
           </DataElement>
-          <DataElement key="SelectedContentItem" value="Low">
+          <DataElement key="SelectedContentItem" value="High">
           </DataElement>
           <SerializableData name="ContentItem1">
             <DataElement key="Pin" value="">
@@ -45087,21 +45087,21 @@
     <SerializableData name="RL78L13_IT">
       <SerializableData name="IT">
         <SerializableData name="MODULE_UNUSE">
-          <DataElement key="Checked" value="True">
-          </DataElement>
-        </SerializableData>
-        <SerializableData name="MODULE_USED">
           <DataElement key="Checked" value="False">
           </DataElement>
         </SerializableData>
+        <SerializableData name="MODULE_USED">
+          <DataElement key="Checked" value="True">
+          </DataElement>
+        </SerializableData>
         <SerializableData name="INPUT_VALUE">
-          <DataElement key="Text" value="100">
+          <DataElement key="Text" value="10">
           </DataElement>
         </SerializableData>
         <SerializableData name="INPUT_VALUE_SCALE">
           <DataElement key="ContentItemCount" value="3">
           </DataElement>
-          <DataElement key="SelectedContentItem" value="us">
+          <DataElement key="SelectedContentItem" value="ms">
           </DataElement>
           <SerializableData name="ContentItem1">
             <DataElement key="Pin" value="">
@@ -45177,7 +45177,7 @@
         <SerializableData name="INTTERRUPT_PRIORITY">
           <DataElement key="ContentItemCount" value="4">
           </DataElement>
-          <DataElement key="SelectedContentItem" value="Low">
+          <DataElement key="SelectedContentItem" value="High">
           </DataElement>
           <SerializableData name="ContentItem1">
             <DataElement key="Pin" value="">
@@ -50815,7 +50815,7 @@
             <SerializableData name="TRANSMIT_TRANSFER_BAUDRATE_VALUE">
               <DataElement key="ContentItemCount" value="10">
               </DataElement>
-              <DataElement key="SelectedContentText" value="3000000">
+              <DataElement key="SelectedContentText" value="300000">
               </DataElement>
               <SerializableData name="ContentItem1">
                 <DataElement key="Pin" value="">
@@ -51163,7 +51163,7 @@
             <SerializableData name="RECEIVE_TRANSFER_BAUDRATE_VALUE">
               <DataElement key="ContentItemCount" value="10">
               </DataElement>
-              <DataElement key="SelectedContentText" value="3000000">
+              <DataElement key="SelectedContentText" value="300000">
               </DataElement>
               <SerializableData name="ContentItem1">
                 <DataElement key="Pin" value="">
@@ -51559,11 +51559,11 @@
               </SerializableData>
             </SerializableData>
             <SerializableData name="CALLBACK_RECEIVE_END_USE">
-              <DataElement key="Checked" value="True">
+              <DataElement key="Checked" value="False">
               </DataElement>
             </SerializableData>
             <SerializableData name="CALLBACK_RECEIVE_ERROR_USE">
-              <DataElement key="Checked" value="True">
+              <DataElement key="Checked" value="False">
               </DataElement>
             </SerializableData>
           </SerializableData>
@@ -52436,7 +52436,7 @@
             </DataElement>
           </SerializableData>
           <SerializableData name="MASTER_STOP_CONDITION_CALLBACK_USED">
-            <DataElement key="Checked" value="True">
+            <DataElement key="Checked" value="False">
             </DataElement>
           </SerializableData>
         </SerializableData>
@@ -65038,7 +65038,7 @@
             </DataElement>
             <DataElement key="InUse" value="False">
             </DataElement>
-            <DataElement key="FunctionIO" value="None">
+            <DataElement key="FunctionIO" value="I">
             </DataElement>
             <DataElement key="FunctionState" value="0">
             </DataElement>
@@ -68796,6 +68796,42 @@
         </SerializableData>
       </SerializableData>
       <SerializableData name="Both_UART2">
+        <SerializableData name="VDD_MIN">
+          <DataElement key="DataValue" value="2.7">
+          </DataElement>
+        </SerializableData>
+      </SerializableData>
+      <SerializableData name="KB20">
+        <SerializableData name="fCLK">
+          <DataElement key="DataValue" value="24000">
+          </DataElement>
+        </SerializableData>
+        <SerializableData name="fHOCO">
+          <DataElement key="DataValue" value="24000">
+          </DataElement>
+        </SerializableData>
+        <SerializableData name="fCLKSource">
+          <DataElement key="DataValue" value="fIH">
+          </DataElement>
+        </SerializableData>
+      </SerializableData>
+      <SerializableData name="RTC">
+        <SerializableData name="fRTC">
+          <DataElement key="DataValue" value="32.768">
+          </DataElement>
+        </SerializableData>
+      </SerializableData>
+      <SerializableData name="IT">
+        <SerializableData name="fRTC">
+          <DataElement key="DataValue" value="32.768">
+          </DataElement>
+        </SerializableData>
+      </SerializableData>
+      <SerializableData name="COMP">
+        <SerializableData name="fCLK">
+          <DataElement key="DataValue" value="24000">
+          </DataElement>
+        </SerializableData>
         <SerializableData name="VDD_MIN">
           <DataElement key="DataValue" value="2.7">
           </DataElement>

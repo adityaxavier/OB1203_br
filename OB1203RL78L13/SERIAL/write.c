@@ -66,7 +66,7 @@ size_t __write(int handle, const unsigned char * buffer, size_t size)
   
   /* Wait until any previous transfers are completed */
   while(false == ready);
-#if 1
+
   /* Enable the DMA channel */
   if(1 != DEN0)
   {
@@ -81,10 +81,10 @@ size_t __write(int handle, const unsigned char * buffer, size_t size)
   
   /* Write the first byte to the DMAC controller */
   TXD2 = *buffer;
-#else
-  R_UART2_Send((uint8_t *)buffer, size);
-#endif
   ready = false;
+  
+  /* Wait until any previous transfers are completed */
+  while(false == ready);
   
   return size;
 }

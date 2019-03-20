@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
     <fileVersion>4</fileVersion>
-    <fileChecksum>580035845</fileChecksum>
+    <fileChecksum>44920550</fileChecksum>
     <configuration>
         <name>Debug</name>
         <outputs>
@@ -12,6 +12,7 @@
             <file>$PROJ_DIR$\Debug\Obj\r_cg_iica_user.__cstat.et</file>
             <file>$PROJ_DIR$\Debug\Obj\r_cg_dmac.__cstat.et</file>
             <file>$PROJ_DIR$\Debug\Obj\r_cg_intp.__cstat.et</file>
+            <file>$PROJ_DIR$\main.cpp</file>
             <file>$PROJ_DIR$\Debug\Obj\OB1203.__cstat.et</file>
             <file>$PROJ_DIR$\Debug\Obj\SPO2.__cstat.et</file>
             <file>$PROJ_DIR$\Debug\Obj\r_cg_lcd_user.__cstat.et</file>
@@ -26,6 +27,7 @@
             <file>$PROJ_DIR$\Debug\Obj\r_cg_lcd.__cstat.et</file>
             <file>$PROJ_DIR$\Debug\Obj\r_cg_main.__cstat.et</file>
             <file>$PROJ_DIR$\Debug\Obj\r_cg_sau.__cstat.et</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_it.h</file>
             <file>$PROJ_DIR$\Debug\Exe\OB1203RL78L13_cpp.out</file>
             <file>$PROJ_DIR$\SPO2\SPO2.h</file>
             <file>$PROJ_DIR$\OB1203\OB1203.cpp</file>
@@ -126,19 +128,66 @@
             <file>$PROJ_DIR$\cg_src\r_cg_cgc.c</file>
             <file>$PROJ_DIR$\cg_src\r_cg_intp.h</file>
             <file>$PROJ_DIR$\cg_src\r_cg_lcd_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_rtc.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_rtc.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_rtc_user.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_it.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_it_user.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.o</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_it_user.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_it_user.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_it_user.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_it.pbi</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_it.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_it.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_rtc.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_rtc_user.o</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_rtc_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_rtc.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_rtc.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_rtc_user.pbi</file>
         </outputs>
+        <file>
+            <name>$PROJ_DIR$\main.cpp</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 130</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 124</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 129</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 79 90 80 47 70 74 54 42 57 56 52 48 51 106 93 96 38 115 102 30 24</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 90 70 24 80 51 106 54 57 38 42 102 47 74 56 48 93 115 79 30 52 96</file>
+                </tool>
+            </inputs>
+        </file>
         <file>
             <name>$PROJ_DIR$\Debug\Exe\OB1203RL78L13_cpp.out</name>
             <outputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 79</file>
+                    <file> 81</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 63 47 74 41 32 80 62 89 59 24 92 51 26 29 84 38 44 69 82 25 60 70 90 75</file>
+                    <file> 65 49 130 76 43 34 82 64 91 61 26 94 53 136 133 28 31 86 40 46 141 138 71 84 27 62 72 92 77</file>
                 </tool>
             </inputs>
         </file>
@@ -147,25 +196,25 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 74</file>
+                    <file> 76</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 7</file>
+                    <file> 8</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 73</file>
+                    <file> 75</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 77 88 78 45 68 72 52 57 28 104 91 94 36 113 100</file>
+                    <file> 79 90 80 47 70 74 54 59 30 106 93 96 38 115 102</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 88 100 94 57 78 52 104 77 28 45 68 72 113 91 36</file>
+                    <file> 90 80 54 106 96 59 102 79 30 47 70 74 115 93 38</file>
                 </tool>
             </inputs>
         </file>
@@ -174,25 +223,25 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 60</file>
+                    <file> 62</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 8</file>
+                    <file> 9</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 30</file>
+                    <file> 32</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 77 88 78 45 68 72 52 40 55 54 50 46 49 22 104 91 94 36 113 100 28</file>
+                    <file> 79 90 80 47 70 74 54 42 57 56 52 48 51 24 106 93 96 38 115 102 30</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 104 54 45 46 28 88 72 78 52 94 40 68 55 49 113 77 22 50 100 91 36</file>
+                    <file> 56 47 48 30 90 74 80 54 96 42 70 57 51 115 102 79 24 52 106 93 38</file>
                 </tool>
             </inputs>
         </file>
@@ -201,38 +250,11 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 70</file>
+                    <file> 72</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 17</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 83</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 53 52 88 78 45 68 72 104 91 94 36 100 108 106</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 91 106 100 78 36 104 108 52 88 45 68 72 94 53</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\LCD\lcd_panel.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 47</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 15</file>
+                    <file> 18</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
@@ -242,20 +264,20 @@
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 104 91 94 36 110 48 112</file>
+                    <file> 55 54 90 80 47 70 74 106 93 96 38 102 110 108</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 48 94 110 112 91 36 104</file>
+                    <file> 93 108 102 80 38 106 110 54 90 47 70 74 96 55</file>
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\LCD\ppg_lcd.c</name>
+            <name>$PROJ_DIR$\LCD\lcd_panel.c</name>
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 41</file>
+                    <file> 49</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
@@ -269,11 +291,38 @@
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 104 91 94 36 110 100 48</file>
+                    <file> 106 93 96 38 112 50 114</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 36 100 91 110 48 94 104</file>
+                    <file> 50 96 112 114 93 38 106</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\LCD\ppg_lcd.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 43</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 17</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 89</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 106 93 96 38 112 102 50</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 38 102 93 112 50 96 106</file>
                 </tool>
             </inputs>
         </file>
@@ -282,25 +331,25 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 38</file>
+                    <file> 40</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 10</file>
+                    <file> 11</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 61</file>
+                    <file> 63</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 104 91 94 36 112 100</file>
+                    <file> 106 93 96 38 114 102</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 91 100 36 112 94 104</file>
+                    <file> 93 102 38 114 96 106</file>
                 </tool>
             </inputs>
         </file>
@@ -309,25 +358,25 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 44</file>
+                    <file> 46</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 14</file>
+                    <file> 15</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 76</file>
+                    <file> 78</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 104 91 94 36 112 100</file>
+                    <file> 106 93 96 38 114 102</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 91 100 36 112 94 104</file>
+                    <file> 93 102 38 114 96 106</file>
                 </tool>
             </inputs>
         </file>
@@ -336,7 +385,61 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 25</file>
+                    <file> 27</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 14</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 97</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 106 93 96 38 98 114 123 22 108 115 112 110 121 102</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 110 22 93 114 115 102 38 98 123 108 112 121 96 106</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_iica.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 61</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 3</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 58</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 106 93 96 38 115 102</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 96 115 93 38 106 102</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_intp_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 53</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
@@ -350,65 +453,11 @@
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 104 91 94 36 96 112 106 113 110 108 119 100</file>
+                    <file> 106 93 96 38 121 59 90 80 47 70 74 54 102</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 100 113 36 112 108 91 96 106 110 119 94 104</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\cg_src\r_cg_iica.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 59</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 3</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 56</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 104 91 94 36 113 100</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 94 113 91 36 104 100</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\cg_src\r_cg_intp_user.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 51</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 12</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 93</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 104 91 94 36 119 100</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 91 100 36 119 94 104</file>
+                    <file> 96 59 121 102 93 38 80 47 90 106 54 70 74</file>
                 </tool>
             </inputs>
         </file>
@@ -417,7 +466,7 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 89</file>
+                    <file> 91</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
@@ -425,17 +474,17 @@
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 66</file>
+                    <file> 68</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 104 91 94 36 108 100</file>
+                    <file> 106 93 96 38 110 102</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 91 100 36 108 94 104</file>
+                    <file> 93 102 38 110 96 106</file>
                 </tool>
             </inputs>
         </file>
@@ -444,25 +493,25 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 84</file>
+                    <file> 86</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 19</file>
+                    <file> 20</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 58</file>
+                    <file> 60</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 104 91 94 36 96 112 106 113 110 108 119 77 88 78 45 68 72 52 28 100 48 39</file>
+                    <file> 106 93 96 38 98 114 123 22 108 115 112 110 121 30 102 50 41</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 113 78 36 39 112 108 28 110 91 88 96 106 119 77 48 100 94 104 52 45 68 72</file>
+                    <file> 110 38 22 41 114 115 30 93 102 98 123 108 112 121 50 96 106</file>
                 </tool>
             </inputs>
         </file>
@@ -471,7 +520,7 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 80</file>
+                    <file> 82</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
@@ -479,17 +528,17 @@
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 67</file>
+                    <file> 69</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 104 91 94 36 96 100</file>
+                    <file> 106 93 96 38 98 102</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 94 96 91 36 104 100</file>
+                    <file> 96 98 93 38 106 102</file>
                 </tool>
             </inputs>
         </file>
@@ -498,196 +547,11 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 24</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 4</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 31</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 104 91 94 36 113 100</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 94 113 91 36 104 100</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\cg_src\r_cg_dmac.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 62</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 5</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 65</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 104 91 94 36 108 100</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 91 100 36 108 94 104</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\cg_src\r_cg_intp.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 92</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 6</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 81</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 104 91 94 36 119 100</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 91 100 36 119 94 104</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\cg_src\r_cg_lcd.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCRL78</name>
                     <file> 26</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 18</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 86</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 104 91 94 36 110 100</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 91 100 36 110 94 104</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\cg_src\r_cg_sau.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 69</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 20</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 71</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 104 91 94 36 106 100</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 94 100 106 91 36 104</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\cg_src\r_cg_sau_user.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 82</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 11</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 64</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 104 91 94 36 106 100</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\cg_src\r_cg_cgc.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 32</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 0</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 34</file>
-                </tool>
-            </outputs>
-            <inputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 104 91 94 36 96 100</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 94 96 91 36 104 100</file>
-                </tool>
-            </inputs>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\cg_src\r_cg_lcd_user.c</name>
-            <outputs>
-                <tool>
-                    <name>ICCRL78</name>
-                    <file> 29</file>
-                </tool>
-                <tool>
-                    <name>__cstat</name>
-                    <file> 9</file>
+                    <file> 4</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
@@ -697,11 +561,200 @@
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 104 91 94 36 110 100</file>
+                    <file> 106 93 96 38 115 102</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 94 110 91 36 104 100</file>
+                    <file> 96 115 93 38 106 102</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_dmac.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 64</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 5</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 67</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 106 93 96 38 110 102</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 93 102 38 110 96 106</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_intp.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 94</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 6</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 83</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 106 93 96 38 121 102</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 93 102 38 121 96 106</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_lcd.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 28</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 19</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 88</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 106 93 96 38 112 102</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 93 102 38 112 96 106</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_sau.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 71</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 21</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 73</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 106 93 96 38 108 102</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 96 102 108 93 38 106</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_sau_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 84</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 12</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 66</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 106 93 96 38 108 102</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 96 108 93 38 106 102</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_cgc.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 34</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 0</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 36</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 106 93 96 38 98 102</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 96 98 93 38 106 102</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_lcd_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 31</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 10</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 35</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 106 93 96 38 112 102</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 96 112 93 38 106 102</file>
                 </tool>
             </inputs>
         </file>
@@ -710,9 +763,117 @@
             <outputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 21 79</file>
+                    <file> 23 81</file>
                 </tool>
             </outputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_it_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 133</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 128</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 132</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 106 93 96 38 22 102</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 96 22 93 38 106 102</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_it.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 136</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 127</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 134</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 106 93 96 38 22 102</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 96 22 93 38 106 102</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_rtc_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 138</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 126</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 142</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 106 93 96 38 123 102</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 93 102 38 123 96 106</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_rtc.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 141</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 125</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 137</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 106 93 96 38 123 102</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 93 102 38 123 96 106</file>
+                </tool>
+            </inputs>
         </file>
     </configuration>
     <configuration>

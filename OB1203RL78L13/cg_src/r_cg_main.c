@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements main function.
-* Creation Date: 3/13/2019
+* Creation Date: 3/20/2019
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -32,6 +32,8 @@ Includes
 #include "r_cg_macrodriver.h"
 #include "r_cg_cgc.h"
 #include "r_cg_port.h"
+#include "r_cg_rtc.h"
+#include "r_cg_it.h"
 #include "r_cg_sau.h"
 #include "r_cg_iica.h"
 #include "r_cg_lcd.h"
@@ -107,10 +109,13 @@ void main(void)
 static void R_MAIN_UserInit(void)
 {
     /* Start user code. Do not edit comment generated here */
-  uint32_t i = LCD_VOLTAGE_WAITTIME;  
-  
   EI();
+#if defined(DEBUG)
+  R_UART2_Start();
+#endif
+  R_INTC0_Start();
 #if defined(TEST_CODE)
+  uint32_t i = LCD_VOLTAGE_WAITTIME;  
   R_UART2_Start();
   printf("Hello!\r\n");
   printf("World!\r\n");
@@ -181,6 +186,9 @@ static void R_MAIN_UserInit(void)
   }
   
   LCD_DISPLAY_OFF();
+#else
+  extern void ob1203_spo2_main(void);
+  ob1203_spo2_main();
 #endif
   /* End user code. Do not edit comment generated here */
 }
@@ -226,10 +234,10 @@ void defaultConfig(void) //populate the default settings here
     ob1203.ppg_ps_mode = PS_MODE;
   }
   ob1203.ps_pulses = PS_PULSES(3);
-  //    pc.printf("ps_pulses = %02X\r\n",ob1203.ps_pulses);
+  //    LOG(LOG_DEBUG,"ps_pulses = %02X\r\n",ob1203.ps_pulses);
   ob1203.ps_pwidth = PS_PWIDTH(1);
   ob1203.ps_rate = PS_RATE(5); //5 = 100ms
-  //    pc.printf("ps_rate = %02X\r\n",ob1203.ps_rate);
+  //    LOG(LOG_DEBUG,"ps_rate = %02X\r\n",ob1203.ps_rate);
   ob1203.ps_avg_en = PS_AVG_OFF;
   ob1203.ps_can_ana = PS_CAN_ANA_0;
   ob1203.ps_digital_can = 0;
@@ -291,12 +299,12 @@ void defaultConfig(void) //populate the default settings here
   
   if(mode == BIO_MODE)
   {
-    //        pc.printf("initial setup: bio\r\n");
+    //        LOG(LOG_DEBUG,"initial setup: bio\r\n");
     ppg2 ? ob1203.init_spo2() : ob1203.init_hr();
   }
   else    
   {
-    //       pc.printf("initial setup: ps\r\n");
+    //       LOG(LOG_DEBUG,"initial setup: ps\r\n");
     ob1203.ppg_int_en = PPG_INT_OFF;
     ob1203.ps_int_en = PS_INT_OFF;
     ob1203.init_ps();

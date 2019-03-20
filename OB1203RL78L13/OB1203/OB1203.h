@@ -195,6 +195,7 @@ public:
   MD_STATUS i2c_error;
 
   bool ready;
+  bool send_stop;
   
   static volatile bool busy;
   static void callback(void);
@@ -268,6 +269,7 @@ public:
   void writeRegister(int, char, char);
   void writeBlock(int, char, char *, char);
   void readBlock(int, char, char *, int);
+  void readRegisters(int, char, char *, int);
   uint32_t bytes2uint32(char *, int);
   uint32_t twoandhalfBytes2uint32(char *, int); 
   

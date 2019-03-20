@@ -18,11 +18,11 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_systeminit.c
+* File Name    : r_cg_it_user.c
 * Version      : Applilet4 for RL78/L13 V1.04.02.03 [24 May 2018]
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
-* Description  : This file implements system initializing function.
+* Description  : This file implements device driver for IT module.
 * Creation Date: 3/20/2019
 ***********************************************************************************************************************/
 
@@ -30,15 +30,7 @@
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "r_cg_cgc.h"
-#include "r_cg_port.h"
-#include "r_cg_rtc.h"
 #include "r_cg_it.h"
-#include "r_cg_sau.h"
-#include "r_cg_iica.h"
-#include "r_cg_lcd.h"
-#include "r_cg_dmac.h"
-#include "r_cg_intp.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -55,47 +47,19 @@ Global variables and functions
 /* Start user code for global. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 
-#pragma diag_suppress = Pm011
-int __low_level_init(void);
-#pragma diag_default = Pm011
-void R_Systeminit(void);
-
 /***********************************************************************************************************************
-* Function Name: R_Systeminit
-* Description  : This function initializes every macro.
+* Function Name: r_it_interrupt
+* Description  : None
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_Systeminit(void)
+#pragma vector = INTIT_vect
+__interrupt static void r_it_interrupt(void)
 {
-    PIOR = 0x14U;
-    R_CGC_Get_ResetSource();
-    R_PORT_Create();
-    R_CGC_Create();
-    R_RTC_Create();
-    R_IT_Create();
-    R_SAU1_Create();
-    R_IICA0_Create();
-    R_LCD_Create();
-    R_DMAC0_Create();
-    R_INTC_Create();
-    IAWCTL = 0x00U;
-}
-/***********************************************************************************************************************
-* Function Name: __low_level_init
-* Description  : This function initializes hardware setting.
-* Arguments    : None
-* Return Value : 1U -
-*                    true
-***********************************************************************************************************************/
-#pragma diag_suppress = Pm011
-int __low_level_init(void)
-#pragma diag_default = Pm011
-{
-    DI();
-    R_Systeminit();
-
-    return (int)(1U);
+    /* Start user code. Do not edit comment generated here */
+  extern void t_callback(void);
+  t_callback();
+    /* End user code. Do not edit comment generated here */
 }
 
 /* Start user code for adding. Do not edit comment generated here */

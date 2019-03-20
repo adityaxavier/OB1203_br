@@ -11,6 +11,13 @@ volatile bool OB1203::busy = false;
 void OB1203::callback(void)
 {
   busy = false;
+  if(NULL != OB1203::current)
+  {
+    if(OB1203::current->send_stop == true)
+    {
+      R_IICA0_StopCondition();
+    }
+  }
 }
 
 void OB1203_callback_tx_complete(void)
@@ -28,9 +35,11 @@ void OB1203_callback_error(MD_STATUS status)
   if(NULL != OB1203::current)
   {
     OB1203::current->i2c_error = status;
-    R_IICA0_StopCondition();
   }
   OB1203::callback();
+  
+  /* Send the stop condition to release bus control*/
+  R_IICA0_StopCondition();
 }
 
 OB1203::OB1203(uint8_t addr)
@@ -38,6 +47,7 @@ OB1203::OB1203(uint8_t addr)
 #if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
   busy = false;
   ready = false;
+  send_stop = true;
   i2c_addr = addr;
   i2c_error = MD_OK;
 #endif //defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
@@ -45,7 +55,10 @@ OB1203::OB1203(uint8_t addr)
 
 
 void OB1203::reset()
-{ 
+{
+  /* Wait for previous transmission to complete */
+  while(busy == true);
+  
   current = this;
 #if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__)
   /* Test if Slave Responds */
@@ -102,7 +115,7 @@ void OB1203::reset()
         if((status_reg_vals & 0x8000) == 0)
         {
           ready = true;
-          LOG(LOG_INFO,"OB1203 Initialized");
+          LOG(LOG_INFO,"OB1203 Initialized\r\n");
         }
       }
     }
@@ -113,6 +126,9 @@ void OB1203::reset()
 
 void OB1203::writeRegister(int addr, char reg, char val) 
 {
+  /* Wait for previous transmission to complete */
+  while(busy == true);
+  
   current = this;
   uint8_t writeRegister_writeData[2];
   /*writes 1 byte to a single register*/
@@ -121,9 +137,6 @@ void OB1203::writeRegister(int addr, char reg, char val)
   
   writeRegister_writeData[0] = reg;
   writeRegister_writeData[1] = val;
-  
-  /* Wait for previous transmission to complete */
-  while(busy == true);
   
   /* Send out the data */
   do
@@ -142,6 +155,9 @@ void OB1203::writeRegister(int addr, char reg, char val)
 
 void OB1203::writeBlock(int addr, char startReg, char *data, char numBytes) 
 {
+  /* Wait for previous transmission to complete */
+    while(busy == true);
+  
   current = this;
   /*writes data from an array beginning at the startReg*/
 
@@ -158,10 +174,6 @@ void OB1203::writeBlock(int addr, char startReg, char *data, char numBytes)
     {
       writeRegister_writeData[itr + 1] = data[itr];
     }
-    
-    
-    /* Wait for previous transmission to complete */
-    while(busy == true);
     
     /* Send out the data */
     do
@@ -187,14 +199,58 @@ void OB1203::writeBlock(int addr, char startReg, char *data, char numBytes)
 
 void OB1203::readBlock(int addr, char startReg, char *data, int numBytes) 
 {
+    /* Wait for previous transmission to complete */
+  while(busy == true);
+  
+  /* Don't send the stop condition */
+  send_stop = false;
+  
   current = this;
   i2c_addr = addr & 0xFFU;
 #if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
   uint8_t readBlock_writeData[1];
   readBlock_writeData[0] = startReg;
-   
-  /* Wait for previous transmission to complete */
+  
+  /* Send out the Register to start from */
+  do
+  {
+    i2c_error = R_IICA0_Master_Send(i2c_addr, &readBlock_writeData[0], 1, 1);
+    if(i2c_error==MD_OK)
+    {
+      busy = true;
+    }
+    
+    while(true == busy);
+  }while((i2c_error==MD_ERROR1) || (i2c_error==MD_ERROR2));
+  
+  
+  /* Read the data */
+  do
+  {
+    i2c_error = R_IICA0_Master_Restart_Receive(i2c_addr, (uint8_t*)&data[0], (uint16_t)numBytes, 8);
+    if(i2c_error==MD_OK)
+    {
+      busy = true;
+      while(true == busy);
+      R_IICA0_StopCondition();
+    }
+  }while(i2c_error==MD_ERROR2);
+  /* Allow send*/
+  send_stop = true;
+
+#endif //defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
+}
+
+void OB1203::readRegisters(int addr, char startReg, char *data, int numBytes) 
+{
+    /* Wait for previous transmission to complete */
   while(busy == true);
+ 
+  current = this;
+  i2c_addr = addr & 0xFFU;
+#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
+  uint8_t readBlock_writeData[1];
+  readBlock_writeData[0] = startReg;
   
   /* Send out the Register to start from */
   do
@@ -216,7 +272,10 @@ void OB1203::readBlock(int addr, char startReg, char *data, int numBytes)
     {
       busy = true;
     }
+    
+    while(true == busy);
   }while((i2c_error==MD_ERROR1) || (i2c_error==MD_ERROR2));
+  
 #endif //defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
 }
 
@@ -225,6 +284,10 @@ uint16_t OB1203::get_status()
 {
   uint8_t get_status_writeData[1]; 
   uint8_t get_status_readData[2];
+  
+  /* Wait for previous transmission to complete */
+  while(busy == true);
+  
   current = this; 
 #if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
 

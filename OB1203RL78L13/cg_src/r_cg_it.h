@@ -18,85 +18,50 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_systeminit.c
+* File Name    : r_cg_it.h
 * Version      : Applilet4 for RL78/L13 V1.04.02.03 [24 May 2018]
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
-* Description  : This file implements system initializing function.
+* Description  : This file implements device driver for IT module.
 * Creation Date: 3/20/2019
 ***********************************************************************************************************************/
+#ifndef IT_H
+#define IT_H
 
 /***********************************************************************************************************************
-Includes
+Macro definitions (Register bit)
 ***********************************************************************************************************************/
-#include "r_cg_macrodriver.h"
-#include "r_cg_cgc.h"
-#include "r_cg_port.h"
-#include "r_cg_rtc.h"
-#include "r_cg_it.h"
-#include "r_cg_sau.h"
-#include "r_cg_iica.h"
-#include "r_cg_lcd.h"
-#include "r_cg_dmac.h"
-#include "r_cg_intp.h"
-/* Start user code for include. Do not edit comment generated here */
+/*
+    Peripheral Enable Register 1 (PER1)
+*/
+/* Interval timer input clock supply (TMKAEN) */
+#define _00_IT_CLOCK_STOP             (0x00U) /* stops supply of input clock */
+#define _80_IT_CLOCK_SUPPLY           (0x80U) /* supplies input clock */
+
+/* 
+    Interval timer control register (ITMC)
+*/
+/* Interval timer operation enable/disable specification (RINTE) */
+#define _0000_IT_OPERATION_DISABLE    (0x0000U) /* disable interval timer operation */
+#define _8000_IT_OPERATION_ENABLE     (0x8000U) /* enable interval timer operation */
+
+/***********************************************************************************************************************
+Macro definitions
+***********************************************************************************************************************/
+/* Interval timer compare value (ITMCMP11 - 0) */
+#define _0147_ITMCMP_VALUE            (0x0147U)
+
+/***********************************************************************************************************************
+Typedef definitions
+***********************************************************************************************************************/
+
+/***********************************************************************************************************************
+Global functions
+***********************************************************************************************************************/
+void R_IT_Create(void);
+void R_IT_Start(void);
+void R_IT_Stop(void);
+
+/* Start user code for function. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
-#include "r_cg_userdefine.h"
-
-/***********************************************************************************************************************
-Pragma directive
-***********************************************************************************************************************/
-/* Start user code for pragma. Do not edit comment generated here */
-/* End user code. Do not edit comment generated here */
-
-/***********************************************************************************************************************
-Global variables and functions
-***********************************************************************************************************************/
-/* Start user code for global. Do not edit comment generated here */
-/* End user code. Do not edit comment generated here */
-
-#pragma diag_suppress = Pm011
-int __low_level_init(void);
-#pragma diag_default = Pm011
-void R_Systeminit(void);
-
-/***********************************************************************************************************************
-* Function Name: R_Systeminit
-* Description  : This function initializes every macro.
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-void R_Systeminit(void)
-{
-    PIOR = 0x14U;
-    R_CGC_Get_ResetSource();
-    R_PORT_Create();
-    R_CGC_Create();
-    R_RTC_Create();
-    R_IT_Create();
-    R_SAU1_Create();
-    R_IICA0_Create();
-    R_LCD_Create();
-    R_DMAC0_Create();
-    R_INTC_Create();
-    IAWCTL = 0x00U;
-}
-/***********************************************************************************************************************
-* Function Name: __low_level_init
-* Description  : This function initializes hardware setting.
-* Arguments    : None
-* Return Value : 1U -
-*                    true
-***********************************************************************************************************************/
-#pragma diag_suppress = Pm011
-int __low_level_init(void)
-#pragma diag_default = Pm011
-{
-    DI();
-    R_Systeminit();
-
-    return (int)(1U);
-}
-
-/* Start user code for adding. Do not edit comment generated here */
-/* End user code. Do not edit comment generated here */
+#endif

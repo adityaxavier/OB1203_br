@@ -18,11 +18,11 @@
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
-* File Name    : r_cg_systeminit.c
+* File Name    : r_cg_it.c
 * Version      : Applilet4 for RL78/L13 V1.04.02.03 [24 May 2018]
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
-* Description  : This file implements system initializing function.
+* Description  : This file implements device driver for IT module.
 * Creation Date: 3/20/2019
 ***********************************************************************************************************************/
 
@@ -30,15 +30,7 @@
 Includes
 ***********************************************************************************************************************/
 #include "r_cg_macrodriver.h"
-#include "r_cg_cgc.h"
-#include "r_cg_port.h"
-#include "r_cg_rtc.h"
 #include "r_cg_it.h"
-#include "r_cg_sau.h"
-#include "r_cg_iica.h"
-#include "r_cg_lcd.h"
-#include "r_cg_dmac.h"
-#include "r_cg_intp.h"
 /* Start user code for include. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 #include "r_cg_userdefine.h"
@@ -55,47 +47,46 @@ Global variables and functions
 /* Start user code for global. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */
 
-#pragma diag_suppress = Pm011
-int __low_level_init(void);
-#pragma diag_default = Pm011
-void R_Systeminit(void);
-
 /***********************************************************************************************************************
-* Function Name: R_Systeminit
-* Description  : This function initializes every macro.
+* Function Name: R_IT_Create
+* Description  : This function initializes the IT module.
 * Arguments    : None
 * Return Value : None
 ***********************************************************************************************************************/
-void R_Systeminit(void)
+void R_IT_Create(void)
 {
-    PIOR = 0x14U;
-    R_CGC_Get_ResetSource();
-    R_PORT_Create();
-    R_CGC_Create();
-    R_RTC_Create();
-    R_IT_Create();
-    R_SAU1_Create();
-    R_IICA0_Create();
-    R_LCD_Create();
-    R_DMAC0_Create();
-    R_INTC_Create();
-    IAWCTL = 0x00U;
+    TMKAEN = 1U;    /* supply IT clock */
+    ITMC = _0000_IT_OPERATION_DISABLE;    /* disable IT operation */
+    TMKAMK = 1U;    /* disable INTIT interrupt */
+    TMKAIF = 0U;    /* clear INTIT interrupt flag */
+    /* Set INTIT high priority */
+    TMKAPR1 = 0U;
+    TMKAPR0 = 0U;
+    ITMC = _0147_ITMCMP_VALUE;
 }
 /***********************************************************************************************************************
-* Function Name: __low_level_init
-* Description  : This function initializes hardware setting.
+* Function Name: R_IT_Start
+* Description  : This function starts IT module operation.
 * Arguments    : None
-* Return Value : 1U -
-*                    true
+* Return Value : None
 ***********************************************************************************************************************/
-#pragma diag_suppress = Pm011
-int __low_level_init(void)
-#pragma diag_default = Pm011
+void R_IT_Start(void)
 {
-    DI();
-    R_Systeminit();
-
-    return (int)(1U);
+    TMKAIF = 0U;    /* clear INTIT interrupt flag */
+    TMKAMK = 0U;    /* enable INTIT interrupt */
+    ITMC |= _8000_IT_OPERATION_ENABLE;    /* enable IT operation */
+}
+/***********************************************************************************************************************
+* Function Name: R_IT_Stop
+* Description  : This function stops IT module operation.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_IT_Stop(void)
+{
+    TMKAMK = 1U;    /* disable INTIT interrupt */
+    TMKAIF = 0U;    /* clear INTIT interrupt flag */
+    ITMC &= (uint16_t)~_8000_IT_OPERATION_ENABLE;    /* disable IT operation */
 }
 
 /* Start user code for adding. Do not edit comment generated here */

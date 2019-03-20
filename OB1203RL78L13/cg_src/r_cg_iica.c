@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements device driver for IICA module.
-* Creation Date: 3/13/2019
+* Creation Date: 3/20/2019
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -216,4 +216,51 @@ MD_STATUS R_IICA0_Master_Receive(uint8_t adr, uint8_t * const rx_buf, uint16_t r
 }
 
 /* Start user code for adding. Do not edit comment generated here */
+/***********************************************************************************************************************
+* Function Name: R_IICA0_Master_Send
+* Description  : This function starts to send data as master mode.
+* Arguments    : adr -
+*                    send address
+*                tx_buf -
+*                    transfer buffer pointer
+*                tx_num -
+*                    buffer size
+*                wait -
+*                    wait for start condition
+* Return Value : status -
+*                    MD_OK or MD_ERROR1 or MD_ERROR2
+***********************************************************************************************************************/
+MD_STATUS R_IICA0_Master_Restart_Receive(uint8_t adr, uint8_t * const rx_buf, uint16_t rx_num, uint8_t wait)
+{
+    MD_STATUS status = MD_OK;
+
+    IICAMK0 = 1U;  /* disable INTIIA0 interrupt */
+
+    {
+        STT0 = 1U; /* set IICA0 start condition */
+        IICAMK0 = 0U;  /* enable INTIIA0 interrupt */
+        
+        /* Wait */
+        while (wait--)
+        {
+            ;
+        }
+        
+        if (0U == STD0)
+        {
+            status = MD_ERROR2;
+        }
+		
+        /* Set parameter */
+        g_iica0_rx_len = rx_num;
+        g_iica0_rx_cnt = 0U;
+        gp_iica0_rx_address = rx_buf;
+        g_iica0_master_status_flag  = _00_IICA_MASTER_FLAG_CLEAR;
+        adr |= 0x01U; /* set receive mode */
+        IICA0 = adr; /* receive address */
+    }
+
+    return (status);
+}
+
 /* End user code. Do not edit comment generated here */

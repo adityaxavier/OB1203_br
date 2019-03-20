@@ -1,0 +1,755 @@
+Docklight Log File (ASCII) - Started 3/20/2019 16:16:11.013 
+
+3/20/2019 16:16:47.043 [RX] - ?
+3/20/2019 16:16:59.494 [RX] - initial setup: ps<CR><LF>
+OB1203 Initialized<CR><LF>
+register config<CR><LF>
+00, 00<CR><LF>
+01,
+3/20/2019 16:16:59.570 [RX] -  40<CR><LF>
+02, 00<CR><LF>
+03, 00<CR><LF>
+04, 00<CR><LF>
+05, 00<CR><LF>
+06, 00<CR><LF>
+07, 00<CR><LF>
+08, 00<CR><LF>
+09, 00<CR><LF>
+0A, 00<CR><LF>
+0B, 00<CR><LF>
+0C, 00<CR><LF>
+0D, 00<CR><LF>
+0E, 00<CR><LF>
+0F, 00<CR><LF>
+10, 00<CR><LF>
+11, 00<CR><LF>
+12, 00<CR><LF>
+13, 00<CR><LF>
+14, 00<CR><LF>
+15, 02<CR><LF>
+16, 01<CR><LF>
+17, A8<CR><LF>
+18, 00<CR><LF>
+19, 1A<CR><LF>
+1A, 15<CR><LF>
+1B, 00<CR><LF>
+1C, 00<CR><LF>
+1D, 00<CR><LF>
+1E, 98<CR><LF>
+1F, 3A<CR><LF>
+20, 00<CR><LF>
+21, 00<CR><LF>
+22, 22<CR><LF>
+23, 01<CR><LF>
+24, FF<CR><LF>
+25, FF<CR><LF>
+26, 0F<CR><LF>
+27, 00<CR><LF>
+28, 00<CR><LF>
+29, 00<CR><LF>
+2A, 00<CR><LF>
+2B, 00<CR><LF>
+2C, 01<CR><LF>
+2D, 22<CR><LF>
+2E, 0A<CR><LF>
+2F, 04<CR><LF>
+30, 00<CR><LF>
+31, 00<CR><LF>
+32, 00<CR><LF>
+33, 00<CR><LF>
+34, 00<CR><LF>
+35, 0A<CR><LF>
+36, 42<CR><LF>
+37, 00<CR><LF>
+38, 00<CR><LF>
+39, 00<CR><LF>
+3A, 00<CR><LF>
+3B, 91<CR><LF>
+3C, 00<CR><LF>
+3D, 00<CR><LF>
+3E, 37<CR><LF>
+3F, 00<CR><LF>
+40, 03<CR><LF>
+41, 01<CR><LF>
+42, 00<CR><LF>
+43, 00<CR><LF>
+44, 1E<CR><LF>
+45, 01<CR><LF>
+46, 03<CR><LF>
+47, 1E<CR><LF>
+48, 00<CR><LF>
+49, 00<CR><LF>
+4A, 03<CR><LF>
+4B, 8F<CR><LF>
+4C, 4A<CR><LF>
+4D, 00<CR><LF>
+begin autogain<CR><LF>
+10s SPO2, 10s HR, 1s SPO2, 1s HR, R<CR><LF>
+
+3/20/2019 16:17:04.830 [RX] - OB1203 Initialized<CR><LF>
+switching to mode 1<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+switching FastMode to 0<CR><LF>
+0.00, 0.00, 0.00, 0.00, 0.0000<CR><LF>
+
+3/20/2019 16:17:05.834 [RX] - sample_count 56<CR><LF>
+0.00, 0.00, 0.00, 0.00, 0.0000<CR><LF>
+
+3/20/2019 16:17:06.841 [RX] - sample_count 152<CR><LF>
+0.00, 0.00, 0.00, 0.00, 0.0000<CR><LF>
+
+3/20/2019 16:17:07.832 [RX] - sample_count 256<CR><LF>
+0.00, 0.00, 0.00, 0.00, 0.0000<CR><LF>
+
+3/20/2019 16:17:08.839 [RX] - sample_count 301<CR><LF>
+do alg part 1<CR><LF>
+var1f = 73462289<CR><LF>
+channel 0, mean1f = 3219779, rms1f = 494<CR><LF>
+
+3/20/2019 16:17:08.942 [RX] - var1f = 102671751<CR><LF>
+channel 1, mean1f = 3226657, rms1f = 584<CR><LF>
+doing algorithm part 2<CR><LF>
+R=0.847697<CR><LF>
+spo2 = 78.41<CR><LF>
+start find max correl<CR><LF>
+26, -814392<CR><LF>
+32, -633016<CR><LF>
+searching for max<CR><LF>
+38 -350986<CR><LF>
+searching for max<CR><LF>
+44 -485150<CR><LF>
+d2 = -3<CR><LF>
+guessing near the max at 35<CR><LF>
+fine search at 35<CR><LF>
+34, -203 <CR><LF>
+36, -162 <CR><LF>
+37, -149 <CR><LF>
+38, -140 <CR><LF>
+39, -137 <CR><LF>
+40, -139 <CR><LF>
+start = 35, success at 39.13, correl = -343116<CR><LF>
+HR = 153.312500, 2453<CR><LF>
+pre concensus 80.0, 0.0<CR><LF>
+post concensus 80.0, 0.0, first? 1, 1<CR><LF>
+80.00, 0.00, 80.00, 0.00, 0.8477<CR><LF>
+
+3/20/2019 16:17:09.842 [RX] - sample_count 301<CR><LF>
+do alg part 1<CR><LF>
+var1f = 61998244<CR><LF>
+channel 0, mean1f = 3218526, rms1f = 453<CR><LF>
+
+3/20/2019 16:17:09.959 [RX] - var1f = 166515463<CR><LF>
+channel 1, mean1f = 3230782, rms1f = 743<CR><LF>
+doing algorithm part 2<CR><LF>
+R=0.612012<CR><LF>
+spo2 = 90.52<CR><LF>
+start find max correl<CR><LF>
+26, 733556<CR><LF>
+32, 549844<CR><LF>
+searching for min<CR><LF>
+38 394438<CR><LF>
+searching for min<CR><LF>
+44 232823<CR><LF>
+searching for min<CR><LF>
+50 79002<CR><LF>
+searching for min<CR><LF>
+56 -29354<CR><LF>
+searching for min<CR><LF>
+62 -100875<CR><LF>
+searching for min<CR><LF>
+68 -66255<CR><LF>
+d2 = -6<CR><LF>
+guessing double the min at 118<CR><LF>
+fine search at 118<CR><LF>
+117, -531 <CR><LF>
+116, -518 <CR><LF>
+115, -503 <CR><LF>
+114, -485 <CR><LF>
+113, -465 <CR><LF>
+112, -443 <CR><LF>
+111, -418 <CR><LF>
+110, -392 <CR><LF>
+109, -365 <CR><LF>
+108, -337 <CR><LF>
+107, -309 <CR><LF>
+106, -281 <CR><LF>
+105, -256 <CR><LF>
+104, -233 <CR><LF>
+103, -213 <CR><LF>
+102, -196 <CR><LF>
+101, -184 <CR><LF>
+100, -175 <CR><LF>
+99, -168 <CR><LF>
+98, -164 <CR><LF>
+97, -159 <CR><LF>
+96, -154 <CR><LF>
+95, -147 <CR><LF>
+94, -137 <CR><LF>
+93, -124 <CR><LF>
+92, -109 <CR><LF>
+91, -92 <CR><LF>
+90, -73 <CR><LF>
+89, -55 <CR><LF>
+88, -37 <CR><LF>
+87, -20 <CR><LF>
+86, -5 <CR><LF>
+85, 8 <CR><LF>
+84, 19 <CR><LF>
+83, 27 <CR><LF>
+82, 33 <CR><LF>
+81, 37 <CR><LF>
+80, 39 <CR><LF>
+79, 38 <CR><LF>
+start = 118, success at 79.69, correl = 98943<CR><LF>
+HR = 75.250000, 1204<CR><LF>
+pre concensus 90.5, 75.3<CR><LF>
+post concensus 90.5, 75.3, first? 1, 0<CR><LF>
+85.25, 75.25, 90.50, 75.25, 0.6120<CR><LF>
+
+3/20/2019 16:17:10.833 [RX] - sample_count 301<CR><LF>
+do alg part 1<CR><LF>
+var1f = 90686450<CR><LF>
+channel 0, mean1f = 3216856, rms1f = 548<CR><LF>
+var1f = 297891262<CR><LF>
+
+3/20/2019 16:17:10.940 [RX] - channel 1, mean1f = 3232151, rms1f = 994<CR><LF>
+doing algorithm part 2<CR><LF>
+R=0.553929<CR><LF>
+spo2 = 93.02<CR><LF>
+start find max correl<CR><LF>
+26, 2055881<CR><LF>
+32, 2095837<CR><LF>
+searching for max<CR><LF>
+38 2036398<CR><LF>
+d2 = -1<CR><LF>
+guessing near the max at 31<CR><LF>
+fine search at 75<CR><LF>
+74, 39 <CR><LF>
+73, 86 <CR><LF>
+72, 129 <CR><LF>
+71, 169 <CR><LF>
+70, 202 <CR><LF>
+69, 233 <CR><LF>
+68, 261 <CR><LF>
+67, 287 <CR><LF>
+66, 311 <CR><LF>
+65, 335 <CR><LF>
+64, 359 <CR><LF>
+63, 384 <CR><LF>
+62, 411 <CR><LF>
+61, 440 <CR><LF>
+60, 471 <CR><LF>
+59, 502 <CR><LF>
+58, 535 <CR><LF>
+57, 566 <CR><LF>
+56, 596 <CR><LF>
+55, 623 <CR><LF>
+54, 646 <CR><LF>
+53, 666 <CR><LF>
+52, 682 <CR><LF>
+51, 697 <CR><LF>
+50, 708 <CR><LF>
+49, 717 <CR><LF>
+48, 726 <CR><LF>
+47, 734 <CR><LF>
+46, 742 <CR><LF>
+45, 750 <CR><LF>
+44, 759 <CR><LF>
+43, 768 <CR><LF>
+42, 777 <CR><LF>
+41, 786 <CR><LF>
+40, 796 <CR><LF>
+39, 805 <CR><LF>
+38, 814 <CR><LF>
+37, 822 <CR><LF>
+36, 828 <CR><LF>
+35, 833 <CR><LF>
+34, 836 <CR><LF>
+33, 838 <CR><LF>
+32, 838 
+3/20/2019 16:17:11.125 [RX] - <CR><LF>
+start = 75, fail at 32.00 correl = 2095837<CR><LF>
+trying prev sol'n<CR><LF>
+fine search at 79<CR><LF>
+78, -164 <CR><LF>
+80, -265 <CR><LF>
+start = 79, success at 78.81, correl = -23320<CR><LF>
+HR = 76.125000, 1218<CR><LF>
+pre concensus 93.0, 0.0<CR><LF>
+post concensus 93.0, 0.0, first? 1, 0<CR><LF>
+87.81, 0.00, 93.00, 0.00, 0.5539<CR><LF>
+
+3/20/2019 16:17:11.844 [RX] - sample_count 301<CR><LF>
+do alg part 1<CR><LF>
+var1f = 110981284<CR><LF>
+channel 0, mean1f = 3215455, rms1f = 607<CR><LF>
+
+3/20/2019 16:17:11.969 [RX] - var1f = 316242433<CR><LF>
+channel 1, mean1f = 3233921, rms1f = 1025<CR><LF>
+doing algorithm part 2<CR><LF>
+R=0.595596<CR><LF>
+spo2 = 91.24<CR><LF>
+start find max correl<CR><LF>
+26, 1784389<CR><LF>
+32, 924880<CR><LF>
+searching for min<CR><LF>
+38 -14364<CR><LF>
+searching for min<CR><LF>
+44 -801128<CR><LF>
+searching for min<CR><LF>
+50 -1598702<CR><LF>
+searching for min<CR><LF>
+56 -2238103<CR><LF>
+searching for min<CR><LF>
+62 -2769122<CR><LF>
+searching for min<CR><LF>
+68 -3200498<CR><LF>
+searching for min<CR><LF>
+74 -3486264<CR><LF>
+searching for min<CR><LF>
+80 -3753900<CR><LF>
+searching for min<CR><LF>
+86 -3713649<CR><LF>
+d2 = -6<CR><LF>
+guessing double the min at 154<CR><LF>
+fine search at 75<CR><LF>
+74, -1394 <CR><LF>
+73, -1373 <CR><LF>
+72, -1353 <CR><LF>
+71, -1336 <CR><LF>
+70, -1318 <CR><LF>
+69, -1300 <CR><LF>
+68, -1280 <CR><LF>
+67, -1258 <CR><LF>
+66, -1233 <CR><LF>
+65, -1205 <CR><LF>
+64, -1175 <CR><LF>
+63, -1142 <CR><LF>
+62, -1107 <CR><LF>
+61, -1072 <CR><LF>
+60, -1036 <CR><LF>
+59, -1000 <CR><LF>
+58, -965 <CR><LF>
+57, -930 <CR><LF>
+56, -895 <CR><LF>
+55, -857 <CR><LF>
+54, -818 <CR><LF>
+53, -778 <CR><LF>
+52, -735 <CR><LF>
+51, -689 <CR><LF>
+50, -639 <CR><LF>
+49, -587 <CR><LF>
+48, -534 <CR><LF>
+47, -480 <CR><LF>
+46, -426 <CR><LF>
+45, -373 <CR><LF>
+44, -320 <CR><LF>
+43, -268 <CR><LF>
+42, -217 <CR><LF>
+41, -166 <CR><LF>
+40, -115 <CR><LF>
+39, -61 <CR><LF>
+38, -5 <CR><LF>
+37, 52 <CR><LF>
+36, 112 <CR><LF>
+35, 174 <CR><LF>
+34, 239 <CR><LF>
+33, 304 <CR><LF>
+32, 369 <CR><LF>
+start = 75, fail at 32.00 correl = 924880<CR><LF>
+HR = 0.000000, 0<CR><LF>
+pre concensus 91.2, 0.0<CR><LF>
+post concensus 91.2, 0.0, first? 1, 0<CR><LF>
+88.63, 0.00, 91.19, 0.00, 0.5956<CR><LF>
+
+3/20/2019 16:17:12.845 [RX] - sample_count 301<CR><LF>
+do alg part 1<CR><LF>
+var1f = 146273529<CR><LF>
+channel 0, mean1f = 3214086, rms1f = 697<CR><LF>
+
+3/20/2019 16:17:12.947 [RX] - var1f = 510892994<CR><LF>
+channel 1, mean1f = 3236397, rms1f = 1302<CR><LF>
+doing algorithm part 2<CR><LF>
+R=0.539046<CR><LF>
+spo2 = 93.63<CR><LF>
+start find max correl<CR><LF>
+26, 4466078<CR><LF>
+32, 3460433<CR><LF>
+searching for min<CR><LF>
+38 2407530<CR><LF>
+searching for min<CR><LF>
+44 1205398<CR><LF>
+searching for min<CR><LF>
+50 -94458<CR><LF>
+searching for min<CR><LF>
+56 -914016<CR><LF>
+searching for min<CR><LF>
+62 -887780<CR><LF>
+d2 = -6<CR><LF>
+guessing double the min at 106<CR><LF>
+fine search at 106<CR><LF>
+105, -380 <CR><LF>
+104, -372 <CR><LF>
+103, -365 <CR><LF>
+102, -359 <CR><LF>
+101, -352 <CR><LF>
+100, -343 <CR><LF>
+99, -334 <CR><LF>
+98, -324 <CR><LF>
+97, -311 <CR><LF>
+96, -296 <CR><LF>
+95, -281 <CR><LF>
+94, -265 <CR><LF>
+93, -250 <CR><LF>
+92, -236 <CR><LF>
+91, -223 <CR><LF>
+90, -213 <CR><LF>
+89, -204 <CR><LF>
+88, -196 <CR><LF>
+87, -189 <CR><LF>
+86, -181 <CR><LF>
+85, -174 <CR><LF>
+84, -165 <CR><LF>
+83, -156 <CR><LF>
+82, -146 <CR><LF>
+81, -136 <CR><LF>
+80, -127 <CR><LF>
+79, -119 <CR><LF>
+78, -114 <CR><LF>
+77, -113 <CR><LF>
+76, -116 <CR><LF>
+start = 106, success at 77.25, correl = -284191<CR><LF>
+HR = 77.625000, 1242<CR><LF>
+pre concensus 93.6, 0.0<CR><LF>
+post concensus 93.6, 0.0, first? 1, 1<CR><LF>
+93.63, 0.00, 93.63, 0.00, 0.5390<CR><LF>
+
+3/20/2019 16:17:13.843 [RX] - sample_count 301<CR><LF>
+do alg part 1<CR><LF>
+var1f = 60416227<CR><LF>
+channel 0, mean1f = 3212029, rms1f = 448<CR><LF>
+
+3/20/2019 16:17:13.960 [RX] - var1f = 235146184<CR><LF>
+channel 1, mean1f = 3237401, rms1f = 883<CR><LF>
+doing algorithm part 2<CR><LF>
+R=0.511369<CR><LF>
+spo2 = 94.74<CR><LF>
+start find max correl<CR><LF>
+26, 148419<CR><LF>
+32, 41071<CR><LF>
+searching for min<CR><LF>
+38 -131038<CR><LF>
+searching for min<CR><LF>
+44 -137138<CR><LF>
+searching for min<CR><LF>
+50 -211377<CR><LF>
+searching for min<CR><LF>
+56 -329378<CR><LF>
+searching for min<CR><LF>
+62 -351614<CR><LF>
+searching for min<CR><LF>
+68 -382400<CR><LF>
+searching for min<CR><LF>
+74 -322249<CR><LF>
+d2 = -6<CR><LF>
+guessing double the min at 130<CR><LF>
+fine search at 130<CR><LF>
+129, -394 <CR><LF>
+128, -382 <CR><LF>
+127, -367 <CR><LF>
+126, -353 <CR><LF>
+125, -338 <CR><LF>
+124, -326 <CR><LF>
+123, -316 <CR><LF>
+122, -309 <CR><LF>
+121, -304 <CR><LF>
+120, -302 <CR><LF>
+119, -301 <CR><LF>
+118, -301 <CR><LF>
+117, -300 <CR><LF>
+116, -298 <CR><LF>
+115, -294 <CR><LF>
+114, -287 <CR><LF>
+113, -279 <CR><LF>
+112, -268 <CR><LF>
+111, -255 <CR><LF>
+110, -241 <CR><LF>
+109, -228 <CR><LF>
+108, -215 <CR><LF>
+107, -203 <CR><LF>
+106, -193 <CR><LF>
+105, -184 <CR><LF>
+104, -177 <CR><LF>
+103, -172 <CR><LF>
+102, -167 <CR><LF>
+101, -162 <CR><LF>
+100, -158 <CR><LF>
+99, -154 <CR><LF>
+98, -149 <CR><LF>
+97, -146 <CR><LF>
+96
+3/20/2019 16:17:14.126 [RX] - , -143 <CR><LF>
+95, -141 <CR><LF>
+94, -140 <CR><LF>
+93, -142 <CR><LF>
+start = 130, success at 94.25, correl = -352206<CR><LF>
+HR = 63.625000, 1018<CR><LF>
+pre concensus 94.7, 0.0<CR><LF>
+post concensus 94.7, 0.0, first? 1, 1<CR><LF>
+94.69, 0.00, 94.69, 0.00, 0.5114<CR><LF>
+
+3/20/2019 16:17:14.846 [RX] - sample_count 301<CR><LF>
+do alg part 1<CR><LF>
+var1f = 146418008<CR><LF>
+channel 0, mean1f = 3210078, rms1f = 697<CR><LF>
+
+3/20/2019 16:17:14.983 [RX] - var1f = 602830908<CR><LF>
+channel 1, mean1f = 3238732, rms1f = 1415<CR><LF>
+doing algorithm part 2<CR><LF>
+R=0.496976<CR><LF>
+spo2 = 95.29<CR><LF>
+start find max correl<CR><LF>
+26, 6898550<CR><LF>
+32, 5212439<CR><LF>
+searching for min<CR><LF>
+38 3309904<CR><LF>
+searching for min<CR><LF>
+44 1436902<CR><LF>
+searching for min<CR><LF>
+50 -421103<CR><LF>
+searching for min<CR><LF>
+56 -2244104<CR><LF>
+searching for min<CR><LF>
+62 -3828367<CR><LF>
+searching for min<CR><LF>
+68 -5116640<CR><LF>
+searching for min<CR><LF>
+74 -6083502<CR><LF>
+searching for min<CR><LF>
+80 -6710018<CR><LF>
+searching for min<CR><LF>
+86 -7044164<CR><LF>
+searching for min<CR><LF>
+92 -7038184<CR><LF>
+d2 = -6<CR><LF>
+guessing double the min at 166<CR><LF>
+fine search at 75<CR><LF>
+74, -2433 <CR><LF>
+73, -2378 <CR><LF>
+72, -2320 <CR><LF>
+71, -2257 <CR><LF>
+70, -2190 <CR><LF>
+69, -2120 <CR><LF>
+68, -2046 <CR><LF>
+67, -1969 <CR><LF>
+66, -1888 <CR><LF>
+65, -1803 <CR><LF>
+64, -1715 <CR><LF>
+63, -1624 <CR><LF>
+62, -1531 <CR><LF>
+61, -1434 <CR><LF>
+60, -1333 <CR><LF>
+59, -1229 <CR><LF>
+58, -1122 <CR><LF>
+57, -1011 <CR><LF>
+56, -897 <CR><LF>
+55, -780 <CR><LF>
+54, -661 <CR><LF>
+53, -540 <CR><LF>
+52, -416 <CR><LF>
+51, -292 <CR><LF>
+50, -168 <CR><LF>
+49, -44 <CR><LF>
+48, 80 <CR><LF>
+47, 204 <CR><LF>
+46, 327 <CR><LF>
+45, 451 <CR><LF>
+44, 574 <CR><LF>
+43, 697 <CR><LF>
+42, 821 <CR><LF>
+41, 945 <CR><LF>
+40, 1070 <CR><LF>
+39, 1196 <CR><LF>
+38, 1323 <CR><LF>
+37, 1451 <CR><LF>
+36, 1579 <CR><LF>
+35, 1707 <CR><LF>
+34, 1834 <CR><LF>
+33, 1960 <CR><LF>
+32, 2084 <CR><LF>
+start = 75, fail at 32.00 correl = 5212439<CR><LF>
+HR = 0.000000, 0<CR><LF>
+pre concensus 95.3, 0.0<CR><LF>
+post concensus 95.3, 0.0, first? 1, 1<CR><LF>
+95.25, 0.00, 95.25, 0.00, 0.4970<CR><LF>
+
+3/20/2019 16:17:15.846 [RX] - sample_count 301<CR><LF>
+do alg part 1<CR><LF>
+var1f = 231332970<CR><LF>
+channel 0, mean1f = 3208813, rms1f = 876<CR><LF>
+
+3/20/2019 16:17:15.986 [RX] - var1f = 655087880<CR><LF>
+channel 1, mean1f = 3239766, rms1f = 1475<CR><LF>
+doing algorithm part 2<CR><LF>
+R=0.599627<CR><LF>
+spo2 = 91.07<CR><LF>
+start find max correl<CR><LF>
+26, 2934576<CR><LF>
+32, 1894671<CR><LF>
+searching for min<CR><LF>
+38 1008011<CR><LF>
+searching for min<CR><LF>
+44 341468<CR><LF>
+searching for min<CR><LF>
+50 -217116<CR><LF>
+searching for min<CR><LF>
+56 -672085<CR><LF>
+searching for min<CR><LF>
+62 -1022692<CR><LF>
+searching for min<CR><LF>
+68 -1396373<CR><LF>
+searching for min<CR><LF>
+74 -1795080<CR><LF>
+searching for min<CR><LF>
+80 -2028884<CR><LF>
+searching for min<CR><LF>
+86 -2056743<CR><LF>
+searching for min<CR><LF>
+92 -1910341<CR><LF>
+d2 = -6<CR><LF>
+guessing double the min at 166<CR><LF>
+fine search at 75<CR><LF>
+74, -718 <CR><LF>
+73, -694 <CR><LF>
+72, -669 <CR><LF>
+71, -642 <CR><LF>
+70, -614 <CR><LF>
+69, -586 <CR><LF>
+68, -558 <CR><LF>
+67, -531 <CR><LF>
+66, -505 <CR><LF>
+65, -480 <CR><LF>
+64, -455 <CR><LF>
+63, -432 <CR><LF>
+62, -409 <CR><LF>
+61, -386 <CR><LF>
+60, -363 <CR><LF>
+59, -341 <CR><LF>
+58, -318 <CR><LF>
+57, -294 <CR><LF>
+56, -268 <CR><LF>
+55, -243 <CR><LF>
+54, -215 <CR><LF>
+53, -185 <CR><LF>
+52, -154 <CR><LF>
+51, -121 <CR><LF>
+50, -86 <CR><LF>
+49, -51 <CR><LF>
+48, -14 <CR><LF>
+47, 22 <CR><LF>
+46, 60 <CR><LF>
+45, 98 <CR><LF>
+44, 136 <CR><LF>
+43, 175 <CR><LF>
+42, 215 <CR><LF>
+41, 258 <CR><LF>
+40, 303 <CR><LF>
+39, 351 <CR><LF>
+38, 403 <CR><LF>
+37, 457 <CR><LF>
+36, 514 <CR><LF>
+35, 573 <CR><LF>
+34, 634 <CR><LF>
+33, 695 <CR><LF>
+32, 757 <CR><LF>
+start = 75, fail at 32.00 correl = 1894671<CR><LF>
+HR = 0.000000, 0<CR><LF>
+pre concensus 91.1, 0.0<CR><LF>
+post concensus 91.1, 0.0, first? 1, 1<CR><LF>
+91.06, 0.00, 91.06, 0.00, 0.5996<CR><LF>
+
+3/20/2019 16:17:16.371 [RX] - switching FastMode to 16<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+out of range<CR><LF>
+OB1203 Initialized<CR><LF>
+switching to mode 0<CR><LF>

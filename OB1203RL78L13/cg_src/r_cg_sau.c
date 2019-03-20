@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements device driver for SAU module.
-* Creation Date: 3/13/2019
+* Creation Date: 3/20/2019
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -93,14 +93,14 @@ void R_UART2_Create(void)
             _0002_SAU_MODE_UART | _0000_SAU_TRANSFER_END;
     SCR10 = _8000_SAU_TRANSMISSION | _0000_SAU_INTSRE_MASK | _0000_SAU_PARITY_NONE | _0080_SAU_LSB | 
             _0010_SAU_STOP_1 | _0007_SAU_LENGTH_8;
-    SDR10 = _0600_UART2_TRANSMIT_DIVISOR;
+    SDR10 = _4E00_UART2_TRANSMIT_DIVISOR;
     NFEN0 |= _10_SAU_RXD2_FILTER_ON;
     SIR11 = _0004_SAU_SIRMN_FECTMN | _0002_SAU_SIRMN_PECTMN | _0001_SAU_SIRMN_OVCTMN;    /* clear error flag */
     SMR11 = _0020_SAU_SMRMN_INITIALVALUE | _0000_SAU_CLOCK_SELECT_CK00 | _0100_SAU_TRIGGER_RXD | _0000_SAU_EDGE_FALL | 
             _0002_SAU_MODE_UART | _0000_SAU_TRANSFER_END;
     SCR11 = _4000_SAU_RECEPTION | _0000_SAU_INTSRE_MASK | _0000_SAU_PARITY_NONE | _0080_SAU_LSB | _0010_SAU_STOP_1 | 
             _0007_SAU_LENGTH_8;
-    SDR11 = _0600_UART2_RECEIVE_DIVISOR;
+    SDR11 = _4E00_UART2_RECEIVE_DIVISOR;
     SO1 |= _0001_SAU_CH0_DATA_OUTPUT_1;
     SOL1 |= _0000_SAU_CHANNEL0_NORMAL;    /* output level normal */
     SOE1 |= _0001_SAU_CH0_OUTPUT_ENABLE;    /* enable UART2 output */

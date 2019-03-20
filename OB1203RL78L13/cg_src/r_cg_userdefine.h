@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file includes user definition.
-* Creation Date: 3/13/2019
+* Creation Date: 3/20/2019
 ***********************************************************************************************************************/
 #ifndef _USER_DEF_H
 #define _USER_DEF_H
@@ -65,7 +65,6 @@ User definitions
                             if (level <= DEBUG_LVL) { \
                               if(level <= LOG_ERR) { fprintf(DEBUG_STREAM,"%s:%d:", __FILE__, __LINE__); }\
                                 fprintf(DEBUG_STREAM, __VA_ARGS__); \
-                                fprintf(DEBUG_STREAM, "\r\n"); \
                                 fflush(DEBUG_STREAM); \
                             } \
                         } while (0)

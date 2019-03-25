@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements main function.
-* Creation Date: 3/20/2019
+* Creation Date: 3/25/2019
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -194,14 +194,11 @@ static void R_MAIN_UserInit(void)
   LCD_DISPLAY_ON();
   
   {
-    uint32_t i = LCD_VOLTAGE_WAITTIME;
-    i = LCD_VOLTAGE_WAITTIME;
+    uint32_t i = LCD_VOLTAGE_WAITTIME>>1;
     while(--i);
   }
   
   LCD_DISPLAY_OFF();
-  
-  R_PPG_LCD_Display_HRM(100);
   
   ob1203_spo2_main();
 #endif

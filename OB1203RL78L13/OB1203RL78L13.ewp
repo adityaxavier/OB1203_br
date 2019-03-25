@@ -308,6 +308,7 @@
                     <name>CCDefines</name>
                     <state>USE_BRUTE_DELAY</state>
                     <state>DEBUG</state>
+                    <state>MEASURE_PERFORMANCE</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>

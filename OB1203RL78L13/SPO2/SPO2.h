@@ -111,6 +111,7 @@ public:
     uint16_t avg_hr;
     uint16_t avg_spo2;
     uint16_t display_spo2;
+    uint16_t display_hr;
     uint16_t display_spo2_frac;
     uint16_t sample_count;
     
@@ -120,6 +121,7 @@ public:
 //    float r_range[2];
 
     bool quickstart;
+    uint16_t p2_start_time;
     
 private:
 //functions

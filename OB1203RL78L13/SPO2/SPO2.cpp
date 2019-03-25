@@ -53,7 +53,8 @@ void SPO2::do_algorithm_part1()
 
 void SPO2::do_algorithm_part2()
 {
-
+    extern uint16_t t_read(void);
+    
     static uint16_t hr_avgs[NUM_HR_AVGS];
     static uint16_t sum_hr = 0;
     static uint8_t hr_avg_ind = 0;
@@ -63,6 +64,7 @@ void SPO2::do_algorithm_part2()
     static uint8_t num_hr_avgs = 0;
     static uint8_t num_spo2_avgs = 0;
     
+    p2_start_time = t_read();
     offset_guess = DEFAULT_GUESS;
     start_point = data_ptr; //oldest point in the buffer
     LOG(LOG_DEBUG, "sample_count %d\r\n",sample_count);
@@ -159,6 +161,7 @@ void SPO2::do_algorithm_part2()
     }
     LOG(LOG_INFO, "%.2f, %.2f, %.2f, %.2f, %.4f\r\n",(float)avg_spo2/(float)(1<<FIXED_BITS),(float)avg_hr/(float)(1<<FIXED_BITS),(float)current_spo21f/float(1<<FIXED_BITS),(float)current_hr1f/(float)(1<<FIXED_BITS),R);
     display_spo2 = ((avg_spo2>>FIXED_BITS) * 10) + (((0x0008 & avg_spo2) == 0) ? 0 : 5);
+    display_hr   = avg_hr>>FIXED_BITS;
 }
 
 
@@ -478,7 +481,7 @@ void SPO2::get_rms()
             ind++;
             LOG(LOG_DEBUG,"%d, %d, %d\r\n",ind,idx[n],AC1f[idx[n]]);
         }
-        for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
+        for (uint16_t n=0; n<SAMPLE_LENGTH; n++) {
             /*Test whether we need to do the entire array or not. 
             Could reduce this if HR is fast.
             If it is too long we risk drift affecting the RMS reading.
@@ -494,7 +497,7 @@ void SPO2::get_rms()
             }
         
         LOG(LOG_INFO,"var1f = %lu\r\n",var1f);
-        rms1f[channel] = uint_sqrt(var1f/(uint32_t)ARRAY_LENGTH ); //square root halfs the bit shifts back to 2, so this is more like RMS0.5f -- OH WELL (it is 4x bigger, not 16x bigger)
+        rms1f[channel] = uint_sqrt(var1f/(uint32_t)SAMPLE_LENGTH ); //square root halfs the bit shifts back to 2, so this is more like RMS0.5f -- OH WELL (it is 4x bigger, not 16x bigger)
         LOG(LOG_INFO,"channel %u, mean1f = %ld, rms1f = %lu\r\n",channel,mean1f[channel],rms1f[channel]);
     }//end channel loop
 }
@@ -581,9 +584,9 @@ void SPO2::add_sample(uint32_t ir_data, uint32_t r_data)
     avg_buffer[RED][buffer_index] = r_data;
     dc_data[IR][data_ptr] = running_sum[IR]/num_samples;
     dc_data[RED][data_ptr] = running_sum[RED]/num_samples;
-    #ifdef PRINT_RAW
-        LOG(LOG_INFO,"%d, %d\r\n",dc_data[IR][data_ptr],dc_data[RED][data_ptr]);
-    #endif
+    
+    LOG(LOG_DEBUG_RAW,"%lu, %lu\r\n",dc_data[IR][data_ptr],dc_data[RED][data_ptr]);
+    
     buffer_index++;
     buffer_index = (buffer_index==num2avg) ? 0 : buffer_index;
     prev_data_ptr = data_ptr; //keeping track of this in case I want to print the data
@@ -619,6 +622,7 @@ int32_t SPO2::corr(int16_t *x, uint16_t start_ptr, uint16_t len, uint16_t offset
 
 void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t start_correl, uint32_t search_step)
 {
+    extern uint16_t t_read(void);
     /*fine search for correlation peak using defined step size (index units).
     Finds peak and interpolates the maximum and saves the answer with fixed precision.
     */
@@ -631,6 +635,13 @@ void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t 
     int32_t lowest;
     final_correl = start_correl;     //initialize
     final_offset = start_offset;
+    uint16_t elapsed_time = t_read() - p2_start_time;
+    if ( elapsed_time >= 15) {
+      final_correl = 0;
+      final_offset = 0;
+      final_offset1f = 0;
+    } else {
+    
     while(1) { //search toward lower offset, higher frequency
         offset -= search_step;
         if (offset>=min_offset) {
@@ -671,6 +682,8 @@ void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t 
         }
         high_side=c; //the high side sample is the one we exited the loop on.
     }
+    
+    }
     if(final_offset <= min_offset) {
         final_offset1f = min_offset<<FIXED_BITS; //force the algorithm to bonk at max found check.
     } else if(final_offset >=max_offset) {
@@ -693,7 +706,7 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint16_t start_offset, int32_t sta
 {
     //check for a max in the correlation in a region
     bool max_found = 0;
-    fine_search(x,len,start_offset,start_correl, SMALL_STEP);
+    fine_search(x,len,start_offset,start_correl, MID_STEP);
     if ( final_offset1f != (min_offset<<FIXED_BITS)) {
         if(final_offset1f != (max_offset<<FIXED_BITS)) {
             max_found = 1;
@@ -759,6 +772,8 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
     Then do a fine search.
     If that bonks, try something near the previous solution (can't start with this or we could get stuck in a local maximum)
     */
+    extern uint16_t t_read(void);
+  
     LOG(LOG_INFO,"start find max correl\r\n");
     LOG(LOG_DEBUG,"len = %d, offset_guess = %d\r\n",max_length, offset_guess);
     int32_t start_correl;
@@ -787,11 +802,16 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
     c2 = corr(x,start_ptr,samples2use,try_offset);
     rising = (c2 > c1) ? 1 : 0; //skip to search for a peak if rising, else look for a minimum and double it.
     LOG(LOG_INFO,"%d, %ld\r\n%d, %ld\r\n", MIN_OFFSET-BIG_STEP,c1,MIN_OFFSET,c2);
-    if(!rising) {
+    uint16_t step = BIG_STEP; //start with big step
+    const uint16_t max_step = 16;
+    if(!rising) 
+    {
         while(!rising) { //keep going until you find a minimum
+          uint16_t elapsed_time = t_read() - p2_start_time;
             LOG(LOG_INFO,"searching for min\r\n");
-            try_offset += BIG_STEP;
-            if(try_offset> MAX_OFFSET) {
+            try_offset += step; //increment by step size
+            step += (step < max_step) ? 1 : 0; //increment step size if less than max step
+            if(try_offset> MAX_OFFSET || (elapsed_time >= 15)) {
                 fail = 1; //still falling and ran out of samples
                 break;
             }
@@ -804,7 +824,8 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
             }
             LOG(LOG_INFO,"%d %ld\r\n",try_offset,c3);
         }
-        if(!fail) {
+        if(!fail) 
+        {
             highest = (c1 > c3) ? c1 : c3;
             if(c2-highest == 0) {
                 offset_guess  = try_offset-BIG_STEP;
@@ -818,9 +839,12 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
         }
     } else {//already rising
         while(rising) {//keep going until you find a drop
+          uint16_t elapsed_time = t_read() - p2_start_time;
+          
             LOG(LOG_INFO,"searching for max\r\n");
-            try_offset += BIG_STEP;
-            if(try_offset>MAX_OFFSET) {
+            try_offset += step;
+            step += (step < max_step) ? 1 : 0; //increment step size if less than max step
+            if((try_offset>MAX_OFFSET) ||((elapsed_time >= 15))) {
                 fail = 2; //still rising and ran out of samples
                 break;
             } else {

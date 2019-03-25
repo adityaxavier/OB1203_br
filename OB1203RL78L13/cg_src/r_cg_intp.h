@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements device driver for INTP module.
-* Creation Date: 3/20/2019
+* Creation Date: 3/25/2019
 ***********************************************************************************************************************/
 #ifndef INTP_H
 #define INTP_H

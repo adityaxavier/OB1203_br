@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements device driver for Port module.
-* Creation Date: 3/20/2019
+* Creation Date: 3/25/2019
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -64,12 +64,12 @@ void R_PORT_Create(void)
              _02_PFSEG25_SEG | _01_PFSEG24_SEG | _00_PFDEG_PORT;
     PFSEG4 = _80_PFSEG38_SEG | _40_PFSEG37_SEG | _20_PFSEG36_SEG | _10_PFSEG35_SEG | _08_PFSEG34_SEG | 
              _04_PFSEG33_SEG | _02_PFSEG32_SEG | _01_PFSEG31_SEG;
-    PFSEG5 = _80_PFSEG46_SEG | _40_PFSEG45_SEG | _20_PFSEG44_SEG | _10_PFSEG43_SEG | _08_PFSEG42_SEG | 
+    PFSEG5 = _00_PFSEG46_PORT | _40_PFSEG45_SEG | _20_PFSEG44_SEG | _10_PFSEG43_SEG | _08_PFSEG42_SEG | 
              _04_PFSEG41_SEG | _02_PFSEG40_SEG | _01_PFSEG39_SEG;
     PFSEG6 = _08_PFSEG50_SEG | _04_PFSEG49_SEG | _00_PFSEG48_PORT | _01_PFSEG47_SEG;
-    P0 = _20_Pn5_OUTPUT_1;
+    P0 = _00_Pn3_OUTPUT_0 | _20_Pn5_OUTPUT_1;
     P4 = _02_Pn1_OUTPUT_1 | _20_Pn5_OUTPUT_1;
-    PM0 = _01_PMn0_NOT_USE | _02_PMn1_NOT_USE | _04_PMn2_NOT_USE | _08_PMn3_NOT_USE | _10_PMn4_NOT_USE | 
+    PM0 = _01_PMn0_NOT_USE | _02_PMn1_NOT_USE | _04_PMn2_NOT_USE | _00_PMn3_MODE_OUTPUT | _10_PMn4_NOT_USE | 
           _00_PMn5_MODE_OUTPUT | _40_PMn6_NOT_USE | _80_PMn7_NOT_USE;
     PM4 = _01_PMn0_NOT_USE | _00_PMn1_MODE_OUTPUT | _04_PMn2_NOT_USE | _08_PMn3_NOT_USE | _10_PMn4_NOT_USE | 
           _00_PMn5_MODE_OUTPUT | _40_PMn6_NOT_USE | _80_PMn7_NOT_USE;

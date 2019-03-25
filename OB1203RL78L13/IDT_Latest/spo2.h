@@ -1,4 +1,4 @@
-	#ifndef __SPO2_H__
+#ifndef __SPO2_H__
 #define __SPO2_H__
 
 #include "mbed.h"
@@ -90,10 +90,12 @@ public:
     float rms_float[2];
     
     bool prev_valid;
+    uint32_t final_offset;
     int32_t final_offset1f;
     int32_t final_correl;
     uint16_t offset_guess;
     uint16_t prev_offset;
+    int32_t prev_correl;
     
     int32_t c0;
 //    int32_t m1f;

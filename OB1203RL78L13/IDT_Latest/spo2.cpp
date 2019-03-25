@@ -142,6 +142,7 @@ SPO2::SPO2()
     first_hr = 1;
     first_spo2 =1;
     data_ptr=0;
+    final_offset = 0;
 }
 
 
@@ -529,7 +530,7 @@ void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t 
     Finds peak and interpolates the maximum and saves the answer with fixed precision.
     */
     pc.printf("fine search at %d\r\n",start_offset);
-    uint32_t final_offset;
+
     uint16_t offset = start_offset;
     int32_t c;
     int32_t high_side;

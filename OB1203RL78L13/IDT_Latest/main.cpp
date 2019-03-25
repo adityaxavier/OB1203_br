@@ -329,6 +329,7 @@ int main()
 {
     i2c.frequency( 400000 ); //always use max speed I2C
     bool do_part2;
+    bool samples_processed = false;
 //    pc.printf("register settings\r\n");
 //    regDump(OB1203_ADDR,0,19);
 //    regDump(OB1203_ADDR,20,39);
@@ -372,20 +373,23 @@ int main()
             t.reset();
             if(ob1203.afull_int_en) {
                 spo2.do_algorithm_part1();
+                samples_processed = false;
             }
             do_part2 = 1;
             while(t.read()<1) {
                 if(mode == BIO_MODE) {
                     if(samples_ready) { //only read data if available (samples_ready is asserted by ISR and cleard by get_sensor_data)
                         get_sensor_data();
+                        samples_processed = true;
                     }
                 } else {
                     break; //exit loop and go to sleep
                 }
-                if(do_part2 && ob1203.afull_int_en) {
+                if(do_part2 && ob1203.afull_int_en && samples_processed) {
                     //if we are in bio slow read mode and we haven't done part 2 yet
                     spo2.do_algorithm_part2();
                     do_part2 = 0;
+                    samples_processed = false;
                 }
             } //end 1sec loop
         } //end conditional

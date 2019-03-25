@@ -21,39 +21,38 @@ InterruptIn intb(intb_pin); //declare an interrupt pin for INTB
 //DigitalOut scl_pullup(D11,1);
 //DigitalOut intb_pullup(D12,1);
 
-
 //RTOS variables
 OB1203 ob1203(&i2c); //instantiate the OB1203 object from its class and pass i2c object
 SPO2 spo2;
 Serial pc(USBTX, USBRX,256000); //create a serial port for printing data to a pc
 Timer t; //use a microsecond timer for time stamping data
 //Timer p;
-Semaphore sensor_ready(0);
+
 #define PROX_MODE 0 //0 for prox, 1 for bio
 #define BIO_MODE 1 //1 for bio mode
 const uint32_t PROX_THRESHOLD = 10000; //counts
 const uint32_t BIO_THRESHOLD = 100000; // -->for consistency change to AGC low limit
 #define MAX_LOW_SAMPLES 50 //one second
 #define PROX_DELAY 100
-bool samples_ready = 0;
-
+volatile bool samples_ready = 0;
+volatile bool just_woke_up = 0;
 //function declarations
 void defaultConfig();
 void switch_mode(bool prox_bio_mode);
 void regDump(uint8_t Addr, uint8_t startByte, uint8_t endByte);
 void get_sensor_data();
 void get_prox_data();
-void intEvent(void);
+void dataEvent(void); //interrupt for data
+void proxEvent(void); //interrupt for prox
 
 
 //USER CONFIGURABLE*********
 bool mode = PROX_MODE; //start in prox mode, then switch to HR mode when we detect proximity
 const bool meas_ps = 1;
 const bool ppg2 = 1; //0 for HR, 1 for SpO2
-const bool meas_temp = 0;
-const bool printRaw = 0; //default 0 print raw data
-const bool printCurrent = 0;//print LED current and time stamp
 const bool redAGC = 1;
+//const bool printCurrent = 0;
+//const bool printRaw = 1;
 const bool irAGC = 1;
 const bool trim_oscillator = 0;
 //****************************
@@ -66,7 +65,7 @@ void defaultConfig() //populate the default settings here
     //high accuracy oscillator trim overwrite option
     ob1203.osc_trim = 0x3F; //max trim code =0x3F
     //temperature sensor settings (hidden registers)
-    meas_temp ? ob1203.temp_en = TEMP_ON : ob1203.temp_en = TEMP_OFF;
+    ob1203.temp_en = TEMP_OFF;
     //LS settings
     ob1203.ls_res = LS_RES(2); //2= 18bit 100ms, 0= max res
     ob1203.ls_rate = LS_RATE(2); //2 =100ms, 4 = 500ms
@@ -93,9 +92,9 @@ void defaultConfig() //populate the default settings here
     ob1203.ps_can_ana = PS_CAN_ANA_0;
     ob1203.ps_digital_can = 0;
     ob1203.ps_hys_level = 0;
-    meas_ps ? ob1203.ps_current = 0x1FF : ob1203.ps_current = 0x000;
+    meas_ps ? ob1203.ps_current = 0x0A8 : ob1203.ps_current = 0x000;
 //    ob1203.ps_current = 0;
-    ob1203.ps_thres_hi = 0xFF;
+    ob1203.ps_thres_hi = 0x3A98; //15,000 decimal
     ob1203.ps_thres_lo = 0x00;
 
     //interrupts
@@ -105,7 +104,7 @@ void defaultConfig() //populate the default settings here
     ob1203.ppg_ps_en = PPG_PS_ON;
 
     ob1203.ps_logic_mode = PS_INT_READ_CLEARS;
-    ob1203.ps_int_en = PS_INT_OFF;
+    ob1203.ps_int_en = PS_INT_ON;
     ob1203.ls_persist = LS_PERSIST(2);
     ob1203.ps_persist = PS_PERSIST(2);
 
@@ -151,7 +150,6 @@ void defaultConfig() //populate the default settings here
     } else {
         pc.printf("initial setup: ps\r\n");
         ob1203.ppg_int_en = PPG_INT_OFF;
-        ob1203.ps_int_en = PS_INT_OFF;
         ob1203.init_ps();
     }
     if(trim_oscillator)
@@ -168,7 +166,7 @@ void switch_mode(bool prox_bio_mode)
     } else {
         ob1203.afull_int_en = AFULL_INT_OFF;
         ob1203.ppg_int_en = PPG_INT_OFF;
-        ob1203.ps_int_en = PS_INT_OFF;
+        ob1203.ps_int_en = PS_INT_ON;
         ob1203.init_ps();
     }
     pc.printf("switching to mode %d\r\n", mode);
@@ -202,101 +200,103 @@ void get_sensor_data()
     uint32_t ppgData[maxSamples2Read*2];
     char fifo_reg_data[3];
     char sample_info[3];
-    char overflow;
-    bool do_reset_fifo;
-    if(mode ==  BIO_MODE) { //only if bio mode
+    char overflow =0;
+    bool do_reset_fifo =0 ;
 //        pc.printf("reading samples\r\n");
-        if(ob1203.afull_int_en) { //slow mode--find out how many samples in buffer
-            ob1203.getNumFifoSamplesAvailable(fifo_reg_data,sample_info); //read the samples fifo registers and figure out how many samples are left
-            samples2Read = (sample_info[1] > maxSamples2Read) ? maxSamples2Read : sample_info[1]; //limit the number of samples to the maximum
+//    pc.printf("%d \r\n",t.read_us());
+    if(ob1203.afull_int_en) { //slow mode--find out how many samples in buffer
+        ob1203.getNumFifoSamplesAvailable(fifo_reg_data,sample_info); //read the samples fifo registers and figure out how many samples are left
+        samples2Read = (sample_info[1] > maxSamples2Read) ? maxSamples2Read : sample_info[1]; //limit the number of samples to the maximum
 //            pc.printf("wr = %02x, read = %02x, overflow = %02x,sample_info[0] = %02x, sample_info[1] = %02x,  samples2Read %d\r\n",ob1203.writePointer,ob1203.readPointer,ob1203.fifoOverflow,sample_info[0],sample_info[1],samples2Read);
-    //        pc.printf("sample_info: hr samples %d, ppg_samples %d, overflow %d\r\n",sample_info[0],sample_info[1], sample_info[2]);
-        }
-        else {
-            samples2Read = 1; //read one sample
-        }
-        ob1203.getFifoSamples(samples2Read<<1,fifoBuffer);
+//        pc.printf("s2r = %d, sample_info: hr samples %d, ppg_samples %d, overflow %d\r\n",samples2Read, sample_info[0],sample_info[1], sample_info[2]);
+    } else {
+        samples2Read = 1; //read one sample
+        overflow = 0;
+    }
+    ob1203.getFifoSamples(samples2Read<<1,fifoBuffer);
 //        pc.printf("%02x %02x %02x %02x %02x %02x\r\n",fifoBuffer[0],fifoBuffer[1],fifoBuffer[2],fifoBuffer[3],fifoBuffer[4],fifoBuffer[5]);
-        ob1203.parseFifoSamples(samples2Read<<1,fifoBuffer,ppgData);
+    ob1203.parseFifoSamples(samples2Read<<1,fifoBuffer,ppgData);
 //        pc.printf("1st sample: %d %d\r\n",ppgData[0],ppgData[1]);
-        if(ob1203.ir_in_range && ob1203.r_in_range) {
-            for( int n=0; n<(overflow>>1); n++) {
-                spo2.add_sample(ppgData[0],ppgData[1]); //duplicate oldest data to deal with missing (overwritten) samples
-                if(spo2.sample_count < ARRAY_LENGTH) spo2.sample_count ++; //number of samples in buffer
-            }
-            for( int n=0; n<samples2Read; n++) { //add samples
-                spo2.add_sample(ppgData[2*n],ppgData[2*n+1]); //add data to sample buffer when data is in range
-                if(spo2.sample_count < ARRAY_LENGTH) spo2.sample_count ++; //number of samples in buffer
-            }
-        } else {
+    if(ob1203.ir_in_range && ob1203.r_in_range) {
+        for( int n=0; n<(overflow>>1); n++) {
+            spo2.add_sample(ppgData[0],ppgData[1]); //duplicate oldest data to deal with missing (overwritten) samples
+            if(spo2.sample_count < ARRAY_LENGTH) spo2.sample_count ++; //number of samples in buffer
+        }
+        for( int n=0; n<samples2Read; n++) { //add samples
+            spo2.add_sample(ppgData[2*n],ppgData[2*n+1]); //add data to sample buffer when data is in range
+            if(spo2.sample_count < ARRAY_LENGTH) spo2.sample_count ++; //number of samples in buffer
+        }
+    } else {
 //            pc.printf("out of range\r\n");
-            spo2.sample_count = 0;
-        }
+        spo2.sample_count = 0;
+    }
 
-        if(ppg2) { //print two columns of data with or without current
-            //PRINT RAW DATA
-            if(printCurrent) {
-                for(int n = 0; n<(overflow>>1); n++) {
-                    //print oldest sample in the place of missing samples
-                    pc.printf("overflow %d, %d, %d, %d, %d\r\n",ppgData[0],ppgData[1],ob1203.ir_current,ob1203.r_current); //(use only with slower data rates or averaging as this slows down the data printing);
-                }
-                for(int n= 0; n<samples2Read; n++) {
-                    //print samples from FIFO
-                    pc.printf("%d, %d, %d, %d\r\n",ppgData[2*n],ppgData[2*n+1],ob1203.ir_current,ob1203.r_current); //(use only with slower data rates or averaging as this slows down the data printing);
-                }
-            } else if (printRaw) {
-                for(int n = 0; n<(overflow>>1); n++) {
-                    //print oldest sample in the place of missing samples
-                    pc.printf("overflow %d, %d\r\n",ppgData[0],ppgData[1]);
-                }
-                for(int n= 0; n<samples2Read; n++) {
-                    //print samples from FIFO
-                    pc.printf("%d,    %d\r\n",ppgData[2*n],ppgData[2*n+1]); 
-                }
-            }//end print if
-        }//end SpO2 case
-        else { //HR mode print one column of data
-            //PRINT RAW DATA
-            for(int n=0; n<samples2Read; n++) {
-                pc.printf("%d\r\n%d\r\n",ppgData[0],ppgData[1]);
-            }
-        }//HR case
+//    if(ppg2) { //print two columns of data with or without current
+//        //PRINT RAW DATA
+//        if(printCurrent) {
+//            pc.printf("overflow = %d\r\n",overflow);
+//            for(int n = 0; n<(overflow>>1); n++) {
+//                //print oldest sample in the place of missing samples
+//                pc.printf("overflow %d, %d, %d, %d, %d\r\n",ppgData[0],ppgData[1],ob1203.ir_current,ob1203.r_current); //(use only with slower data rates or averaging as this slows down the data printing);
+//            }
+//            for(int n= 0; n<samples2Read; n++) {
+//                //print samples from FIFO
+//                pc.printf("%d, %d, %d, %d\r\n",ppgData[2*n],ppgData[2*n+1],ob1203.ir_current,ob1203.r_current); //(use only with slower data rates or averaging as this slows down the data printing);
+//            }
+//        } else if (printRaw) {
+//            for(int n = 0; n<(overflow>>1); n++) {
+//                //print oldest sample in the place of missing samples
+//                pc.printf("overflow %d, %d\r\n",ppgData[0],ppgData[1]);
+//            }
+//            for(int n= 0; n<samples2Read; n++) {
+//                //print samples from FIFO
+//                pc.printf("%d, %d, %d\r\n",n, ppgData[2*n],ppgData[2*n+1]);
+//            }
+//        }//end print if
+//    }//end SpO2 case
+//    else { //HR mode print one column of data
+//        //PRINT RAW DATA
+//        for(int n=0; n<samples2Read; n++) {
+//            pc.printf("%d\r\n%d\r\n",ppgData[0],ppgData[1]);
+//        }
+//    }//HR case
 
-        if(irAGC) {
-            ob1203.do_agc(ppgData[2*(samples2Read-1)],0);  //use the most recent sample in the FIFO
-        }//end IR AGC case
-        if(ppg2 && redAGC) {
-            ob1203.do_agc(ppgData[2*(samples2Read-1)+1],1);  //use the most recent sample in the FIFO
-        }//enr R AGC case
-        if(ob1203.updateFastMode || ob1203.updateCurrent)
-            do_reset_fifo = 1;
-        if(ob1203.updateFastMode) {
-            pc.printf("switching FastMode to %d\r\n",ob1203.ppg_int_en);
-            ob1203.setIntConfig();
-            ob1203.updateFastMode = 0;
-        }
-        if(ob1203.updateCurrent) {
-            ob1203.setPPGcurrent();
-            ob1203.updateCurrent=0;
-        }
-        if(do_reset_fifo) {
-            ob1203.resetFIFO();
-        }
-        //switch modes if no signal
-        if(ppgData[2*(samples2Read-1)]< BIO_THRESHOLD) {
-            num_low_samples++;
-        } else {
-            num_low_samples = 0;
-        }
-        if (num_low_samples >= MAX_LOW_SAMPLES) {
-            mode = PROX_MODE;
-            switch_mode(mode);
-        }
-    }//end if mode
-    else { //prox mode case
-        get_prox_data();
+    if(irAGC) {
+        ob1203.do_agc(ppgData[2*(samples2Read-1)],0);  //use the most recent sample in the FIFO
+    }//end IR AGC case
+    if(ppg2 && redAGC) {
+        ob1203.do_agc(ppgData[2*(samples2Read-1)+1],1);  //use the most recent sample in the FIFO
+    }//enr R AGC case
+    if(ob1203.updateFastMode || ob1203.updateCurrent) {
+        do_reset_fifo = 1;
+    }
+    if(ob1203.updateFastMode) {
+        pc.printf("switching FastMode to %d\r\n",ob1203.ppg_int_en);
+        ob1203.setIntConfig();
+        ob1203.updateFastMode = 0;
+    }
+    if(ob1203.updateCurrent) {
+        ob1203.setPPGcurrent();
+        ob1203.updateCurrent=0;
+    }
+    if(do_reset_fifo) {
+        ob1203.resetFIFO();
+        do_reset_fifo = 0;
+    }
+    //switch modes if no signal
+    if(ppgData[2*(samples2Read-1)]< BIO_THRESHOLD) {
+        num_low_samples++;
+    } else {
+        num_low_samples = 0;
+    }
+    if (num_low_samples >= MAX_LOW_SAMPLES) {
+        mode = PROX_MODE;
+        switch_mode(mode);
+        just_woke_up = 0;
+        intb.fall(&proxEvent); //set an interrupt on the falling edge
     }
     samples_ready = 0;
+  
 }//end get_sensor_data
 
 void get_prox_data()
@@ -314,14 +314,19 @@ void get_prox_data()
     }
 }
 
-void intEvent(void)
+void dataEvent(void)
 {
     samples_ready = 1;
 }
 
 
+void proxEvent(void)
+{
+    just_woke_up = 1;
+}
+
 int main()
-{   
+{
     i2c.frequency( 400000 ); //always use max speed I2C
     bool do_part2;
 //    pc.printf("register settings\r\n");
@@ -339,34 +344,50 @@ int main()
     regDump(OB1203_ADDR,40,59);
     regDump(OB1203_ADDR,60,77);
 
-    intb.fall(&intEvent); //attach a falling interrupt
+    intb.fall(&dataEvent); //attach a falling interrupt
     t.start(); //start microsecond timer for datalogging
 
     wait(1); //finish regDump
 
-    intb.fall(&intEvent); //set an interrupt on the falling edge
+    intb.fall(&proxEvent); //set an interrupt on the falling edge to wake from prox mode
     pc.printf("begin autogain\r\n");
     //while ( (!ob1203.ir_in_range) && (!ob1203.r_in_range) ) {} //wait for AGC complete
     pc.printf("10s SPO2, 10s HR, 1s SPO2, 1s HR, R\r\n");
+    spo2.get_sum_squares(); //get sum_squares
     while(1) { //main program loop
-        t.reset();
-        if(ob1203.afull_int_en) {
-            spo2.do_algorithm_part1();
+        if(just_woke_up) {
+            pc.printf("got prox interrupt \r\n");
         }
-        do_part2 = 1;
-        while(t.read()<1) {
-            if(mode == BIO_MODE) {
-                if(samples_ready) { //only read data if available (samples_ready is asserted by ISR and cleard by get_sensor_data)
-                    get_sensor_data();
+        if(mode == PROX_MODE) {//prox mode case
+
+            //*******put sleep command here and register wake on interrupt******
+
+            if(just_woke_up) {
+                mode = BIO_MODE;
+                switch_mode(mode); //starts in fast mode
+                intb.fall(&dataEvent); //attach interrupt to data events
+                just_woke_up = 0;
+            }
+        } else { //bio mode case
+            t.reset();
+            if(ob1203.afull_int_en) {
+                spo2.do_algorithm_part1();
+            }
+            do_part2 = 1;
+            while(t.read()<1) {
+                if(mode == BIO_MODE) {
+                    if(samples_ready) { //only read data if available (samples_ready is asserted by ISR and cleard by get_sensor_data)
+                        get_sensor_data();
+                    }
+                } else {
+                    break; //exit loop and go to sleep
                 }
-            } else {
-                get_sensor_data(); //includes a delay for prox samples
-            }
-            if(do_part2 && ob1203.afull_int_en) {
-                //if we are in bio mode and we haven't done part 2 yet
-                spo2.do_algorithm_part2();
-                do_part2 = 0;
-            }
-        }
-    }
+                if(do_part2 && ob1203.afull_int_en) {
+                    //if we are in bio slow read mode and we haven't done part 2 yet
+                    spo2.do_algorithm_part2();
+                    do_part2 = 0;
+                }
+            } //end 1sec loop
+        } //end conditional
+    }//end while (1)
 }//end main

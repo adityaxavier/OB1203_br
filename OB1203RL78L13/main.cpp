@@ -10,6 +10,8 @@
 #include "OB1203.h"
 #include "SPO2.h"
 
+#include "ppg_lcd.h"
+
 //normal
 //I2C i2c(I2C_SDA,I2C_SCL); //instantiate an i2c object from its class
 #define intb_pin D3
@@ -198,13 +200,13 @@ void regDump(uint8_t Addr, uint8_t startByte, uint8_t endByte)
     }
 }
 
-
-void get_sensor_data()
-{
-    char samples2Read;
-    const char maxSamples2Read = 8; //FIFO samples, e.g. 4 samples * 3 bytes = 12 bytes (or 2 SpO2 samples) 16 samples is the entire SpO2 buffer.
+    const char maxSamples2Read = 16; //FIFO samples, e.g. 4 samples * 3 bytes = 12 bytes (or 2 SpO2 samples) 16 samples is the entire SpO2 buffer.
     char fifoBuffer[maxSamples2Read*6];
     uint32_t ppgData[maxSamples2Read*2];
+void get_sensor_data()
+{
+    char samples2Read = 0;
+
     char fifo_reg_data[3];
     char sample_info[3];
     char overflow =0;
@@ -216,6 +218,12 @@ void get_sensor_data()
         samples2Read = (sample_info[1] > maxSamples2Read) ? maxSamples2Read : sample_info[1]; //limit the number of samples to the maximum
 //            LOG(LOG_DEBUG,"wr = %02x, read = %02x, overflow = %02x,sample_info[0] = %02x, sample_info[1] = %02x,  samples2Read %d\r\n",ob1203.writePointer,ob1203.readPointer,ob1203.fifoOverflow,sample_info[0],sample_info[1],samples2Read);
 //        LOG(LOG_DEBUG,"s2r = %d, sample_info: hr samples %d, ppg_samples %d, overflow %d\r\n",samples2Read, sample_info[0],sample_info[1], sample_info[2]);
+        
+        if(samples2Read == 0)
+        {
+          LOG(LOG_INFO,"samples2Read == 0\r\n");
+        }
+        
     } else {
         samples2Read = 1; //read one sample
         overflow = 0;
@@ -422,6 +430,7 @@ void ob1203_spo2_main(void)
                 if(do_part2 && ob1203.afull_int_en) {
                     //if we are in bio slow read mode and we haven't done part 2 yet
                     spo2.do_algorithm_part2();
+                    R_PPG_LCD_Display_SPO2(spo2.display_spo2);
                     do_part2 = 0;
                 }
             } //end 1sec loop

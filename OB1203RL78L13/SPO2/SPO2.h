@@ -110,6 +110,8 @@ public:
     uint32_t current_hr1f;
     uint16_t avg_hr;
     uint16_t avg_spo2;
+    uint16_t display_spo2;
+    uint16_t display_spo2_frac;
     uint16_t sample_count;
     
     bool first_hr;

@@ -615,7 +615,7 @@ void OB1203::init_spo2()
 uint32_t OB1203::bytes2uint32(char *data, int start_byte) 
 {
     //coverts a string of 3 bytes with LSB first into unsigned long MSB last
-    return ((uint32_t)data[start_byte+2])<<16 | ((uint32_t)data[start_byte+1])<<8 | ((uint32_t)data[start_byte]) ;
+    return ((uint32_t)(data[start_byte+2] & (0x3U)))<<16 | ((uint32_t)data[start_byte+1])<<8 | ((uint32_t)data[start_byte]) ;
 }
 
 uint32_t OB1203::twoandhalfBytes2uint32(char *data, int start_byte) 
@@ -710,7 +710,7 @@ void OB1203::getNumFifoSamplesAvailable(char *fifo_info, char *sample_info)
     
     getFifoInfo(fifo_info);
     char numSamples = writePointer;
-    if (writePointer<readPointer)
+    if (writePointer<=readPointer)
     {
         numSamples += 32; 
     }
@@ -756,7 +756,11 @@ void OB1203::do_agc(uint32_t data, bool ch)
     
     if( data > targetCounts[ch] + ( (in_range[ch]>in_range_persist) ? tol2: tol1) ) //too high
     {       
-        if(data> targetCounts[ch] + tol2) in_range[ch]=0;
+        if(data> (targetCounts[ch] + tol2))
+        {
+          in_range[ch]=0;
+          LOG(LOG_INFO, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\r\n");
+        }
         
         if( (ch ? r_current : ir_current)>step)
         {
@@ -766,8 +770,11 @@ void OB1203::do_agc(uint32_t data, bool ch)
     }
     else if( data < targetCounts[ch] - ( (in_range[ch]>in_range_persist) ? tol2 : tol1) ) //too low
     {
-        if(data < targetCounts[ch] - tol2)
-            in_range[ch]=0;
+        if(data < (targetCounts[ch] - tol2))
+        {
+          in_range[ch]=0;
+          LOG(LOG_INFO, "#############################################\r\n");
+        }
         if( (ch ? r_current : ir_current) +step < maxCurrent[ch]) //no need to go to full current
         {
             (ch ? r_current : ir_current) += step;

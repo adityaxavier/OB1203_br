@@ -158,6 +158,7 @@ void SPO2::do_algorithm_part2()
         avg_spo2 = 0;
     }
     LOG(LOG_INFO, "%.2f, %.2f, %.2f, %.2f, %.4f\r\n",(float)avg_spo2/(float)(1<<FIXED_BITS),(float)avg_hr/(float)(1<<FIXED_BITS),(float)current_spo21f/float(1<<FIXED_BITS),(float)current_hr1f/(float)(1<<FIXED_BITS),R);
+    display_spo2 = ((avg_spo2>>FIXED_BITS) * 10) + (((0x0008 & avg_spo2) == 0) ? 0 : 5);
 }
 
 
@@ -401,7 +402,7 @@ void SPO2::get_DC()
               LOG(LOG_DEBUG,"%lu\r\n",dc_data[channel][n]);
         }
         mean1f[channel] = (mean1f[channel]<<FIXED_BITS)/ARRAY_LENGTH;
-        LOG(LOG_DEBUG,"channel %u mean = %ld\r\n",channel,mean1f[channel]);
+        LOG(LOG_INFO,"channel %u mean = %ld\r\n",channel,mean1f[channel]);
     }
 }
 
@@ -485,13 +486,13 @@ void SPO2::get_rms()
             var1f += ( (uint32_t)abs(AC1f[idx[n]]>>2 ))*( (uint32_t)abs(AC1f[idx[n]>>2] )); //getting 2 bit shifts here, taking out extra bit shift for overhead
             LOG(LOG_DEBUG,"var1f = %lu\r\n",var1f);
         }
-        #ifdef PRINT_AC1F
+        
             if(channel == IR) { //print filtered data for IR channel
                 for (int n = 0; n<ARRAY_LENGTH; n++) {
-                    LOG(LOG_INFO,"%d\r\n",AC1f[idx[n]]);
+                    LOG(LOG_DEBUG_NEED,"%d\r\n",AC1f[idx[n]]);
                 }
             }
-        #endif
+        
         LOG(LOG_INFO,"var1f = %lu\r\n",var1f);
         rms1f[channel] = uint_sqrt(var1f/(uint32_t)ARRAY_LENGTH ); //square root halfs the bit shifts back to 2, so this is more like RMS0.5f -- OH WELL (it is 4x bigger, not 16x bigger)
         LOG(LOG_INFO,"channel %u, mean1f = %ld, rms1f = %lu\r\n",channel,mean1f[channel],rms1f[channel]);
@@ -869,7 +870,7 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
         prev_valid = 1;
     }
     
-    LOG(LOG_DEBUG,"final_offset %ld\r\n",final_offset1f);
+    LOG(LOG_DEBUG_NEED,"final_offset %ld\r\n",final_offset1f);
 
     return max_found;
 }

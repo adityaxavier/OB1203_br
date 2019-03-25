@@ -188,6 +188,21 @@ static void R_MAIN_UserInit(void)
   LCD_DISPLAY_OFF();
 #else
   extern void ob1203_spo2_main(void);
+    /* 10ms delay */
+  Init_Display_Panel();
+  
+  LCD_DISPLAY_ON();
+  
+  {
+    uint32_t i = LCD_VOLTAGE_WAITTIME;
+    i = LCD_VOLTAGE_WAITTIME;
+    while(--i);
+  }
+  
+  LCD_DISPLAY_OFF();
+  
+  R_PPG_LCD_Display_HRM(100);
+  
   ob1203_spo2_main();
 #endif
   /* End user code. Do not edit comment generated here */

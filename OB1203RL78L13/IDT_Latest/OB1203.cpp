@@ -355,7 +355,7 @@ void OB1203::init_spo2()
 uint32_t OB1203::bytes2uint32(char *data, int start_byte) 
 {
     //coverts a string of 3 bytes with LSB first into unsigned long MSB last
-    return ((uint32_t)data[start_byte+2])<<16 | ((uint32_t)data[start_byte+1])<<8 | ((uint32_t)data[start_byte]) ;
+    return ((uint32_t)(data[start_byte+2] & 0x03) )<<16 | ((uint32_t)data[start_byte+1])<<8 | ((uint32_t)data[start_byte]) ;
 }
 
 uint32_t OB1203::twoandhalfBytes2uint32(char *data, int start_byte) 
@@ -440,7 +440,7 @@ void OB1203::getNumFifoSamplesAvailable(char *fifo_info, char *sample_info)
     
     getFifoInfo(fifo_info);
     char numSamples = writePointer;
-    if (writePointer<readPointer)
+    if (writePointer<=readPointer)
     {
         numSamples += 32; 
     }

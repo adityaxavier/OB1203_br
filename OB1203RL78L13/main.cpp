@@ -298,6 +298,10 @@ void get_sensor_data()
         LOG(LOG_INFO,"switching FastMode to %d\r\n",ob1203.ppg_int_en);
         ob1203.setIntConfig();
         ob1203.updateFastMode = 0;
+        if(ob1203.ppg_int_en == 0) { //not in fastMode -- switching to collecting data
+            spo2.reset_kalman_hr = 1; //reset the Kalman filter for SpO2
+            spo2.reset_kalman_spo2 = 1; //reset the Kalman filter for SpO2
+        }
     }
     if(ob1203.updateCurrent) {
         ob1203.setPPGcurrent();
@@ -470,13 +474,13 @@ void ob1203_spo2_main(void)
                 if(display==LCD_HEART_RATE)
                 {
                   LCD_DISPLAY_OFF();
-                  R_PPG_LCD_Display_SPO2(spo2.display_spo2);
+                  R_PPG_LCD_Display_SPO2(spo2.current_spo21f);
                   display = LCD_OXYGEN_LEVEL;
                 }
                 else if(display==LCD_OXYGEN_LEVEL)
                 {
                   LCD_DISPLAY_OFF();
-                  R_PPG_LCD_Display_HRM(spo2.display_hr);
+                  R_PPG_LCD_Display_HRM(spo2.current_hr1f);
                   display = LCD_HEART_RATE;
                 }
                 do_part2 = 0;

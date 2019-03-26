@@ -34,7 +34,7 @@ This project requires 3.3 volts DC power supply to the OB1203. The Renesas Start
 
 ## Acquiring additional information ##
 Data from the OB1203 can be acquired directly by setting the preprocessor `DEBUG_LVL` in `r_cg_userdefine.h` to LOG_DEBUG_RAW.
-There are other levels of details which may be acquired from the OB1203. 
+There are other levels of details which may be acquired from the OB1203 by applying a `LOG_` bitmask to `DEBUG_LVL`. 
 
 It must be noted that, although the DMAC is used, the serial printing function blocks program control (in write.c) until all data is printed to the terminal. This is primarily to maintain proper sequence of data.
 
@@ -45,7 +45,7 @@ It must be noted that, although the DMAC is used, the serial printing function b
 ## Relevant documentation ##
 - [OB1203 Short form Datasheet](https://www.idt.com/document/sds/ob1203-preliminary-short-form-datasheet)
 - [OB1203 Datasheet](https://www.idt.com/support?nid=460026&issue_type=sales)
-- RL78/L13 Hardware User's Manual
+- [RL78/L13 Hardware User's Manual](https://www.renesas.com/us/en/products/microcontrollers-microprocessors/rl78/rl78l1x/rl78l13.html#documents)
 - [Renesas Starter Kit for RL78/L13 - Product Information](https://www.renesas.com/us/en/products/software-tools/boards-and-kits/starter-kits/renesas-starter-kit-for-rl78-l13.html)
 - [R20UT2888EG0100 - Renesas Starter Kit LCD Application Board V2](https://www.renesas.com/en-sg/doc/products/tool/doc/003/r20ut2888eg0100_lcdappv2_lcd.pdf)
 - [R20UT2518EG0100 - LCD Glass datasheet]()

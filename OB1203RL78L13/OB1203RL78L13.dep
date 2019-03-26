@@ -665,6 +665,10 @@
                     <name>ICCRL78</name>
                     <file> 31 111 100 136 36 54 52 8 121 67 6 57 16</file>
                 </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 100 57 54 67 8 36 16 111 136 52 6 31 121</file>
+                </tool>
             </inputs>
         </file>
         <file>
@@ -768,10 +772,6 @@
                 <tool>
                     <name>ICCRL78</name>
                     <file> 31 111 100 136 36 16</file>
-                </tool>
-                <tool>
-                    <name>BICOMP</name>
-                    <file> 111 16 136 36 100 31</file>
                 </tool>
             </inputs>
         </file>

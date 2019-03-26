@@ -56,8 +56,11 @@ User definitions
 #define LOG_DEBUG_NEED  (64)
 #define LOG_DEBUG_RAW   (128)
 
+#if !defined(DEBUG_STREAM)
 #define DEBUG_STREAM    stdout
-#if defined(stdout)
+#endif
+
+#if defined(stdout) && !defined(DEBUG_LVL)
 #define DEBUG_LVL       (LOG_INFO)
 #else
 #define DEBUG_LVL       (0)

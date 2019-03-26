@@ -114,6 +114,8 @@ static void R_MAIN_UserInit(void)
   R_UART2_Start();
 #endif
   R_INTC0_Start();
+  R_INTC5_Start();
+  R_INTC7_Start();
 #if defined(TEST_CODE)
   uint32_t i = LCD_VOLTAGE_WAITTIME;  
   R_UART2_Start();

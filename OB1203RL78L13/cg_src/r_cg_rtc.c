@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements device driver for RTC module.
-* Creation Date: 3/25/2019
+* Creation Date: 3/26/2019
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -61,10 +61,7 @@ void R_RTC_Create(void)
     RTCIF = 0U;    /* clear INTRTC interrupt flag */
     RTITMK = 1U;   /* disable INTRTIT interrupt */
     RTITIF = 0U;   /* clear INTRTIT interrupt flag */
-    /* Set INTRTC high priority */
-    RTCPR1 = 0U;
-    RTCPR0 = 0U;
-    RTCC0 = _00_RTC_RTC1HZ_DISABLE | _00_RTC_12HOUR_SYSTEM | _02_RTC_INTRTC_CLOCK_1;
+    RTCC0 = _00_RTC_RTC1HZ_DISABLE | _00_RTC_12HOUR_SYSTEM | _00_RTC_INTRTC_NOT_GENERATE;
     RTCWEN = 0U;    /* stops input clock supply */
 }
 /***********************************************************************************************************************
@@ -78,8 +75,6 @@ void R_RTC_Start(void)
     volatile uint16_t w_count;
 
     RTCWEN = 1U;   /* enables input clock supply */
-    RTCIF = 0U;    /* clear INTRTC interrupt flag */
-    RTCMK = 0U;    /* enable INTRTC interrupt */
     RTCE = 1U;     /* enable RTC clock operation */
 
     /* Change the waiting time according to the system */
@@ -102,8 +97,6 @@ void R_RTC_Stop(void)
 
     RTCWEN = 1U;  /* enables input clock supply */
     RTCE = 0U;    /* disable RTC clock operation */
-    RTCMK = 1U;   /* disable INTRTC interrupt */
-    RTCIF = 0U;   /* clear INTRTC interrupt flag */
 
     /* Change the waiting time according to the system */
     for (w_count = 0U; w_count < RTC_WAITTIME_2FRTC; w_count++)
@@ -219,49 +212,6 @@ MD_STATUS R_RTC_Set_CounterValue(rtc_counter_value_t counter_write_val)
     RTCWEN = 0U;    /* stops input clock supply */
 
     return (status);
-}
-/***********************************************************************************************************************
-* Function Name: R_RTC_Set_ConstPeriodInterruptOn
-* Description  : This function enables constant-period interrupt.
-* Arguments    : period -
-*                    the constant period of INTRTC
-* Return Value : status -
-*                    MD_OK or MD_ARGERROR
-***********************************************************************************************************************/
-MD_STATUS R_RTC_Set_ConstPeriodInterruptOn(rtc_int_period_t period)
-{
-    MD_STATUS status = MD_OK;
-
-    if ((period < HALFSEC) || (period > ONEMONTH))
-    {
-        status = MD_ARGERROR;
-    }
-    else
-    {
-        RTCWEN = 1U;   /* enables input clock supply */
-        RTCMK = 1U;    /* disable INTRTC */
-        RTCC0 = (RTCC0 & _F8_RTC_INTRTC_CLEAR) | period;
-        RTCC1 &= (uint8_t)~_08_RTC_INTC_GENERATE_FLAG;
-        RTCIF = 0U;    /* clear INTRTC interrupt flag */
-        RTCMK = 0U;    /* enable INTRTC interrupt */
-        RTCWEN = 0U;   /* stops input clock supply */
-    }
-
-    return (status);
-}
-/***********************************************************************************************************************
-* Function Name: R_RTC_Set_ConstPeriodInterruptOff
-* Description  : This function disables constant-period interrupt.
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-void R_RTC_Set_ConstPeriodInterruptOff(void)
-{
-    RTCWEN = 1U;       /* enables input clock supply */
-    RTCC0 &= _F8_RTC_INTRTC_CLEAR;
-    RTCC1 &= (uint8_t)~_08_RTC_INTC_GENERATE_FLAG;
-    RTCIF = 0U;        /* clear INTRTC interrupt flag */
-    RTCWEN = 0U;       /* stops input clock supply */
 }
 
 /* Start user code for adding. Do not edit comment generated here */

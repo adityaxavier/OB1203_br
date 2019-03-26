@@ -14,16 +14,21 @@ Calculated values are displayed on the Native LCD screen.
 
 ## OB1203 to RL78/L13 connection scheme ##
 
+This project requires 3.3 volts DC power supply to the OB1203. The Renesas Starter Kit for RL78/L13 must therefore be configured to supply this voltage by setting
+(J5:= Pin2-3 shorted; J6:= All open). See R20UT2124EG0100 sheet 3 of 8.
+
+3.3V can be acquired by connecting to J7 or regulating JA1-1 (5VDC) to 3.3V
+
 
 | OB1203	| RSKRL78L13
 |-----------|----------------------------
 | GND		| JA1-2 
 | NC		| NC
 | NC		| NC
-| INTB		| JA2-7
+| INTB		| JA5-9
 | SDA		| JA1-25
 | SCL		| JA1-26
-| VLED		| 3V3  (J7)
+| VLED		| 3V3  (J7) 
 | VDD		| 3V3  (J7)
 
 

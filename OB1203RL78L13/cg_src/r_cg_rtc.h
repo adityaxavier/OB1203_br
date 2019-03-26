@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements device driver for RTC module.
-* Creation Date: 3/25/2019
+* Creation Date: 3/26/2019
 ***********************************************************************************************************************/
 #ifndef RTC_H
 #define RTC_H
@@ -139,9 +139,6 @@ void R_RTC_Start(void);
 void R_RTC_Stop(void);
 MD_STATUS R_RTC_Get_CounterValue(rtc_counter_value_t * const counter_read_val);
 MD_STATUS R_RTC_Set_CounterValue(rtc_counter_value_t counter_write_val);
-MD_STATUS R_RTC_Set_ConstPeriodInterruptOn(rtc_int_period_t period);
-void R_RTC_Set_ConstPeriodInterruptOff(void);
-static void r_rtc_callback_constperiod(void);
 
 /* Start user code for function. Do not edit comment generated here */
 /* End user code. Do not edit comment generated here */

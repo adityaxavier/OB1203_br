@@ -11,6 +11,7 @@ Calculated values are displayed on the Native LCD screen.
 ## Development Hardware Platform ##
 - Renesas Starter Kit for RL78/L13 [YR0K5010WMS000BE](https://www.renesas.com/us/en/products/software-tools/boards-and-kits/starter-kits/renesas-starter-kit-for-rl78-l13.html)
 - OB1203 breakout board
+- (Optional) USB-to-Serial High-Speed Adapter [Keyspan](https://assets.tripplite.com/product-pdfs/en/usa19hs.pdf)
 
 ## OB1203 to RL78/L13 connection scheme ##
 
@@ -31,6 +32,11 @@ This project requires 3.3 volts DC power supply to the OB1203. The Renesas Start
 | VLED		| 3V3  (J7) 
 | VDD		| 3V3  (J7)
 
+## Acquiring additional information ##
+Data from the OB1203 can be acquired directly by setting the preprocessor `DEBUG_LVL` in `r_cg_userdefine.h` to LOG_DEBUG_RAW.
+There are other levels of details which may be acquired from the OB1203. 
+
+It must be noted that, although the DMAC is used, the serial printing function blocks program control (in write.c) until all data is printed to the terminal. This is primarily to maintain proper sequence of data.
 
 ## Evaluation Platform ##
 - Optimized H/W design to be released

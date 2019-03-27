@@ -67,8 +67,8 @@ public:
     void do_algorithm_part2();
     void get_sum_squares();
     void peak_find(uint16_t *x0, int32_t *y, int32_t *x_fit1f, int32_t *y_fit) ;
-    void simple_peak_find(int32_t *y, int32_t *x_fit1f, int32_t *yfit, uint16_t x_center, uint16_t step);
-    void kalman(uint32_t *kalman_array,uint8_t *kalman_length,uint8_t *kalman_ptr,uint32_t *data_array,uint8_t *data_array_length,uint8_t *data_ptr, uint32_t new_data,volatile bool *reset_kalman,uint32_t *kalman_avg);
+    void simple_peak_find(int32_t *y, int32_t *x_fit1f, int32_t *yfit, uint16_t x_center, int32_t step);
+    void kalman(uint32_t *kalman_array,uint8_t *kalman_length,uint8_t *kalman_ptr,uint32_t *data_array,uint8_t *data_array_length,uint8_t *data_ptr, uint32_t new_data,volatile bool *reset_kalman,uint32_t *kalman_avg,uint8_t *outlier_cnt, uint8_t *alg_fail_cnt );
     uint32_t get_std(uint32_t *array,uint8_t length, uint32_t avg);
     uint32_t get_avg(uint32_t *array,uint8_t length);
     //variables
@@ -117,6 +117,11 @@ public:
     uint32_t kalman_spo2_array[MAX_KALMAN_LENGTH];
     uint16_t p2_start_time;
     
+    uint16_t display_spo2;
+    uint16_t display_hr;
+
+     int32_t fit_correl;
+  
 private:
 //functions
 

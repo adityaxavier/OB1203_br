@@ -64,6 +64,10 @@ void SPO2::do_algorithm_part2()
     static uint8_t kalman_spo2_ptr = 0;
     static uint8_t kalman_hr_length = 0;
     static uint8_t kalman_spo2_length = 0;
+    static uint8_t hr_outlier_cnt =0;
+    static uint8_t hr_alg_fail_cnt = 0;
+    static uint8_t spo2_outlier_cnt =0;
+    static uint8_t spo2_alg_fail_cnt = 0;
 
     p2_start_time = t_read();
     offset_guess = DEFAULT_GUESS;
@@ -82,9 +86,9 @@ void SPO2::do_algorithm_part2()
         LOG(LOG_DEBUG,"pre kalman %.1f, %.1f\r\n",(float)current_spo21f/(float)(1<<FIXED_BITS), (float)current_hr1f/(float)(1<<FIXED_BITS));
 //        consensus(); //filter out crap data
         LOG(LOG_INFO,"HR: ");
-        kalman(kalman_hr_array,&kalman_hr_length,&kalman_hr_ptr,hr_samples,&num_hr_samples,&hr_ptr,current_hr1f,&reset_kalman_hr,&avg_hr1f);
+        kalman(kalman_hr_array,&kalman_hr_length,&kalman_hr_ptr,hr_samples,&num_hr_samples,&hr_ptr,current_hr1f,&reset_kalman_hr,&avg_hr1f,&hr_outlier_cnt,&hr_alg_fail_cnt);
         LOG(LOG_INFO,"SPO2: ");
-        kalman(kalman_spo2_array,&kalman_spo2_length,&kalman_spo2_ptr,spo2_samples,&num_spo2_samples,&spo2_ptr,current_spo21f,&reset_kalman_spo2,&avg_spo21f);
+        kalman(kalman_spo2_array,&kalman_spo2_length,&kalman_spo2_ptr,spo2_samples,&num_spo2_samples,&spo2_ptr,current_spo21f,&reset_kalman_spo2,&avg_spo21f,&spo2_outlier_cnt,&spo2_alg_fail_cnt);
         LOG(LOG_INFO,"post kalman %.1f, %.1f\r\n",(float)avg_hr1f/(float)(1<<FIXED_BITS), (float)avg_spo21f/(float)(1<<FIXED_BITS) );
 
     } else {
@@ -96,6 +100,8 @@ void SPO2::do_algorithm_part2()
         first_spo2 = 1;
     }
     LOG(LOG_INFO,"%.2f, %.2f, %.2f, %.2f, %.4f\r\n",(float)avg_spo21f/(float)(1<<FIXED_BITS),(float)avg_hr1f/(float)(1<<FIXED_BITS),(float)current_spo21f/float(1<<FIXED_BITS),(float)current_hr1f/(float)(1<<FIXED_BITS),R);
+    display_spo2 = ((avg_spo21f>>FIXED_BITS) * 10) + (((0x0008 & avg_spo21f) == 0) ? 0 : 5);
+    display_hr   = avg_hr1f>>FIXED_BITS;
 }
 
 
@@ -138,7 +144,7 @@ uint32_t SPO2::get_avg(uint32_t *array,uint8_t length)
     return avg;
 }
 
-void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t *kalman_ptr, uint32_t *data_array, uint8_t *data_array_length, uint8_t *data_ptr, uint32_t new_data, volatile bool *reset_kalman, uint32_t *kalman_avg)
+void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t *kalman_ptr, uint32_t *data_array, uint8_t *data_array_length, uint8_t *data_ptr, uint32_t new_data, volatile bool *reset_kalman, uint32_t *kalman_avg, uint8_t *outlier_cnt, uint8_t *alg_fail_cnt)
 {
     /*Decide whether to trust the new data or not.
         Base decision on difference between new data and Kalman average and data variance.
@@ -162,8 +168,7 @@ void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t *kalma
     for (int n= 0; n<NUM_HR_AVGS; n++) {
         LOG(LOG_INFO,"%04lu ",data_array[n]);
     }    
-    static uint8_t outlier_cnt =0;
-    static uint8_t alg_fail_cnt = 0;
+
     uint32_t data_std;
     LOG(LOG_DEBUG,"\r\nk_length = %u, k_ptr = %u, d_length = %u, "\
                   "d_ptr = %u, new_data = %lu, reset_kalman = %d, kalman_avg = %lu\r\n",
@@ -174,8 +179,8 @@ void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t *kalma
         LOG(LOG_INFO,"resetting Kalman\r\n");
         *kalman_ptr = 0;
         *kalman_length = 0;
-        alg_fail_cnt = 0;
-        outlier_cnt = 0;
+        *alg_fail_cnt = 0;
+        *outlier_cnt = 0;
         *reset_kalman = 0;
         if (new_data != 0) { //if sample is valid
             kalman_array[*kalman_ptr] = new_data; //put new data in array
@@ -197,14 +202,14 @@ void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t *kalma
         LOG(LOG_INFO,"std = %lu\r\n", data_std);
         if ( abs((int32_t)(new_data-*kalman_avg)) > (uint32_t)KALMAN_THRESHOLD*data_std ) {//outlier case, don't update the filter
             LOG(LOG_INFO,"outlier %lu\r\n", new_data);
-            outlier_cnt++;
+            (*outlier_cnt)++;
         } else { //valid data case: update the Kalman avg
             if(*kalman_length < MAX_KALMAN_LENGTH)(*kalman_length)++;
             LOG(LOG_INFO,"keeping %lu\r\n", new_data);
             kalman_array[*kalman_ptr] = new_data; //add new data to the kalman array
             *kalman_avg = get_avg(kalman_array,*kalman_length);// get new kalman average
-            alg_fail_cnt = 0; //zero the consecutive algorithm fails
-            outlier_cnt = 0; //zero the consecutive outlier fails
+            *alg_fail_cnt = 0; //zero the consecutive algorithm fails
+            *outlier_cnt = 0; //zero the consecutive outlier fails
             (*kalman_ptr)++;
             if(*kalman_ptr == MAX_KALMAN_LENGTH) *kalman_ptr = 0; //loop index in buffer
         }
@@ -219,20 +224,21 @@ void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t *kalma
 
     } else if (new_data == 0) {//not resetting and invalid sample
         LOG(LOG_INFO,"not valid sample\r\n");
-        alg_fail_cnt++;
-        if(alg_fail_cnt == ALG_FAIL_TOLERANCE) {//too many bad data points: next time reset the filter
+        (*alg_fail_cnt)++;
+        if(*alg_fail_cnt == ALG_FAIL_TOLERANCE) {//too many bad data points: next time reset the filter
             LOG(LOG_INFO,"reset: too many alg fails\r\n");
             /*i.e., can't latch on to nothing*/
             *reset_kalman = 1;
         }
-        if(outlier_cnt >= OUTLIER_DATA_TOLERANCE) {//too many outliers: next time reset the filters
-            /*
-            This is to handle the case where the Kalman filter latches onto an outlier
-            or harmonic/subharmonic and needs to break out.
-            */
-            LOG(LOG_INFO,"reset: too many outliers\r\n");
-            *reset_kalman = 1;
-        }
+
+    }
+    if(*outlier_cnt >= OUTLIER_DATA_TOLERANCE) {//too many outliers: next time reset the filters
+      /*
+      This is to handle the case where the Kalman filter latches onto an outlier
+      or harmonic/subharmonic and needs to break out.
+      */
+      LOG(LOG_INFO,"reset: too many outliers\r\n");
+      *reset_kalman = 1;
     }
 }
 
@@ -404,7 +410,7 @@ void SPO2::calc_hr()
     } else {
         current_hr1f = ((uint32_t)((uint32_t)SAMPLE_RATE_MIN<<FIXED_BITS)<<FIXED_BITS) / final_offset1f;
     }
-    LOG(LOG_INFO,"HR = %f, %lu\r\n",(float)current_hr1f/(float)(1<<FIXED_BITS), current_hr1f);
+    LOG(LOG_INFO,"HR = %.3f, %lu\r\n",(float)current_hr1f/(float)(1<<FIXED_BITS), current_hr1f);
 }
 
 
@@ -468,6 +474,7 @@ void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t 
     final_correl = start_correl;     //initialize
     final_offset = start_offset;
     uint16_t elapsed_time = t_read() - p2_start_time;
+    int32_t y[3];
     if ( elapsed_time >= 15) {
       final_correl = 0;
       final_offset = 0;
@@ -478,7 +485,7 @@ void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t 
             offset -= search_step;
             if (offset>=min_offset) {
                 c = corr(x,len,offset);
-                LOG(LOG_INFO,"%u, %ld \r\n",offset, c/2500);
+                LOG(LOG_INFO,"%u, %ld \r\n",offset, c>>11);
                 if (c<=final_correl) {
                     break; //Getting worse. Stop.
                 } else {
@@ -500,7 +507,7 @@ void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t 
                 offset += search_step;
                 if (offset<max_offset) {
                     c = corr(x,len,offset); //search lower frequency
-                    LOG(LOG_INFO,"%u, %ld \r\n",offset, c/2500);
+                    LOG(LOG_INFO,"%u, %ld \r\n",offset, c>>11);
                     if (c <= final_correl) {
                         break; //getting worse; stop
                     } else {
@@ -524,7 +531,11 @@ void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t 
                 final_offset1f = final_offset<<FIXED_BITS;
             } else {
                     LOG(LOG_DEBUG,"dtot = %ld, d_HL = %ld\r\n", final_correl-lowest,high_side-low_side);
-                final_offset1f = (final_offset<<FIXED_BITS) + ( ( (((int32_t)search_step)<<FIXED_BITS) /2)*(high_side - low_side) ) / (final_correl-lowest); //interpolate a better answer
+//                final_offset1f = (final_offset<<FIXED_BITS) + ( ( (((int32_t)search_step)<<FIXED_BITS) /2)*(high_side - low_side) ) / (final_correl-lowest); //interpolate a better answer
+                    y[0] = low_side;
+                    y[1] = final_correl;
+                    y[2] = high_side;
+                    simple_peak_find(y, &final_offset1f, &fit_correl, (uint16_t)final_offset, (int32_t)search_step);
             }
         }
     }
@@ -539,10 +550,10 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint16_t start_offset, int32_t sta
     if ( final_offset1f != (min_offset<<FIXED_BITS)) {
         if(final_offset1f != (max_offset<<FIXED_BITS)) {
             max_found = 1;
-            LOG(LOG_INFO,"start = %u, success at %.2f, correl = %lu\r\n", start_offset, (float)final_offset1f/(float)(1<<FIXED_BITS), final_correl);
+            LOG(LOG_INFO,"start = %u, success at %.2f, correl = %lu\r\n", start_offset, (float)final_offset1f/(float)(1<<FIXED_BITS),fit_correl>>11);
         }
     } else {
-        LOG(LOG_INFO,"start = %u, fail at %.2f correl = %lu\r\n", start_offset, (float)final_offset1f/(float)(1<<FIXED_BITS), final_correl);
+        LOG(LOG_INFO,"start = %u, fail at %.2f correl = %lu\r\n", start_offset, (float)final_offset1f/(float)(1<<FIXED_BITS), final_correl>>11);
     }
     return max_found;
 }
@@ -555,13 +566,14 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
     bool rising = 0;
     uint8_t fail = 0;
     uint16_t try_offset =MIN_OFFSET-BIG_STEP ;
-    int32_t c1;
-    int32_t c2;
-    int32_t c3;
-    int32_t highest;
-    int32_t lowest;
-    int32_t d2;
+    uint16_t offsets[3];
+    offsets[0] = try_offset;
+    int32_t offset_extremum1f;
+    int32_t c[3];
+//    int32_t d2;
     int32_t prev_correl;
+    int32_t min_correl;
+    
     
     LOG(LOG_INFO,"start find max correl\r\n");
     LOG(LOG_DEBUG,"len = %d, offset_guess = %d\r\n",max_length, offset_guess);
@@ -580,42 +592,51 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
 
     LOG(LOG_DEBUG,"max_offset after get_corr_slope = %d\r\n",max_offset);
 
-    c1 = corr(x,samples2use,try_offset);
+    c[0] = corr(x,samples2use,try_offset);
     try_offset +=BIG_STEP;
-    c2 = corr(x,samples2use,try_offset);
-    rising = (c2 > c1) ? 1 : 0; //skip to search for a peak if rising, else look for a minimum and double it.
-    LOG(LOG_INFO,"%d, %ld\r\n%d, %ld\r\n", MIN_OFFSET-BIG_STEP,c1,MIN_OFFSET,c2);
+    offsets[1] = try_offset;
+    c[1] = corr(x,samples2use,try_offset);
+    rising = (c[1] > c[0]) ? 1 : 0; //skip to search for a peak if rising, else look for a minimum and double it.
+    LOG(LOG_INFO,"%d, %ld\r\n%d, %ld\r\n", MIN_OFFSET-BIG_STEP,c[0],MIN_OFFSET,c[1]);
     uint16_t step = BIG_STEP; //start with big step
     const uint16_t max_step = 16;
     if(!rising) {
-        while(!rising) { //keep going until you find a minimum
+        while(!rising) { //keep going until you find a minimum  
+          step += (step < max_step) ? 1 : 0; //increment step size if less than max step
           uint16_t elapsed_time = t_read() - p2_start_time;
-            LOG(LOG_INFO,"searching for min\r\n");
-            try_offset += step; //increment by step size
-            step += (step < max_step) ? 1 : 0; //increment step size if less than max step
-            if(try_offset> MAX_OFFSET || (elapsed_time >= 15)) {
-                fail = 1; //still falling and ran out of samples
-                break;
-            }
-            c3 = corr(x,samples2use,try_offset);
-            if (c3>c2) {
-                rising  = 1;
-            } else {
-                c2 = c3;
-                c1 = c2;
-            }
-            LOG(LOG_INFO,"%u %ld\r\n",try_offset,c3);
+          LOG(LOG_INFO,"searching for min\r\n");
+          try_offset += step; //increment by step size            
+          if(try_offset> MAX_OFFSET || (elapsed_time >= 15)) {
+            fail = 1; //still falling and ran out of samples
+            break;
+          }
+          c[2] = corr(x,samples2use,try_offset);
+          if (c[2]>c[1]) {
+            rising  = 1;
+          } else {
+              c[0] = c[1];   
+              c[1] = c[2];
+              offsets[0] = offsets[1];
+              offsets[1] = try_offset;
+          }
+          LOG(LOG_INFO,"%u %ld\r\n",try_offset,c[2]);
         }
         if(!fail) {
-            highest = (c1 > c3) ? c1 : c3;
-            if(c2-highest == 0) {
-                offset_guess  = try_offset-BIG_STEP;
-            } else {
-                d2 =  ( ( ( (int32_t)BIG_STEP<<FIXED_BITS)*(c1 - c3) ) / (highest-c2) )>>FIXED_BITS; //twice the delta
-                LOG(LOG_INFO,"d2 = %ld\r\n",d2);
-                offset_guess = (uint16_t)( ( ( (int16_t)try_offset-(int16_t)BIG_STEP)<<1) + (int16_t)d2) ; //interpolate a better answer
-                LOG(LOG_INFO,"guessing double the min at %d\r\n",offset_guess);
-            }
+//            highest = (c1 > c3) ? c1 : c3;
+
+//            if(c2-highest == 0) {
+//                offset_guess  = try_offset-BIG_STEP;
+//            } else {
+//                d2 =  ( ( ( (int32_t)BIG_STEP<<FIXED_BITS)*(c1 - c3) ) / (highest-c2) )>>FIXED_BITS; //twice the delta
+//                LOG(LOG_INFO,"d2 = %ld\r\n",d2);
+//                offset_guess = (uint16_t)( ( ( (int16_t)try_offset-(int16_t)BIG_STEP)<<1) + (int16_t)d2) ; //interpolate a better answer
+              offsets[2] = try_offset; 
+              LOG(LOG_INFO,"min fit at: %u %u %u \r\n",offsets[0],offsets[1],offsets[2]);
+              LOG(LOG_INFO,"for values: %ld %ld %ld \r\n",c[0],c[1],c[2]);
+              peak_find(offsets,c,&offset_extremum1f,&min_correl); 
+              offset_guess = (uint16_t)(offset_extremum1f>>(FIXED_BITS-1));
+              LOG(LOG_INFO,"guessing double the min at %d\r\n",offset_guess);
+//            }
         }
     } else {//already rising
         while(rising) {//keep going until you find a drop
@@ -627,26 +648,34 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
                 fail = 2; //still rising and ran out of samples
                 break;
             } else {
-                c3 = corr(x,samples2use,try_offset);
-                if (c3<c2) {
+                c[2] = corr(x,samples2use,try_offset);
+                if (c[2]<c[1]) {
                     rising  = 0;
                 } else {
-                    c2= c3;
-                    c1= c2;
+                  c[0]= c[1];  
+                  c[1]= c[2];
+                  offsets[0] = offsets[1];
+                  offsets[1] = try_offset;
                 }
-                LOG(LOG_INFO,"%u %ld\r\n",try_offset,c3);
+                LOG(LOG_INFO,"%u %ld\r\n",try_offset,c[2]);
             }
         }
         if(!fail) {
-            lowest = (c3 < c1) ? c3 : c1;
-            if(c2-lowest == 0) {
-                offset_guess  = try_offset-BIG_STEP;
-            } else {
-                d2 = ( ( ( (int32_t)BIG_STEP<<FIXED_BITS)*(c3 - c1) ) / (c2-lowest) )>>(FIXED_BITS+1);
-                LOG(LOG_INFO,"d2 = %ld\r\n",d2);
-                offset_guess = (uint16_t)( ( (int16_t)try_offset-(int16_t)BIG_STEP) + (int16_t)d2) ; //interpolate a better answer
-                LOG(LOG_INFO,"guessing near the max at %d\r\n",offset_guess);
-            }
+//            lowest = (c3 < c1) ? c3 : c1;
+//            if(c2-lowest == 0) {
+//                offset_guess  = try_offset-BIG_STEP;
+//            } else {
+//                d2 = ( ( ( (int32_t)BIG_STEP<<FIXED_BITS)*(c3 - c1) ) / (c2-lowest) )>>(FIXED_BITS+1);
+//                LOG(LOG_INFO,"d2 = %ld\r\n",d2);
+//                offset_guess = (uint16_t)( ( (int16_t)try_offset-(int16_t)BIG_STEP) + (int16_t)d2) ; //interpolate a better answer
+
+//            }
+            offsets[2] = try_offset; 
+            LOG(LOG_INFO,"max fit at: %u %u %u \r\n",offsets[0],offsets[1],offsets[2]);
+            LOG(LOG_INFO,"for values: %ld %ld %ld \r\n",c[0],c[1],c[2]);
+            peak_find(offsets,c,&offset_extremum1f,&min_correl); 
+            offset_guess = (uint16_t)(offset_extremum1f>>FIXED_BITS);
+            LOG(LOG_INFO,"guessing near the max at %d\r\n",offset_guess);
         } else {
             offset_guess = DEFAULT_GUESS;
         }
@@ -656,6 +685,7 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
     if(offset_guess > MAX_OFFSET) offset_guess = DEFAULT_GUESS;
 
     start_correl = corr(x,samples2use,offset_guess);
+    LOG(LOG_INFO,"%u, %lu\r\n",offset_guess,start_correl>>11);
     max_found = check4max(x, samples2use, offset_guess, start_correl);
     if (prev_valid & !max_found) { //go ahead and try the previous value if the other bonked.
         //note you can't just rely on this or you could lock into a harmonic.
@@ -712,7 +742,7 @@ void SPO2::peak_find(uint16_t *x0, int32_t *y, int32_t *x_fit1f, int32_t *y_fit)
 }
 
 
-void SPO2::simple_peak_find(int32_t *y, int32_t *x_fit1f, int32_t *y_fit, uint16_t x_center, uint16_t step)
+void SPO2::simple_peak_find(int32_t *y, int32_t *x_fit1f, int32_t *y_fit, uint16_t x_center, int32_t step)
 {
     /* For numerical stability let x[1] = 0, namely the middle point (high or low) is zero
     To simplify the math we measure in units of the step size, so xfit1f is fixed precision in units of the step size
@@ -736,7 +766,7 @@ void SPO2::simple_peak_find(int32_t *y, int32_t *x_fit1f, int32_t *y_fit, uint16
     //Dy = 1*yp[2] - yp[0]*1 = yp[2] - yp[1] = y[2] -C - (y[0] -C) = y[2] - y[0];
     A = (y[0]+y[2]-(C<<1) )>>1; // Dx/D
     B = (y[2]-y[0])>>1; // Dy/D
-    *x_fit1f =  (-((B<<FIXED_BITS)/A)>>1)*step + (x_center<<FIXED_BITS)  ; // -b/2a * step + x_center
+    *x_fit1f =  (-((B<<FIXED_BITS)/A)>>1)*(int32_t)step + (x_center<<FIXED_BITS)  ; // -b/2a * step + x_center
     *y_fit = C - (((B>>2)*B)/A); //C - b2/4a
     LOG(LOG_DEBUG,"A = %ld, B = %ld, C = %ld, b^2/a = %ld\r\n",A,B,C, B*B/4/A);
 }

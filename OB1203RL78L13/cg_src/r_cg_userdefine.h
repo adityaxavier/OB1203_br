@@ -66,6 +66,11 @@ User definitions
 #define DEBUG_LVL       (0)
 #endif
 
+#if defined(PRINT_RAW_STREAM)
+#undef DEBUG_LVL
+#define DEBUG_LVL       (LOG_DEBUG_RAW)
+#endif
+
 #if defined(DEBUG_LVL)
 #define LOG(level, ...) do {  \
                             if ((level & DEBUG_LVL)>0) { \

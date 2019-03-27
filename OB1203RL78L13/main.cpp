@@ -28,7 +28,7 @@ typedef enum
   LCD_OXYGEN_LEVEL,
 }lcd_info_t;
 
-lcd_info_t display;
+lcd_info_t display = LCD_HEART_RATE;
 
 void (*p_IntB_Event)(void) = NULL;
 //InterruptIn intb(intb_pin); //declare an interrupt pin for INTB
@@ -474,13 +474,13 @@ void ob1203_spo2_main(void)
                 if(display==LCD_HEART_RATE)
                 {
                   LCD_DISPLAY_OFF();
-                  R_PPG_LCD_Display_SPO2(spo2.current_spo21f);
+                  R_PPG_LCD_Display_SPO2(spo2.display_spo2);
                   display = LCD_OXYGEN_LEVEL;
                 }
                 else if(display==LCD_OXYGEN_LEVEL)
                 {
                   LCD_DISPLAY_OFF();
-                  R_PPG_LCD_Display_HRM(spo2.current_hr1f);
+                  R_PPG_LCD_Display_HRM(spo2.display_hr);
                   display = LCD_HEART_RATE;
                 }
                 do_part2 = 0;

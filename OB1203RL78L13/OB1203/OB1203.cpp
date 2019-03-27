@@ -759,7 +759,7 @@ void OB1203::do_agc(uint32_t data, bool ch)
         if(data> (targetCounts[ch] + tol2))
         {
           in_range[ch]=0;
-          LOG(LOG_INFO, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\r\n");
+//          LOG(LOG_INFO, "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$\r\n");
         }
         
         if( (ch ? r_current : ir_current)>step)
@@ -773,7 +773,7 @@ void OB1203::do_agc(uint32_t data, bool ch)
         if(data < (targetCounts[ch] - tol2))
         {
           in_range[ch]=0;
-          LOG(LOG_INFO, "#############################################\r\n");
+//          LOG(LOG_INFO, "#############################################\r\n");
         }
         if( (ch ? r_current : ir_current) +step < maxCurrent[ch]) //no need to go to full current
         {

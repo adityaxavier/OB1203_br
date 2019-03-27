@@ -26,6 +26,7 @@ OB1203 ob1203(&i2c); //instantiate the OB1203 object from its class and pass i2c
 SPO2 spo2;
 Serial pc(USBTX, USBRX,256000); //create a serial port for printing data to a pc
 Timer t; //use a microsecond timer for time stamping data
+Timer t1;
 //Timer p;
 
 #define PROX_MODE 0 //0 for prox, 1 for bio
@@ -52,7 +53,7 @@ const bool meas_ps = 1;
 const bool ppg2 = 1; //0 for HR, 1 for SpO2
 const bool redAGC = 1;
 //const bool printCurrent = 0;
-//const bool printRaw = 1;
+const bool printRaw = 1;
 const bool irAGC = 1;
 const bool trim_oscillator = 0;
 //****************************
@@ -274,6 +275,10 @@ void get_sensor_data()
         pc.printf("switching FastMode to %d\r\n",ob1203.ppg_int_en);
         ob1203.setIntConfig();
         ob1203.updateFastMode = 0;
+        if(ob1203.ppg_int_en == 0) { //not in fastMode -- switching to collecting data
+            spo2.reset_kalman_hr = 1; //reset the Kalman filter for SpO2
+            spo2.reset_kalman_spo2 = 1; //reset the Kalman filter for SpO2
+        }
     }
     if(ob1203.updateCurrent) {
         ob1203.setPPGcurrent();
@@ -347,7 +352,7 @@ int main()
 
     intb.fall(&dataEvent); //attach a falling interrupt
     t.start(); //start microsecond timer for datalogging
-
+    t1.start();
     wait(1); //finish regDump
 
     intb.fall(&proxEvent); //set an interrupt on the falling edge to wake from prox mode

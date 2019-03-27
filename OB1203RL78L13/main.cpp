@@ -10,6 +10,9 @@
 #include "OB1203.h"
 #include "SPO2.h"
 
+#include "lcd_panel.h"
+#include "ppg_lcd.h"
+
 //normal
 //I2C i2c(I2C_SDA,I2C_SCL); //instantiate an i2c object from its class
 #define intb_pin D3
@@ -18,6 +21,14 @@
 //slave board//
 //I2C i2c(D12,PA_7);
 //#define intb_pin D10
+
+typedef enum
+{
+  LCD_HEART_RATE,
+  LCD_OXYGEN_LEVEL,
+}lcd_info_t;
+
+lcd_info_t display = LCD_HEART_RATE;
 
 void (*p_IntB_Event)(void) = NULL;
 //InterruptIn intb(intb_pin); //declare an interrupt pin for INTB
@@ -198,13 +209,13 @@ void regDump(uint8_t Addr, uint8_t startByte, uint8_t endByte)
     }
 }
 
-
-void get_sensor_data()
-{
-    char samples2Read;
-    const char maxSamples2Read = 8; //FIFO samples, e.g. 4 samples * 3 bytes = 12 bytes (or 2 SpO2 samples) 16 samples is the entire SpO2 buffer.
+    const char maxSamples2Read = 16; //FIFO samples, e.g. 4 samples * 3 bytes = 12 bytes (or 2 SpO2 samples) 16 samples is the entire SpO2 buffer.
     char fifoBuffer[maxSamples2Read*6];
     uint32_t ppgData[maxSamples2Read*2];
+void get_sensor_data()
+{
+    char samples2Read = 0;
+
     char fifo_reg_data[3];
     char sample_info[3];
     char overflow =0;
@@ -216,6 +227,12 @@ void get_sensor_data()
         samples2Read = (sample_info[1] > maxSamples2Read) ? maxSamples2Read : sample_info[1]; //limit the number of samples to the maximum
 //            LOG(LOG_DEBUG,"wr = %02x, read = %02x, overflow = %02x,sample_info[0] = %02x, sample_info[1] = %02x,  samples2Read %d\r\n",ob1203.writePointer,ob1203.readPointer,ob1203.fifoOverflow,sample_info[0],sample_info[1],samples2Read);
 //        LOG(LOG_DEBUG,"s2r = %d, sample_info: hr samples %d, ppg_samples %d, overflow %d\r\n",samples2Read, sample_info[0],sample_info[1], sample_info[2]);
+        
+        if(samples2Read == 0)
+        {
+          LOG(LOG_INFO,"samples2Read == 0\r\n");
+        }
+        
     } else {
         samples2Read = 1; //read one sample
         overflow = 0;
@@ -281,6 +298,10 @@ void get_sensor_data()
         LOG(LOG_INFO,"switching FastMode to %d\r\n",ob1203.ppg_int_en);
         ob1203.setIntConfig();
         ob1203.updateFastMode = 0;
+        if(ob1203.ppg_int_en == 0) { //not in fastMode -- switching to collecting data
+            spo2.reset_kalman_hr = 1; //reset the Kalman filter for SpO2
+            spo2.reset_kalman_spo2 = 1; //reset the Kalman filter for SpO2
+        }
     }
     if(ob1203.updateCurrent) {
         ob1203.setPPGcurrent();
@@ -361,8 +382,13 @@ uint16_t t_read(void)
 
 void ob1203_spo2_main(void)
 {
+#if defined(MEASURE_PERFORMANCE)
+    /* P03 := Logic low */
+    P0_bit.no3 = 1;
+#endif  
 //    i2c.frequency( 400000 ); //always use max speed I2C
     bool do_part2 = false;
+    bool samples_processed = false;
 //    LOG(LOG_DEBUG,"register settings\r\n");
 //    regDump(OB1203_ADDR,0,19);
 //    regDump(OB1203_ADDR,20,39);
@@ -391,6 +417,10 @@ void ob1203_spo2_main(void)
     //while ( (!ob1203.ir_in_range) && (!ob1203.r_in_range) ) {} //wait for AGC complete
     LOG(LOG_INFO,"10s SPO2, 10s HR, 1s SPO2, 1s HR, R\r\n");
     spo2.get_sum_squares(); //get sum_squares
+#if defined(MEASURE_PERFORMANCE)
+    /* P03 := Logic low */
+    P0_bit.no3 = 0;
+#endif  
     while(1) { //main program loop
         if(just_woke_up) {
             LOG(LOG_INFO,"got prox interrupt \r\n");
@@ -408,22 +438,54 @@ void ob1203_spo2_main(void)
         } else { //bio mode case
             t_reset();
             if(ob1203.afull_int_en) {
+#if defined(MEASURE_PERFORMANCE)
+                /* P03 := Logic high */
+                P0_bit.no3 = 1;
+#endif
                 spo2.do_algorithm_part1();
+                samples_processed = false;
+#if defined(MEASURE_PERFORMANCE)
+                /* P03 := Logic low */
+                P0_bit.no3 = 0;
+#endif
             }
             do_part2 = 1;
             while(t_read()<100) {
-                if(mode == BIO_MODE) {
-                    if(samples_ready) { //only read data if available (samples_ready is asserted by ISR and cleard by get_sensor_data)
-                        get_sensor_data();
-                    }
-                } else {
-                    break; //exit loop and go to sleep
+              if(mode == BIO_MODE) {
+                if(samples_ready) { //only read data if available (samples_ready is asserted by ISR and cleard by get_sensor_data)
+                  get_sensor_data();
+                  samples_processed = true;
                 }
-                if(do_part2 && ob1203.afull_int_en) {
-                    //if we are in bio slow read mode and we haven't done part 2 yet
-                    spo2.do_algorithm_part2();
-                    do_part2 = 0;
+              } else {
+                break; //exit loop and go to sleep
+              }
+              if(do_part2 && ob1203.afull_int_en && (samples_processed == true)) 
+              {
+                //if we are in bio slow read mode and we haven't done part 2 yet
+#if defined(MEASURE_PERFORMANCE)
+                /* P05 := Logic high */
+                P0_bit.no5 = 1;
+#endif  
+                spo2.do_algorithm_part2();
+#if defined(MEASURE_PERFORMANCE)
+                /* P05 := Logic low */
+                P0_bit.no5 = 0;
+#endif  
+                if(display==LCD_HEART_RATE)
+                {
+                  LCD_DISPLAY_OFF();
+                  R_PPG_LCD_Display_SPO2(spo2.display_spo2);
+                  display = LCD_OXYGEN_LEVEL;
                 }
+                else if(display==LCD_OXYGEN_LEVEL)
+                {
+                  LCD_DISPLAY_OFF();
+                  R_PPG_LCD_Display_HRM(spo2.display_hr);
+                  display = LCD_HEART_RATE;
+                }
+                do_part2 = 0;
+                samples_processed = false;
+              }
             } //end 1sec loop
         } //end conditional
     }//end while (1)

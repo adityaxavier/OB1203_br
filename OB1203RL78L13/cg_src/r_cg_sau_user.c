@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements device driver for SAU module.
-* Creation Date: 3/20/2019
+* Creation Date: 3/26/2019
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -53,29 +53,6 @@ extern uint16_t  g_uart2_rx_length;           /* uart2 receive data length */
 /* End user code. Do not edit comment generated here */
 
 /***********************************************************************************************************************
-* Function Name: r_uart2_interrupt_receive
-* Description  : None
-* Arguments    : None
-* Return Value : None
-***********************************************************************************************************************/
-#pragma vector = INTSR2_vect
-__interrupt static void r_uart2_interrupt_receive(void)
-{
-    volatile uint8_t rx_data;
-    volatile uint8_t err_type;
-    
-    err_type = (uint8_t)(SSR11 & 0x0007U);
-    SIR11 = (uint16_t)err_type;
-    rx_data = RXD2;
-
-    if (g_uart2_rx_length > g_uart2_rx_count)
-    {
-        *gp_uart2_rx_address = rx_data;
-        gp_uart2_rx_address++;
-        g_uart2_rx_count++;
-    }
-}
-/***********************************************************************************************************************
 * Function Name: r_uart2_interrupt_send
 * Description  : None
 * Arguments    : None
@@ -90,6 +67,21 @@ __interrupt static void r_uart2_interrupt_send(void)
         gp_uart2_tx_address++;
         g_uart2_tx_count--;
     }
+    else
+    {
+        r_uart2_callback_sendend();
+    }
+}
+/***********************************************************************************************************************
+* Function Name: r_uart2_callback_sendend
+* Description  : This function is a callback function when UART2 finishes transmission.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+static void r_uart2_callback_sendend(void)
+{
+    /* Start user code. Do not edit comment generated here */
+    /* End user code. Do not edit comment generated here */
 }
 
 /* Start user code for adding. Do not edit comment generated here */

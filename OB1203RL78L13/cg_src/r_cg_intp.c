@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements device driver for INTP module.
-* Creation Date: 3/20/2019
+* Creation Date: 3/26/2019
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -74,7 +74,19 @@ void R_INTC_Create(void)
     /* Set INTP0 high priority */
     PPR10 = 0U;
     PPR00 = 0U;
-    EGN0 = _01_INTP0_EDGE_FALLING_SEL;
+    /* Set INTP5 high priority */
+    PPR15 = 0U;
+    PPR05 = 0U;
+    /* Set INTP7 high priority */
+    PPR17 = 0U;
+    PPR07 = 0U;
+    EGN0 = _01_INTP0_EDGE_FALLING_SEL | _20_INTP5_EDGE_FALLING_SEL | _80_INTP7_EDGE_FALLING_SEL;
+    /* Set INTP5 pin */
+    PFSEG5 &= 0xDFU;
+    PM0 |= 0x02U;
+    /* Set INTP7 pin */
+    PMC4 &= 0xF7U;
+    PM4 |= 0x08U;
 }
 
 /***********************************************************************************************************************
@@ -98,6 +110,50 @@ void R_INTC0_Stop(void)
 {
     PMK0 = 1U;    /* disable INTP0 interrupt */
     PIF0 = 0U;    /* clear INTP0 interrupt flag */
+}
+/***********************************************************************************************************************
+* Function Name: R_INTC5_Start
+* Description  : This function clears INTP5 interrupt flag and enables interrupt.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_INTC5_Start(void)
+{
+    PIF5 = 0U;    /* clear INTP5 interrupt flag */
+    PMK5 = 0U;    /* enable INTP5 interrupt */
+}
+/***********************************************************************************************************************
+* Function Name: R_INTC5_Stop
+* Description  : This function disables INTP5 interrupt and clears interrupt flag.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_INTC5_Stop(void)
+{
+    PMK5 = 1U;    /* disable INTP5 interrupt */
+    PIF5 = 0U;    /* clear INTP5 interrupt flag */
+}
+/***********************************************************************************************************************
+* Function Name: R_INTC7_Start
+* Description  : This function clears INTP7 interrupt flag and enables interrupt.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_INTC7_Start(void)
+{
+    PIF7 = 0U;    /* clear INTP7 interrupt flag */
+    PMK7 = 0U;    /* enable INTP7 interrupt */
+}
+/***********************************************************************************************************************
+* Function Name: R_INTC7_Stop
+* Description  : This function disables INTP7 interrupt and clears interrupt flag.
+* Arguments    : None
+* Return Value : None
+***********************************************************************************************************************/
+void R_INTC7_Stop(void)
+{
+    PMK7 = 1U;    /* disable INTP7 interrupt */
+    PIF7 = 0U;    /* clear INTP7 interrupt flag */
 }
 
 /* Start user code for adding. Do not edit comment generated here */

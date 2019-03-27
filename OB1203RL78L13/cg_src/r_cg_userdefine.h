@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file includes user definition.
-* Creation Date: 3/20/2019
+* Creation Date: 3/26/2019
 ***********************************************************************************************************************/
 #ifndef _USER_DEF_H
 #define _USER_DEF_H
@@ -49,20 +49,31 @@ User definitions
 
 #define LOG_FATAL    (1)
 #define LOG_ERR      (2)
-#define LOG_WARN     (3)
-#define LOG_INFO     (4)
-#define LOG_DEBUG      (5)
+#define LOG_WARN     (4)
+#define LOG_INFO     (8)
+#define LOG_DEBUG      (16)
+#define LOG_DEBUG_MEAN  (32)
+#define LOG_DEBUG_NEED  (64)
+#define LOG_DEBUG_RAW   (128)
 
+#if !defined(DEBUG_STREAM)
 #define DEBUG_STREAM    stdout
-#if defined(stdout)
-#define DEBUG_LVL       LOG_INFO
+#endif
+
+#if defined(stdout) && !defined(DEBUG_LVL)
+#define DEBUG_LVL       (LOG_INFO)
 #else
 #define DEBUG_LVL       (0)
 #endif
 
+#if defined(PRINT_RAW_STREAM)
+#undef DEBUG_LVL
+#define DEBUG_LVL       (LOG_DEBUG_RAW)
+#endif
+
 #if defined(DEBUG_LVL)
 #define LOG(level, ...) do {  \
-                            if (level <= DEBUG_LVL) { \
+                            if ((level & DEBUG_LVL)>0) { \
                               if(level <= LOG_ERR) { fprintf(DEBUG_STREAM,"%s:%d:", __FILE__, __LINE__); }\
                                 fprintf(DEBUG_STREAM, __VA_ARGS__); \
                                 fflush(DEBUG_STREAM); \

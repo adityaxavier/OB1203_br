@@ -23,7 +23,7 @@
 * Device(s)    : R5F10WMG
 * Tool-Chain   : IAR Systems icc78k0r
 * Description  : This file implements main function.
-* Creation Date: 3/20/2019
+* Creation Date: 3/26/2019
 ***********************************************************************************************************************/
 
 /***********************************************************************************************************************
@@ -114,6 +114,8 @@ static void R_MAIN_UserInit(void)
   R_UART2_Start();
 #endif
   R_INTC0_Start();
+  R_INTC5_Start();
+  R_INTC7_Start();
 #if defined(TEST_CODE)
   uint32_t i = LCD_VOLTAGE_WAITTIME;  
   R_UART2_Start();
@@ -188,6 +190,18 @@ static void R_MAIN_UserInit(void)
   LCD_DISPLAY_OFF();
 #else
   extern void ob1203_spo2_main(void);
+    /* 10ms delay */
+  Init_Display_Panel();
+  
+  LCD_DISPLAY_ON();
+  
+  {
+    uint32_t i = LCD_VOLTAGE_WAITTIME>>1;
+    while(--i);
+  }
+  
+  LCD_DISPLAY_OFF();
+  
   ob1203_spo2_main();
 #endif
   /* End user code. Do not edit comment generated here */

@@ -753,3 +753,7 @@ out of range<CR><LF>
 out of range<CR><LF>
 OB1203 Initialized<CR><LF>
 switching to mode 0<CR><LF>
+
+
+Docklight Log File (ASCII) - Stopped 3/20/2019 16:49:54.208 
+

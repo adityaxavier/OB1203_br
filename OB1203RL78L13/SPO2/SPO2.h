@@ -11,19 +11,21 @@
 //#define NUM_FILTER_TAPS 18
 #define NUM_FILTER_TAPS 8
 //#define NUM_FILTER_TAPS 12
-#define SAMPLE_LENGTH 149 //40 BMP at 100sps, also MAX_OFFSET 
-#define MAX_OFFSET 149 //
-#define MIN_OFFSET  32 //180 BPM at 100sps
-#define ARRAY_LENGTH 299 //twice sample length plus 1
+#define SAMPLE_LENGTH 148 //40.5 BPM at 100sps, also MAX_OFFSET 
+#define MAX_OFFSET (SAMPLE_LENGTH) //
+#define MIN_OFFSET  30 //200 BPM at 100sps
+#define MAX_FILTER_LENGTH 32 //for avgNsamples filter --MUST BE EVEN
+#define MIN_FILTER_LENGTH 12 //~<40% of the minimum offset of 32
+#define ARRAY_LENGTH (2*SAMPLE_LENGTH+MAX_FILTER_LENGTH+1) //twice sample length + max filter length plus 1 MUST BE ODD for sum of squares calculation
 #define SAMPLE_RATE 100 //sps
 #define SAMPLE_RATE_MIN 6000 //spm
-#define DEFAULT_GUESS 75 //80 BPM at 100sps
+#define DEFAULT_GUESS 80 //75 BPM at 100sps
 #define NUM_HR_AVGS 8
 #define NUM_SPO2_AVGS 8
 #define NUM_COARSE_POINTS 5
 #define SMALL_STEP 1
 #define MID_STEP 2
-#define BIG_STEP 6
+#define BIG_STEP 2
 #define FIXED_BITS 4 //for basic fixed precision enhancement. Don't change this without looking carefully at spo2.corr function >>2 instances and potential overflows.
 #define IR 1 //channel definitions. Can't switch these (might seem illogical because IR data comes in first) because when we cycle through channels the last one to be analyzed with DC removal is IR, which is used for HR calculations
 #define RED 0
@@ -33,14 +35,14 @@
 #define OUTLIER_DATA_TOLERANCE 3 //number of outlier samples we reject before resetting the kalman filter
 #define KALMAN_THRESHOLD 2 //the multiplier for the standard deviation to use for the kalman filter
 
+#define FILTER_BITS 5 //32 (for fastAvg2Nsamples filter)
+#define MAX_FINE_STEP 3 //maximum step to be used in fine search for slow heart beats
 //#define DEBUG
-
-
 
 class SPO2
 {
 
-
+  
 public:
     SPO2();
 //functions
@@ -71,6 +73,8 @@ public:
     void kalman(uint32_t *kalman_array,uint8_t *kalman_length,uint8_t *kalman_ptr,uint32_t *data_array,uint8_t *data_array_length,uint8_t *data_ptr, uint32_t new_data,volatile bool *reset_kalman,uint32_t *kalman_avg,uint8_t *outlier_cnt, uint8_t *alg_fail_cnt );
     uint32_t get_std(uint32_t *array,uint8_t length, uint32_t avg);
     uint32_t get_avg(uint32_t *array,uint8_t length);
+    void fastAvg2Nsamples(int16_t *x); 
+    void avgNsamples(int16_t *x, uint8_t number2avg);
     //variables
    
     uint16_t data_ptr;  
@@ -120,8 +124,9 @@ public:
     uint16_t display_spo2;
     uint16_t display_hr;
 
-     int32_t fit_correl;
-  
+    int32_t fit_correl;
+    uint8_t samples2avg;
+
 private:
 //functions
 

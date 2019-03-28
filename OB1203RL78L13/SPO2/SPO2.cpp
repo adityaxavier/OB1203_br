@@ -76,6 +76,8 @@ void SPO2::do_algorithm_part2()
         LOG(LOG_INFO,"doing algorithm part 2\r\n");
         calc_R();
         calc_spo2();
+        avgNsamples(AC1f,samples2avg); //smooth the data more to avoid detecting peaks from the dichrotic notch
+//        fastAvg2Nsamples(AC1f); //smooth the data with a 32 sample average
         find_max_corr(AC1f,(uint16_t)SAMPLE_LENGTH, offset_guess); //AC1f is the IR sample after get_rms is run
 
         calc_hr();
@@ -102,6 +104,11 @@ void SPO2::do_algorithm_part2()
     LOG(LOG_INFO,"%.2f, %.2f, %.2f, %.2f, %.4f\r\n",(float)avg_spo21f/(float)(1<<FIXED_BITS),(float)avg_hr1f/(float)(1<<FIXED_BITS),(float)current_spo21f/float(1<<FIXED_BITS),(float)current_hr1f/(float)(1<<FIXED_BITS),R);
     display_spo2 = ((avg_spo21f>>FIXED_BITS) * 10) + (((0x0008 & avg_spo21f) == 0) ? 0 : 5);
     display_hr   = avg_hr1f>>FIXED_BITS;
+    //reduce averaging for fast heart rates. Ramp from MAX_FILTER_LENGTH down to MIN_FILTER_LENGTH from max HR to min heart rate
+    if(avg_hr1f > 0) {
+      samples2avg = MAX_FILTER_LENGTH - ((uint32_t)(MAX_FILTER_LENGTH - MIN_FILTER_LENGTH)*((uint32_t)(avg_hr1f>>FIXED_BITS)-(uint32_t)40))/(uint32_t)160; 
+      LOG(LOG_INFO,"filter = %u\r\n",samples2avg);
+    }
 }
 
 
@@ -121,6 +128,7 @@ SPO2::SPO2()
     reset_kalman_spo2 = 1;
     avg_hr1f = 0;
     avg_spo21f = 0;
+    samples2avg = MAX_FILTER_LENGTH;
 }
 
 
@@ -243,7 +251,6 @@ void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t *kalma
 }
 
 
-
 void SPO2::copy_data(uint8_t channel)
 {
     /*copies all data from the dc_data buffers to temporary buffer and subtracts the DC level
@@ -282,7 +289,7 @@ void SPO2::get_DC()
             LOG(LOG_DEBUG,"%lu\r\n",dc_data[channel][n]);
         }
         mean1f[channel] = (mean1f[channel]<<FIXED_BITS)/ARRAY_LENGTH;
-        LOG(LOG_INFO,"channel %u mean = %ld\r\n",channel,mean1f[channel]);
+//        LOG(LOG_INFO,"channel %u mean = %ld\r\n",channel,mean1f[channel]);
     }
 }
 
@@ -333,7 +340,7 @@ void SPO2::get_rms()
             ind++;
             LOG(LOG_DEBUG,"%d, %d, %d\r\n",ind,idx[n],AC1f[n]);
         }
-        for (uint16_t n=0; n<SAMPLE_LENGTH; n++) {
+        for (uint16_t n=MAX_FILTER_LENGTH; n<SAMPLE_LENGTH+MAX_FILTER_LENGTH; n++) {
             /*Test whether we need to do the entire array or not.
             Could reduce this if HR is fast.
             If it is too long we risk drift affecting the RMS reading.
@@ -348,7 +355,7 @@ void SPO2::get_rms()
             }
         }
         
-        LOG(LOG_INFO,"var1f = %lu\r\n",var1f);
+//        LOG(LOG_INFO,"var1f = %lu\r\n",var1f);
         rms1f[channel] = uint_sqrt(var1f/(uint32_t)SAMPLE_LENGTH ); //square root halfs the bit shifts back to 2, so this is more like RMS0.5f -- OH WELL (it is 4x bigger, not 16x bigger)
         LOG(LOG_INFO,"channel %d, mean1f = %lu, rms1f = %lu\r\n",channel,mean1f[channel],rms1f[channel]);
     }//end channel loop
@@ -458,14 +465,15 @@ int32_t SPO2::corr(int16_t *x, uint16_t len, uint16_t offset)
     return result;
 }
 
-void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t start_correl, uint32_t search_step)
+void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t start_correl, uint32_t max_search_step)
 {
     extern uint16_t t_read(void);
     /*fine search for correlation peak using defined step size (index units).
     Finds peak and interpolates the maximum and saves the answer with fixed precision.
     */
     LOG(LOG_INFO,"fine search at %lu\r\n",start_offset);
-
+    uint32_t search_step = start_offset/30; //dynamically stepping to get better resolution at high heart rates
+    search_step = (search_step > max_search_step) ? max_search_step : search_step;
     uint16_t offset = start_offset;
     int32_t c;
     int32_t high_side;
@@ -546,7 +554,7 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint16_t start_offset, int32_t sta
 {
     //check for a max in the correlation in a region
     bool max_found = 0;
-    fine_search(x,len,start_offset,start_correl, MID_STEP);
+    fine_search(x,len,start_offset,start_correl,MAX_FINE_STEP);
     if ( final_offset1f != (min_offset<<FIXED_BITS)) {
         if(final_offset1f != (max_offset<<FIXED_BITS)) {
             max_found = 1;
@@ -599,12 +607,13 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
     rising = (c[1] > c[0]) ? 1 : 0; //skip to search for a peak if rising, else look for a minimum and double it.
     LOG(LOG_INFO,"%d, %ld\r\n%d, %ld\r\n", MIN_OFFSET-BIG_STEP,c[0],MIN_OFFSET,c[1]);
     uint16_t step = BIG_STEP; //start with big step
-    const uint16_t max_step = 16;
+    const uint8_t max_step = 18;
     if(!rising) {
+        LOG(LOG_INFO,"searching for min\r\n");
         while(!rising) { //keep going until you find a minimum  
           step += (step < max_step) ? 1 : 0; //increment step size if less than max step
           uint16_t elapsed_time = t_read() - p2_start_time;
-          LOG(LOG_INFO,"searching for min\r\n");
+          
           try_offset += step; //increment by step size            
           if(try_offset> MAX_OFFSET || (elapsed_time >= 15)) {
             fail = 1; //still falling and ran out of samples
@@ -639,9 +648,10 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
 //            }
         }
     } else {//already rising
+        LOG(LOG_INFO,"searching for max\r\n");
         while(rising) {//keep going until you find a drop
           uint16_t elapsed_time = t_read() - p2_start_time;
-            LOG(LOG_INFO,"searching for max\r\n");
+
             try_offset += step;
             step += (step < max_step) ? 1 : 0; //increment step size if less than max step
             if((try_offset>MAX_OFFSET) ||((elapsed_time >= 15))) {
@@ -769,4 +779,48 @@ void SPO2::simple_peak_find(int32_t *y, int32_t *x_fit1f, int32_t *y_fit, uint16
     *x_fit1f =  (-((B<<FIXED_BITS)/A)>>1)*(int32_t)step + (x_center<<FIXED_BITS)  ; // -b/2a * step + x_center
     *y_fit = C - (((B>>2)*B)/A); //C - b2/4a
     LOG(LOG_DEBUG,"A = %ld, B = %ld, C = %ld, b^2/a = %ld\r\n",A,B,C, B*B/4/A);
+}
+
+void SPO2::avgNsamples(int16_t *x, uint8_t number2avg) {
+    /*limit FILTER_LENGTH to 16 or less*/
+    int32_t avg_buffer[MAX_FILTER_LENGTH];
+    uint16_t buffer_ind =0;
+    uint8_t avg_length = 0;
+    int32_t running_sum = 0;
+    for (uint16_t n = 0; n<ARRAY_LENGTH; n++) {
+      if(avg_length<number2avg) {
+        avg_length++;
+      } else {
+        running_sum -= avg_buffer[buffer_ind];
+      }
+      avg_buffer[buffer_ind] = (int32_t)x[n];
+      running_sum += avg_buffer[buffer_ind];
+      x[n] = (int16_t)(running_sum/avg_length);
+      buffer_ind++;
+      if(buffer_ind==number2avg) buffer_ind = 0;
+    }
+}
+
+
+void SPO2::fastAvg2Nsamples(int16_t *x) {    /*runs filters for multipes of 2 defined by FILTER_BITS */
+    uint16_t buffer_ind =0;
+    int32_t avg_buffer[1<<FILTER_BITS];
+    uint8_t avg_length = 0;
+    int32_t running_sum = 0;
+    uint16_t filter_length = 1<<FILTER_BITS;
+    uint16_t buffer_mask = filter_length -1;
+    for (uint16_t n = 0; n<filter_length; n++) {//do slow method until the buffer is full
+      avg_buffer[buffer_ind] = (int32_t)x[n]; //load new sample in buffer
+      running_sum += avg_buffer[buffer_ind]; //update running sum
+      x[n] = (int16_t)(running_sum/avg_length); //load filtered sample
+      buffer_ind++; //increment buffer index
+    }
+    for (uint16_t n=filter_length; n<ARRAY_LENGTH; n++) {//do fast method once buffer is full
+      running_sum -= avg_buffer[buffer_ind]; //remove old sample
+      avg_buffer[buffer_ind] = (int32_t)x[n]; //load new sample in buffer
+      running_sum += avg_buffer[buffer_ind]; //update running sum
+      x[n] = (int16_t)(running_sum>>FILTER_BITS);
+      buffer_ind++; //increment buffer index
+      buffer_ind &= buffer_mask; //loop index
+    }
 }

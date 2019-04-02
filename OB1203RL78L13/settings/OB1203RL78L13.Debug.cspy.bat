@@ -25,7 +25,7 @@ if not "%~1" == "" goto debugFile
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "C:\OB1203RL78L13\OB1203RL78\OB1203RL78L13\settings\OB1203RL78L13.Debug.general.xcl" --backend -f "C:\OB1203RL78L13\OB1203RL78\OB1203RL78L13\settings\OB1203RL78L13.Debug.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "C:\Users\onkar.raut\Documents\2019H1\Firmware\IDT\OB1203RL78L13\settings\OB1203RL78L13.Debug.general.xcl" --backend -f "C:\Users\onkar.raut\Documents\2019H1\Firmware\IDT\OB1203RL78L13\settings\OB1203RL78L13.Debug.driver.xcl" 
 
 @echo off 
 goto end 
@@ -34,7 +34,7 @@ goto end
 
 @echo on 
 
-"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "C:\OB1203RL78L13\OB1203RL78\OB1203RL78L13\settings\OB1203RL78L13.Debug.general.xcl" "--debug_file=%~1" --backend -f "C:\OB1203RL78L13\OB1203RL78\OB1203RL78L13\settings\OB1203RL78L13.Debug.driver.xcl" 
+"C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "C:\Users\onkar.raut\Documents\2019H1\Firmware\IDT\OB1203RL78L13\settings\OB1203RL78L13.Debug.general.xcl" "--debug_file=%~1" --backend -f "C:\Users\onkar.raut\Documents\2019H1\Firmware\IDT\OB1203RL78L13\settings\OB1203RL78L13.Debug.driver.xcl" 
 
 @echo off 
 :end

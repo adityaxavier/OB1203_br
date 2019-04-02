@@ -12,7 +12,11 @@
         <ByteLimit>50</ByteLimit>
     </Stack>
     <DebugChecksum>
+<<<<<<< HEAD
         <Checksum>3384283182</Checksum>
+=======
+        <Checksum>846357762</Checksum>
+>>>>>>> remotes/origin/algorithm
     </DebugChecksum>
     <CodeCoverage>
         <Enabled>_ 0</Enabled>
@@ -147,11 +151,7 @@
         <ShowTimeLog>1</ShowTimeLog>
     </DataSample>
     <Breakpoints>
-        <Bp0>_ "STD_CODE" "{$PROJ_DIR$\OB1203\OB1203.cpp}.37.5" 1 0 0 0 "" 0 ""</Bp0>
-        <Bp1>_ "STD_CODE" "{$PROJ_DIR$\cg_src\r_cg_iica_user.c}.80.5" 0 0 0 0 "" 0 ""</Bp1>
-        <Bp2>_ "STD_CODE" "{$PROJ_DIR$\OB1203\OB1203.cpp}.761.11" 0 0 0 0 "" 0 ""</Bp2>
-        <Bp3>_ "STD_CODE" "{$PROJ_DIR$\OB1203\OB1203.cpp}.778.9" 0 0 0 0 "" 0 ""</Bp3>
-        <Count>4</Count>
+        <Count>0</Count>
     </Breakpoints>
     <Monitor_Execution>
         <Leave_target_running>0</Leave_target_running>

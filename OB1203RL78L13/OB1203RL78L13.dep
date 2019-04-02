@@ -5,6 +5,7 @@
     <configuration>
         <name>Debug</name>
         <outputs>
+<<<<<<< HEAD
             <file>$PROJ_DIR$\Debug\Obj\r_cg_sau_user.pbi</file>
             <file>$PROJ_DIR$\cg_src\r_cg_cgc_user.c</file>
             <file>$PROJ_DIR$\cg_src\r_cg_cgc.c</file>
@@ -173,6 +174,158 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 119</file>
+=======
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_rtc_user.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_lcd_user.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_cgc.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\lcd_panel.o</file>
+            <file>$PROJ_DIR$\LCD\ppg_lcd.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_sau.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\lcd_panel.pbi</file>
+            <file>$TOOLKIT_DIR$\inc\c\math.h</file>
+            <file>$PROJ_DIR$\LCD\lcd_panel.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_it_user.o</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_systeminit.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_sau_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_sau.h</file>
+            <file>$PROJ_DIR$\LCD\lcd_panel.h</file>
+            <file>$PROJ_DIR$\SERIAL\write.c</file>
+            <file>$PROJ_DIR$\SPO2\SPO2.cpp</file>
+            <file>$PROJ_DIR$\SPO2\SPO2.h</file>
+            <file>$TOOLKIT_DIR$\inc\ior5f10wmg.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.o</file>
+            <file>$TOOLKIT_DIR$\lib\dbgrlnnf22fd.a</file>
+            <file>$PROJ_DIR$\OB1203\OB1203.cpp</file>
+            <file>$PROJ_DIR$\Debug\Obj\write.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_systeminit.pbi</file>
+            <file>$PROJ_DIR$\main.cpp</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_lcd.pbi</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_userdefine.h</file>
+            <file>$PROJ_DIR$\OB1203\OB1203.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_sau_user.o</file>
+            <file>$TOOLKIT_DIR$\inc\intrinsics.h</file>
+            <file>$PROJ_DIR$\LCD\ppg_lcd.c</file>
+            <file>$PROJ_DIR$\Debug\Exe\OB1203RL78L13_cpp.out</file>
+            <file>$TOOLKIT_DIR$\inc\ior5f10wmg_ext.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\ppg_lcd.o</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_dmac.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_lcd.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_lcd_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_port.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_port.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_rtc.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_port_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_rtc.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_rtc_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_iica.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_intp_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_cgc.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_dmac.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_intp.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_it_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_dmac_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_iica.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_intp.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_it.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_lcd.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_iica_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_cgc_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_it.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_cgc.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_macrodriver.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_main.c</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_sau_user.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_intp_user.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_intp.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\SPO2.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_dmac_user.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_it.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_port_user.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_rtc.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_iica.pbi</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdio.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\OB1203RL78L13.pbd</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_iica.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_iica_user.pbi</file>
+            <file>$TOOLKIT_DIR$\inc\c\stddef.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\LowLevelIOInterface.h</file>
+            <file>$PROJ_DIR$\Debug\List\OB1203RL78L13_cpp.map</file>
+            <file>$TOOLKIT_DIR$\inc\cpp\cstdlib</file>
+            <file>$PROJ_DIR$\Debug\Obj\write.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_intp_user.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_iica_user.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_lcd.o</file>
+            <file>$TOOLKIT_DIR$\lib\dlrlnnf22f.a</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_lcd_user.pbi</file>
+            <file>$TOOLKIT_DIR$\inc\cpp\xtr1common</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_it.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_port.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_port_user.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_cgc.o</file>
+            <file>$TOOLKIT_DIR$\config\lnkr5f10wmg.icf</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_intp.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_cgc_user.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\SPO2.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_dmac_user.__cstat.et</file>
+            <file>$TOOLKIT_DIR$\inc\DLib_float_setup.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_sau.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_main.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_dmac.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_dmac_user.pbi</file>
+            <file>$TOOLKIT_DIR$\inc\c\xtgmath.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\SPO2.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\ppg_lcd.pbi</file>
+            <file>$TOOLKIT_DIR$\inc\DLib_Product.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdlib.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\OB1203.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_cgc.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_iica.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\OB1203.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_intp.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_iica_user.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_dmac.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\OB1203.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_it_user.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_systeminit.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_rtc.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_sau.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_rtc.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_port.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_rtc_user.o</file>
+            <file>$TOOLKIT_DIR$\lib\DLib_Config_Full.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_dmac.o</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_cgc_user.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_main.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_sau_user.__cstat.et</file>
+            <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_cgc_user.pbi</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_port_user.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_port.__cstat.et</file>
+            <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_it_user.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_it.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_rtc_user.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\main.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_lcd.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\lcd_panel.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\ppg_lcd.__cstat.et</file>
+            <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_intp_user.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\write.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_sau.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_systeminit.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_lcd_user.__cstat.et</file>
+            <file>$PROJ_DIR$\Debug\Obj\r_cg_main.__cstat.et</file>
+        </outputs>
+        <file>
+            <name>[ROOT_NODE]</name>
+            <outputs>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 31 75</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
@@ -187,10 +340,11 @@
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\cg_src\r_cg_cgc.c</name>
+            <name>$PROJ_DIR$\cg_src\r_cg_sau.c</name>
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 89</file>
                 </tool>
                 <tool>
@@ -200,20 +354,40 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 64</file>
+=======
+                    <file> 94</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 115</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 139</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 23 108 101 49 17 27</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 101 27 17 108 49 23</file>
+=======
+                    <file> 58 17 32 29 12 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 17 26 29 12 32 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_dmac.c</name>
             <outputs>
                 <tool>
@@ -227,20 +401,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 133</file>
+=======
+            <name>$PROJ_DIR$\LCD\lcd_panel.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 3</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 6</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 134</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 23 108 101 49 9 27</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 108 27 49 9 101 23</file>
+=======
+                    <file> 58 17 32 29 35 13 38</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 13 32 35 38 17 29 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_dmac_user.c</name>
             <outputs>
                 <tool>
@@ -254,20 +452,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 121</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_systeminit.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 113</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 22</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 140</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 23 108 101 49 9 27</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 108 27 49 9 101 23</file>
+=======
+                    <file> 58 17 32 29 57 38 41 56 12 43 35 34 47 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 34 56 17 38 43 26 29 57 41 12 35 47 32 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_intp.c</name>
             <outputs>
                 <tool>
@@ -281,20 +503,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 62</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_sau_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 28</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 60</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 123</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 23 108 101 49 11 27</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 108 27 49 11 101 23</file>
+=======
+                    <file> 58 17 32 29 12 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 17 26 29 12 32 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_intp_user.c</name>
             <outputs>
                 <tool>
@@ -497,20 +743,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 107</file>
+=======
+            <name>$PROJ_DIR$\SERIAL\write.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 77</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 21</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 138</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 23 108 101 49 22 27</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 108 27 49 22 101 23</file>
+=======
+                    <file> 74 124 128 136 24 119 102 58 17 32 29 26 34 12</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 24 12 119 32 26 124 136 102 58 34 128 17 29 74</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_rtc.c</name>
             <outputs>
                 <tool>
@@ -524,20 +794,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 88</file>
+=======
+            <name>$PROJ_DIR$\SPO2\SPO2.cpp</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 63</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 91</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 100</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 23 108 101 49 21 27</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 108 27 49 21 101 23</file>
+=======
+                    <file> 69 128 136 24 119 102 124 7 93 99 83 76 103 16 58 17 32 29 43 26 27</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 128 27 17 7 136 83 58 26 69 16 124 24 119 102 93 99 76 29 103 43 32</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_sau.c</name>
             <outputs>
                 <tool>
@@ -551,20 +845,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 123</file>
+=======
+            <name>$PROJ_DIR$\OB1203\OB1203.cpp</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 107</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 111</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 104</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 23 108 101 49 30 27</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 108 27 49 30 101 23</file>
+=======
+                    <file> 69 128 136 24 119 102 124 73 27 58 17 32 29 43 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 128 136 124 58 32 73 26 69 27 24 119 102 43 17 29</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_sau_user.c</name>
             <outputs>
                 <tool>
@@ -578,20 +896,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 0</file>
+=======
+            <name>$PROJ_DIR$\main.cpp</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 18</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 95</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 132</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 23 108 101 49 30 27</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 108 27 49 30 101 23</file>
+=======
+                    <file> 69 128 136 24 119 102 124 7 93 99 83 76 103 58 17 32 29 43 26 27 16 13 4</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 99 16 24 76 58 128 102 136 124 17 7 26 4 119 93 103 29 69 43 27 13 83 32</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\SERIAL\write.c</name>
             <outputs>
                 <tool>
@@ -605,20 +947,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 76</file>
+=======
+            <name>$PROJ_DIR$\LCD\ppg_lcd.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 33</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 101</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 135</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 143 122 51 80 136 58 135 113 23 108 101 49 27 9 30</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 122 9 23 135 101 113 27 30 51 143 80 136 58 108 49</file>
+=======
+                    <file> 58 17 32 29 35 26 13</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 29 26 17 35 13 32 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\main.cpp</name>
             <outputs>
                 <tool>
@@ -632,24 +998,37 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 125</file>
+=======
+            <name>$PROJ_DIR$\Debug\Exe\OB1203RL78L13_cpp.out</name>
+            <outputs>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 75</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
+<<<<<<< HEAD
                     <name>ICCRL78</name>
                     <file> 120 122 51 80 136 58 135 61 33 138 116 99 141 23 108 101 49 14 27 39 31 45 28</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 23 138 31 80 99 122 58 51 135 108 61 27 28 136 33 141 49 120 14 39 45 116 101</file>
+=======
+                    <name>ILINK</name>
+                    <file> 88 3 18 107 33 87 90 120 64 71 79 62 61 84 9 80 1 96 85 86 114 118 94 28 113 63 77 19 81</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\OB1203\OB1203.cpp</name>
+            <name>$PROJ_DIR$\cg_src\r_cg_lcd_user.c</name>
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 114</file>
                 </tool>
                 <tool>
@@ -659,20 +1038,40 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 124</file>
+=======
+                    <file> 1</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 82</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 141</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 120 122 51 80 136 58 135 112 39 23 108 101 49 14 27</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 122 51 135 23 101 112 27 120 39 80 136 58 14 108 49</file>
+=======
+                    <file> 58 17 32 29 35 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 32 35 17 29 58 26</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_main.c</name>
             <outputs>
                 <tool>
@@ -686,20 +1085,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 118</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_port.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 85</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 117</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 127</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 23 108 101 49 17 22 21 8 30 14 12 9 11 39 27 45 28</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 9 101 8 28 14 22 39 17 21 30 12 11 45 27 108 49 23</file>
+=======
+                    <file> 58 17 32 29 38 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 17 26 29 38 32 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\LCD\lcd_panel.c</name>
             <outputs>
                 <tool>
@@ -713,20 +1136,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 75</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_rtc.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 114</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 67</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 116</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 23 108 101 49 12 45 22</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 45 101 12 22 108 49 23</file>
+=======
+                    <file> 58 17 32 29 41 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 17 26 29 41 32 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_port.c</name>
             <outputs>
                 <tool>
@@ -740,20 +1187,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 82</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_port_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 86</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 66</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 126</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 23 108 101 49 22 27</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 108 27 49 22 101 23</file>
+=======
+                    <file> 58 17 32 29 38 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 17 26 29 38 32 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_systeminit.c</name>
             <outputs>
                 <tool>
@@ -767,20 +1238,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 95</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_rtc_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 118</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 0</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 131</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 23 108 101 49 17 22 21 8 30 14 12 9 11 27</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 9 8 108 22 14 27 49 17 21 30 12 11 101 23</file>
+=======
+                    <file> 58 17 32 29 41 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 17 26 29 41 32 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\LCD\ppg_lcd.c</name>
             <outputs>
                 <tool>
@@ -794,24 +1289,48 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 139</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_intp_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 61</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 78</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 137</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 23 108 101 49 12 27 45</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 49 27 108 12 45 101 23</file>
+=======
+                    <file> 58 17 32 29 47 73 128 136 24 119 102 124 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 32 124 73 119 136 47 26 17 29 128 102 58 24</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\SPO2\SPO2.cpp</name>
+            <name>$PROJ_DIR$\cg_src\r_cg_cgc.c</name>
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 131</file>
                 </tool>
                 <tool>
@@ -821,20 +1340,40 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 84</file>
+=======
+                    <file> 87</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 2</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 105</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 120 122 51 80 136 58 135 61 33 138 116 99 141 31 23 108 101 49 14 27 39</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 80 99 138 39 122 58 51 108 61 135 136 33 23 27 120 31 116 49 141 14 101</file>
+=======
+                    <file> 58 17 32 29 57 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 32 26 57 17 29 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_rtc_user.c</name>
             <outputs>
                 <tool>
@@ -848,29 +1387,69 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 65</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_dmac.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 120</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 110</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 97</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 23 108 101 49 21 27</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 108 27 49 21 101 23</file>
+=======
+                    <file> 58 17 32 29 34 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 17 26 29 34 32 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\Debug\Exe\OB1203RL78L13_cpp.out</name>
             <outputs>
                 <tool>
                     <name>ILINK</name>
                     <file> 83</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_it_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 9</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 112</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 129</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
+<<<<<<< HEAD
                     <name>ILINK</name>
                     <file> 128 63 97 114 74 89 127 111 93 130 36 35 126 132 40 57 86 18 41 105 73 140 67 98 79 131 134 106 96</file>
                 </tool>
@@ -1046,20 +1625,54 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 88</file>
+=======
+                    <name>ICCRL78</name>
+                    <file> 58 17 32 29 56 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 32 56 17 29 58 26</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_dmac_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 64</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 98</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 92</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 16 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 68 25 59 16 66 21</file>
+=======
+                    <file> 58 17 32 29 34 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 17 26 29 34 32 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_cgc.c</name>
             <outputs>
                 <tool>
@@ -1073,20 +1686,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 108</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_iica.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 71</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 68</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 106</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 16 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 66 25 16 68 59 21</file>
+=======
+                    <file> 58 17 32 29 43 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 32 43 17 29 58 26</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_dmac.c</name>
             <outputs>
                 <tool>
@@ -1100,16 +1737,39 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 129</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_intp.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 62</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 89</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 108</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 8 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 68 25 59 8 66 21</file>
+=======
+                    <file> 58 17 32 29 47 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 17 26 29 47 32 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
@@ -1118,6 +1778,7 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 58</file>
                 </tool>
                 <tool>
@@ -1127,20 +1788,40 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 104</file>
+=======
+                    <file> 84</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 65</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 130</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 8 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 68 25 59 8 66 21</file>
+=======
+                    <file> 58 17 32 29 56 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 32 56 17 29 58 26</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_intp.c</name>
             <outputs>
                 <tool>
@@ -1154,24 +1835,48 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 127</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_lcd.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 80</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 25</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 133</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 10 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 68 25 59 10 66 21</file>
+=======
+                    <file> 58 17 32 29 35 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 17 26 29 35 32 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\cg_src\r_cg_intp_user.c</name>
+            <name>$PROJ_DIR$\cg_src\r_cg_iica_user.c</name>
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 73</file>
                 </tool>
                 <tool>
@@ -1181,20 +1886,40 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 75</file>
+=======
+                    <file> 79</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 72</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 109</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 10 132 136 60 63 139 61 138 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 66 132 136 61 10 25 68 59 138 139 60 21 63</file>
+=======
+                    <file> 58 17 32 29 43 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 32 43 17 29 58 26</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_iica_user.c</name>
             <outputs>
                 <tool>
@@ -1208,20 +1933,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 118</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_cgc_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 90</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 125</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 121</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 13 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 66 13 68 59 21 25</file>
+=======
+                    <file> 58 17 32 29 57 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 17 26 29 57 32 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_it_user.c</name>
             <outputs>
                 <tool>
@@ -1235,20 +1984,200 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 130</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_main.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 96</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 122</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 142</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 7 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 66 7 68 59 21 25</file>
+=======
+                    <file> 58 17 32 29 57 38 41 56 12 43 35 34 47 27 26 13 4</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 34 32 56 4 43 38 27 57 41 12 35 47 13 26 17 29 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
+    </configuration>
+    <configuration>
+        <name>RawLog</name>
+        <outputs>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_lcd_user.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\SPO2.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\SPO2.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_port.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_sau_user.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_it.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\lcd_panel.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\ppg_lcd.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_sau.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_it.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_main.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_port.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\write.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\List\OB1203RL78L13_cpp.map</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_lcd_user.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_sau.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_intp_user.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_it_user.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\OB1203.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_sau_user.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_main.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_cgc_user.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_rtc.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_dmac_user.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_cgc.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_rtc.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_rtc_user.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\main.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_systeminit.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_intp_user.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_dmac.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_intp.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_intp.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_iica.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_port_user.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_lcd.__cstat.et</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_iica_user.__cstat.et</file>
+            <file>$PROJ_DIR$\LCD\ppg_lcd.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_sau.c</file>
+            <file>$TOOLKIT_DIR$\inc\c\math.h</file>
+            <file>$PROJ_DIR$\LCD\lcd_panel.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_systeminit.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_sau_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_sau.h</file>
+            <file>$PROJ_DIR$\LCD\lcd_panel.h</file>
+            <file>$PROJ_DIR$\SERIAL\write.c</file>
+            <file>$PROJ_DIR$\SPO2\SPO2.cpp</file>
+            <file>$PROJ_DIR$\SPO2\SPO2.h</file>
+            <file>$TOOLKIT_DIR$\inc\ior5f10wmg.h</file>
+            <file>$TOOLKIT_DIR$\lib\dbgrlnnf22fd.a</file>
+            <file>$PROJ_DIR$\OB1203\OB1203.cpp</file>
+            <file>$PROJ_DIR$\main.cpp</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_userdefine.h</file>
+            <file>$PROJ_DIR$\OB1203\OB1203.h</file>
+            <file>$TOOLKIT_DIR$\inc\intrinsics.h</file>
+            <file>$PROJ_DIR$\LCD\ppg_lcd.c</file>
+            <file>$TOOLKIT_DIR$\inc\ior5f10wmg_ext.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_dmac.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_lcd.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_lcd_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_port.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_port.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_rtc.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_port_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_rtc.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_rtc_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_iica.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_intp_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_cgc.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_dmac.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_intp.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_it_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_dmac_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_iica.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_intp.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_it.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_lcd.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_iica_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_cgc_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_it.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_cgc.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_macrodriver.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_main.c</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdio.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\stddef.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\LowLevelIOInterface.h</file>
+            <file>$TOOLKIT_DIR$\inc\cpp\cstdlib</file>
+            <file>$TOOLKIT_DIR$\lib\dlrlnnf22f.a</file>
+            <file>$TOOLKIT_DIR$\inc\cpp\xtr1common</file>
+            <file>$TOOLKIT_DIR$\config\lnkr5f10wmg.icf</file>
+            <file>$TOOLKIT_DIR$\inc\DLib_float_setup.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\xtgmath.h</file>
+            <file>$TOOLKIT_DIR$\inc\DLib_Product.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdlib.h</file>
+            <file>$TOOLKIT_DIR$\lib\DLib_Config_Full.h</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_dmac_user.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\SPO2.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_cgc.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_systeminit.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_iica.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_dmac.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\main.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_dmac_user.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\write.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_main.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_iica_user.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\ppg_lcd.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_port_user.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_it.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_rtc.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_cgc_user.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_rtc_user.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_rtc_user.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_dmac.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_iica_user.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_cgc.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_it_user.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_cgc_user.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\OB1203.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\lcd_panel.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_lcd.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_port_user.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\OB1203.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Exe\OB1203RL78L13_cpp.out</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_port.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_lcd_user.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_it_user.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_systeminit.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_sau_user.o</file>
+            <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_sau.pbi</file>
+            <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_intp.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\write.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_lcd.o</file>
+            <file>$PROJ_DIR$\RawLog\Obj\ppg_lcd.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_intp_user.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\main.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\lcd_panel.pbi</file>
+            <file>$PROJ_DIR$\RawLog\Obj\r_cg_iica.pbi</file>
+        </outputs>
         <file>
+            <name>[ROOT_NODE]</name>
+            <outputs>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 13 124</file>
+                </tool>
+            </outputs>
+        </file>
+        <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_iica.c</name>
             <outputs>
                 <tool>
@@ -1262,20 +2191,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 101</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_sau.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 15</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 132</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 8</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 13 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 66 13 68 59 21 25</file>
+=======
+                    <file> 82 48 57 55 43 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 48 53 55 43 57 82</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_lcd.c</name>
             <outputs>
                 <tool>
@@ -1316,20 +2269,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 94</file>
+=======
+            <name>$PROJ_DIR$\LCD\lcd_panel.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 120</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 140</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 6</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 7 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 66 7 68 59 21 25</file>
+=======
+                    <file> 82 48 57 55 59 44 62</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 44 57 59 62 48 55 82</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_lcd_user.c</name>
             <outputs>
                 <tool>
@@ -1370,20 +2347,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 111</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_systeminit.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 128</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 99</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 28</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 20 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 68 25 59 20 66 21</file>
+=======
+                    <file> 82 48 57 55 81 62 65 80 43 67 59 58 71 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 58 80 48 62 67 53 55 81 65 43 59 71 57 82</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_rtc.c</name>
             <outputs>
                 <tool>
@@ -1424,20 +2425,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 87</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_sau_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 129</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 19</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 4</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 28 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 68 25 59 28 66 21</file>
+=======
+                    <file> 82 48 57 55 43 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 48 53 55 43 57 82</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_sau_user.c</name>
             <outputs>
                 <tool>
@@ -1451,20 +2476,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 125</file>
+=======
+            <name>$PROJ_DIR$\SERIAL\write.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 104</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 135</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 12</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 28 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 68 25 59 28 66 21</file>
+=======
+                    <file> 86 130 131 133 52 95 93 82 48 57 55 53 58 43</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 48 43 53 133 55 82 58 130 131 52 95 93 57 86</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\SERIAL\write.c</name>
             <outputs>
                 <tool>
@@ -1478,20 +2527,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 70</file>
+=======
+            <name>$PROJ_DIR$\SPO2\SPO2.cpp</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 1</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 97</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 2</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 133 138 136 60 63 139 61 21 68 66 59 25 8 28</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 68 28 25 60 59 21 8 138 136 63 139 61 66 133</file>
+=======
+                    <file> 84 131 133 52 95 93 130 39 91 92 89 87 94 47 82 48 57 55 67 53 54</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 52 87 92 82 54 131 93 133 55 39 130 95 91 53 84 47 89 48 94 67 57</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\main.cpp</name>
             <outputs>
                 <tool>
@@ -1505,20 +2578,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 48</file>
+=======
+            <name>$PROJ_DIR$\OB1203\OB1203.cpp</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 119</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 123</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 18</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 135 136 60 63 139 61 138 62 31 140 134 65 141 21 68 66 59 13 25 35 29 38 26</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 25 140 29 63 65 21 136 61 60 138 68 62 26 139 31 141 59 135 13 35 38 134 66</file>
+=======
+                    <file> 84 131 133 52 95 93 130 85 54 82 48 57 55 67 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 131 133 130 82 57 85 53 84 54 52 95 93 67 48 55</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\OB1203\OB1203.cpp</name>
             <outputs>
                 <tool>
@@ -1532,16 +2629,39 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 114</file>
+=======
+            <name>$PROJ_DIR$\main.cpp</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 102</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 139</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 27</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 135 136 60 63 139 61 138 132 35 21 68 66 59 13 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 136 60 138 21 66 132 25 135 35 63 139 61 13 68 59</file>
+=======
+                    <file> 84 131 133 52 95 93 130 39 91 92 89 87 94 82 48 57 55 67 53 54 47 44 37</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 53 92 47 52 87 82 131 93 133 130 48 39 37 95 91 94 55 84 67 54 44 89 57</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
@@ -1550,6 +2670,7 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 85</file>
                 </tool>
                 <tool>
@@ -1559,20 +2680,40 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 90</file>
+=======
+                    <file> 107</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 137</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 7</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 16 20 19 7 28 13 11 8 10 35 25 38 26</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 8 66 7 26 20 13 35 16 19 28 11 10 38 25 68 59 21</file>
+=======
+                    <file> 82 48 57 55 59 53 44</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 55 53 48 59 44 57 82</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\LCD\lcd_panel.c</name>
             <outputs>
                 <tool>
@@ -1586,16 +2727,39 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 92</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_lcd_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 0</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 126</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 14</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 11 38 20</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 38 66 11 20 68 59 21</file>
+=======
+                    <file> 82 48 57 55 59 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 48 53 55 59 57 82</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
@@ -1604,6 +2768,7 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 84</file>
                 </tool>
                 <tool>
@@ -1613,20 +2778,40 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 126</file>
+=======
+                    <file> 11</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 125</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 3</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 20 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 68 25 59 20 66 21</file>
+=======
+                    <file> 82 48 57 55 62 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 48 53 55 62 57 82</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_systeminit.c</name>
             <outputs>
                 <tool>
@@ -1640,20 +2825,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 76</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_rtc.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 25</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 110</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 22</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 16 20 19 7 28 13 11 8 10 25</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 8 7 68 20 13 25 59 16 19 28 11 10 66 21</file>
+=======
+                    <file> 82 48 57 55 65 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 48 53 55 65 57 82</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\LCD\ppg_lcd.c</name>
             <outputs>
                 <tool>
@@ -1667,20 +2876,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 80</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_port_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 108</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 122</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 34</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 11 25 38</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 59 25 68 11 38 66 21</file>
+=======
+                    <file> 82 48 57 55 62 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 48 53 55 62 57 82</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\SPO2\SPO2.cpp</name>
             <outputs>
                 <tool>
@@ -1694,20 +2927,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 100</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_rtc_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 113</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 112</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 26</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 135 136 60 63 139 61 138 62 31 140 134 65 141 29 21 68 66 59 13 25 35</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 63 65 140 21 35 136 61 60 59 62 138 139 31 25 135 29 134 68 141 13 66</file>
+=======
+                    <file> 82 48 57 55 65 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 48 53 55 65 57 82</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_rtc_user.c</name>
             <outputs>
                 <tool>
@@ -1721,11 +2978,27 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 69</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_intp_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 16</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 138</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 29</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 21 68 66 59 19 25</file>
                 </tool>
                 <tool>
@@ -1746,6 +3019,13 @@
                 <tool>
                     <name>ILINK</name>
                     <file> 137 99 113 105 109 82 44 51 58 71 96 53 73 77 107 81 42 85 84 57 93 55 97 103 86 79 98 67 64</file>
+=======
+                    <file> 82 48 57 55 71 85 131 133 52 95 93 130 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 57 85 131 93 71 53 48 55 130 95 133 82 52</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
@@ -1878,6 +3158,7 @@
             <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
         </outputs>
         <file>
+<<<<<<< HEAD
             <name>[ROOT_NODE]</name>
             <outputs>
                 <tool>
@@ -1900,20 +3181,98 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 75</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_cgc.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 98</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 116</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 24</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+                    <file> 82 48 57 55 81 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 57 53 81 48 55 82</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_dmac.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 114</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 101</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 30</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 82 48 57 55 58 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 48 53 55 58 57 82</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_it_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 127</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 117</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 17</file>
+>>>>>>> remotes/origin/algorithm
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 16 118 117 113 13 19</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 117 13 118 113 16 19</file>
+=======
+                    <file> 82 48 57 55 80 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 57 80 48 55 82 53</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_cgc.c</name>
             <outputs>
                 <tool>
@@ -1927,20 +3286,71 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 64</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_dmac_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 103</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 96</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 23</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+                    <file> 82 48 57 55 58 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 48 53 55 58 57 82</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_iica.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 100</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 141</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 33</file>
+>>>>>>> remotes/origin/algorithm
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 16 118 117 113 13 19</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 117 13 118 113 16 19</file>
+=======
+                    <file> 82 48 57 55 67 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 57 67 48 55 82 53</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_dmac.c</name>
             <outputs>
                 <tool>
@@ -1950,16 +3360,41 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 56</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_intp.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 134</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 31</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 32</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
+<<<<<<< HEAD
                     <name>BICOMP</name>
                     <file> 118 19 113 7 117 16</file>
+=======
+                    <name>ICCRL78</name>
+                    <file> 82 48 57 55 71 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 48 53 55 71 57 82</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_dmac_user.c</name>
             <outputs>
                 <tool>
@@ -1969,12 +3404,90 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 33</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_it.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 109</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 9</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 5</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
+                    <name>ICCRL78</name>
+                    <file> 82 48 57 55 80 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 57 80 48 55 82 53</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_lcd.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 136</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 121</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 35</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 82 48 57 55 59 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 55 53 48 59 57 82</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_iica_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 115</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 106</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 36</file>
+>>>>>>> remotes/origin/algorithm
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+<<<<<<< HEAD
                     <name>BICOMP</name>
                     <file> 118 19 113 7 117 16</file>
+=======
+                    <name>ICCRL78</name>
+                    <file> 82 48 57 55 67 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 57 67 48 55 82 53</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
@@ -1983,6 +3496,7 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 98</file>
                 </tool>
                 <tool>
@@ -1992,24 +3506,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 89</file>
+=======
+                    <file> 118</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 111</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 21</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 16 118 117 113 8 19</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 118 19 113 8 117 16</file>
+=======
+                    <file> 82 48 57 55 81 53</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 48 53 55 81 57 82</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\cg_src\r_cg_intp_user.c</name>
+            <name>$PROJ_DIR$\cg_src\r_cg_main.c</name>
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 42</file>
                 </tool>
                 <tool>
@@ -2019,20 +3553,40 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 46</file>
+=======
+                    <file> 10</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 105</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 20</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 16 118 117 113 8 19</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 118 19 113 8 117 16</file>
+=======
+                    <file> 82 48 57 55 81 62 65 80 43 67 59 58 71 54 53 44 37</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 58 57 80 37 62 67 54 81 65 43 59 71 44 53 48 55 82</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_iica_user.c</name>
             <outputs>
                 <tool>
@@ -2042,16 +3596,192 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 81</file>
+=======
+            <name>$PROJ_DIR$\RawLog\Exe\OB1203RL78L13_cpp.out</name>
+            <outputs>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 13</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
+                    <name>ILINK</name>
+                    <file> 90 120 102 119 107 98 118 114 103 100 115 134 16 109 127 136 0 10 11 108 25 113 15 129 128 1 104 49 88</file>
+                </tool>
+            </inputs>
+        </file>
+    </configuration>
+    <configuration>
+        <name>Release</name>
+        <outputs>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_lcd_user.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_systeminit.__cstat.et</file>
+            <file>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_api.h</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_intp_user.o</file>
+            <file>$TOOLKIT_DIR$\lib\dlrlnnf22n.a</file>
+            <file>$PROJ_DIR$\Release\Obj\main.__cstat.et</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_main.o</file>
+            <file>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_os.c</file>
+            <file>$PROJ_DIR$\Release\Obj\main.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_intp.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_systeminit.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_iic_drv_int.__cstat.et</file>
+            <file>$TOOLKIT_DIR$\lib\dbgrlnnf22nn.a</file>
+            <file>$PROJ_DIR$\Release\Obj\r_iic_drv_api.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_port_user.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_iic_drv_sfr_rl78l13.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_intp_user.__cstat.et</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_intp.__cstat.et</file>
+            <file>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_sfr.h</file>
+            <file>$PROJ_DIR$\Release\Obj\r_iic_drv_sub.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_lcd_user.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_main.pbi</file>
+            <file>$PROJ_DIR$\Release\List\OB1203RL78L13_cpp.map</file>
+            <file>$PROJ_DIR$\Release\Obj\main.o</file>
+            <file>$PROJ_DIR$\Release\Obj\SPO2.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\SPO2.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_sau_user.o</file>
+            <file>$PROJ_DIR$\Release\Obj\lcd_panel.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_dmac.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_dmac.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_cgc.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_iica.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_port_user.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\lcd_panel.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_iic_drv_sfr_rl78l13.__cstat.et</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_main.__cstat.et</file>
+            <file>$PROJ_DIR$\Release\Obj\r_iic_drv_api.__cstat.et</file>
+            <file>$PROJ_DIR$\Release\Obj\ppg_lcd.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_cgc.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_iic_drv_sub.__cstat.et</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_sau.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_cgc_user.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_iica.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_lcd.o</file>
+            <file>$PROJ_DIR$\Release\Obj\ppg_lcd.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_port.pbi</file>
+            <file>$PROJ_DIR$\Release\Exe\OB1203RL78L13_cpp.out</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_sau.o</file>
+            <file>$TOOLKIT_DIR$\inc\c\stdbool.h</file>
+            <file>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_sfr_rl78l13.c</file>
+            <file>$PROJ_DIR$\Release\Obj\OB1203.pbi</file>
+            <file>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_int.h</file>
+            <file>$PROJ_DIR$\Release\Obj\r_iic_drv_os.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_iic_drv_os.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_cgc_user.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_iic_drv_sfr_rl78l13.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_port.o</file>
+            <file>$PROJ_DIR$\Release\Obj\write.o</file>
+            <file>$PROJ_DIR$\Release\Obj\OB1203.__cstat.et</file>
+            <file>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_os.h</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_cgc.__cstat.et</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_dmac_user.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_lcd.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_cgc_user.__cstat.et</file>
+            <file>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_int.c</file>
+            <file>$PROJ_DIR$\Release\Obj\r_iic_drv_os.__cstat.et</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_sau_user.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_iic_drv_api.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_dmac_user.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_systeminit.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_iica_user.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_iic_drv_int.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_iica_user.o</file>
+            <file>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_api.c</file>
+            <file>$TOOLKIT_DIR$\lib\DLib_Config_Normal.h</file>
+            <file>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_sub.c</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_intp.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\OB1203.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_iic_drv_int.o</file>
+            <file>$PROJ_DIR$\Release\Obj\r_cg_intp_user.pbi</file>
+            <file>$PROJ_DIR$\Release\Obj\write.pbi</file>
+            <file>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_sub.h</file>
+            <file>$PROJ_DIR$\Release\Obj\r_iic_drv_sub.o</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_sau.c</file>
+            <file>$PROJ_DIR$\LCD\lcd_panel.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_systeminit.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_sau_user.c</file>
+            <file>$PROJ_DIR$\SERIAL\write.c</file>
+            <file>$PROJ_DIR$\SPO2\SPO2.cpp</file>
+            <file>$TOOLKIT_DIR$\inc\ior5f10wmg.h</file>
+            <file>$PROJ_DIR$\OB1203\OB1203.cpp</file>
+            <file>$PROJ_DIR$\main.cpp</file>
+            <file>$TOOLKIT_DIR$\inc\c\DLib_Defaults.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_userdefine.h</file>
+            <file>$PROJ_DIR$\OB1203\OB1203.h</file>
+            <file>$TOOLKIT_DIR$\inc\intrinsics.h</file>
+            <file>$PROJ_DIR$\LCD\ppg_lcd.c</file>
+            <file>$TOOLKIT_DIR$\inc\ior5f10wmg_ext.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_dmac.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_lcd.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_lcd_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_port.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_port_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_iica.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_intp_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_cgc.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_dmac.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_intp.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_dmac_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_iica.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_intp.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_lcd.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_iica_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_cgc_user.c</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_cgc.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_macrodriver.h</file>
+            <file>$PROJ_DIR$\cg_src\r_cg_main.c</file>
+            <file>$TOOLKIT_DIR$\inc\c\stddef.h</file>
+            <file>$TOOLKIT_DIR$\config\lnkr5f10wmg.icf</file>
+            <file>$TOOLKIT_DIR$\inc\DLib_Product.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\ysizet.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\ycheck.h</file>
+            <file>$TOOLKIT_DIR$\inc\c\yvals.h</file>
+        </outputs>
+        <file>
+            <name>[ROOT_NODE]</name>
+            <outputs>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 22 46</file>
+                </tool>
+            </outputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_os.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 52</file>
+                </tool>
+                <tool>
                     <name>BICOMP</name>
+                    <file> 53</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 65</file>
+>>>>>>> remotes/origin/algorithm
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 89 97 117 121 122 92 74 119 120 2 81 51 18 59</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+<<<<<<< HEAD
                     <file> 117 11 118 113 16 19</file>
+=======
+                    <file> 120 59 2 92 121 97 51 89 117 81 18 122 74 119</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_iica.c</name>
             <outputs>
                 <tool>
@@ -2061,16 +3791,55 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 110</file>
+=======
+            <name>$PROJ_DIR$\Release\Exe\OB1203RL78L13_cpp.out</name>
+            <outputs>
+                <tool>
+                    <name>ILINK</name>
+                    <file> 22</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
-                    <name>BICOMP</name>
-                    <file> 117 11 118 113 16 19</file>
+                    <name>ILINK</name>
+                    <file> 118 77 38 54 9 3 6 10 13 78 52 55 82 12 4</file>
                 </tool>
             </inputs>
         </file>
         <file>
+            <name>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_sfr_rl78l13.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 55</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 15</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 34</file>
+>>>>>>> remotes/origin/algorithm
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 89 97 95 117 121 122 92 74 119 120 48 2 81 51 18 59</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+<<<<<<< HEAD
+                    <file> 117 11 118 113 16 19</file>
+=======
+                    <file> 81 117 122 97 48 18 89 95 2 51 59 121 120 92 74 119</file>
+>>>>>>> remotes/origin/algorithm
+                </tool>
+            </inputs>
+        </file>
+        <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_lcd.c</name>
             <outputs>
                 <tool>
@@ -2080,16 +3849,40 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 30</file>
+=======
+            <name>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_int.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 78</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 71</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 11</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
+                    <name>ICCRL78</name>
+                    <file> 89 97 117 121 122 92 74 119 120 2 81 51 18 59</file>
+                </tool>
+                <tool>
                     <name>BICOMP</name>
+<<<<<<< HEAD
                     <file> 118 19 113 9 117 16</file>
+=======
+                    <file> 120 59 2 92 121 97 51 89 117 81 18 122 74 119</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_lcd_user.c</name>
             <outputs>
                 <tool>
@@ -2099,16 +3892,41 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 92</file>
+=======
+            <name>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_api.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 13</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 67</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 36</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
+<<<<<<< HEAD
                     <name>BICOMP</name>
                     <file> 117 9 118 113 16 19</file>
+=======
+                    <name>ICCRL78</name>
+                    <file> 117 121 122 92 74 119 120 48 2 81 51 18 59</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 81 48 18 121 2 51 59 120 92 117 122 74 119</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_port_user.c</name>
             <outputs>
                 <tool>
@@ -2120,21 +3938,57 @@
                     <file> 38</file>
                 </tool>
             </outputs>
+=======
+            <name>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_sub.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 82</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 19</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 39</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 117 121 122 92 74 119 120 48 2 81 51 18 59</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 81 48 18 121 2 51 59 120 92 117 122 74 119</file>
+                </tool>
+            </inputs>
+>>>>>>> remotes/origin/algorithm
         </file>
         <file>
             <name>$PROJ_DIR$\cg_src\r_cg_sau.c</name>
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 80</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 74</file>
+=======
+                    <file> 47</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 40</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_sau_user.c</name>
             <outputs>
                 <tool>
@@ -2144,10 +3998,22 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 40</file>
+=======
+            <name>$PROJ_DIR$\LCD\lcd_panel.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 27</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 33</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\SERIAL\write.c</name>
             <outputs>
                 <tool>
@@ -2157,6 +4023,21 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 111</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_systeminit.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 10</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 69</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 1</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
         </file>
@@ -2165,6 +4046,7 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 101</file>
                 </tool>
                 <tool>
@@ -2174,10 +4056,18 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 102</file>
+=======
+                    <file> 115 89 97 95 114 107 93</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 89 107 95 114 97 115 93</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\OB1203\OB1203.cpp</name>
             <outputs>
                 <tool>
@@ -2191,20 +4081,56 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 65</file>
-                </tool>
-            </outputs>
-            <inputs>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_sau_user.c</name>
+            <outputs>
                 <tool>
                     <name>ICCRL78</name>
+                    <file> 26</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 66</file>
+>>>>>>> remotes/origin/algorithm
+                </tool>
+            </outputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\SERIAL\write.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 119 120 114 116 49 115 122 25 63</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 114 49 25 115 119 120 122 116 63</file>
+=======
+                    <file> 57</file>
                 </tool>
-            </inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 80</file>
+                </tool>
+            </outputs>
         </file>
         <file>
+            <name>$PROJ_DIR$\SPO2\SPO2.cpp</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 25</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 24</file>
+>>>>>>> remotes/origin/algorithm
+                </tool>
+            </outputs>
+        </file>
+        <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_main.c</name>
             <outputs>
                 <tool>
@@ -2218,33 +4144,69 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 99</file>
+=======
+            <name>$PROJ_DIR$\OB1203\OB1203.cpp</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 77</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 50</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 58</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 16 118 117 113 13 8 25 63 19</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 19 118 8 113 13 25 117 63 16</file>
+=======
+                    <file> 117 121 122 92 74 119 120 94 2</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 122 74 94 119 117 121 120 92 2</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\LCD\lcd_panel.c</name>
+            <name>$PROJ_DIR$\main.cpp</name>
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 112</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 105</file>
+=======
+                    <file> 23</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 8</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 5</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\cg_src\r_cg_port.c</name>
             <outputs>
                 <tool>
@@ -2254,14 +4216,26 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 71</file>
+=======
+            <name>$PROJ_DIR$\LCD\ppg_lcd.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 37</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 44</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\cg_src\r_cg_systeminit.c</name>
+            <name>$PROJ_DIR$\cg_src\r_cg_lcd_user.c</name>
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 90</file>
                 </tool>
                 <tool>
@@ -2271,29 +4245,49 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 86</file>
+=======
+                    <file> 0</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 20</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
+<<<<<<< HEAD
                     <name>ICCRL78</name>
                     <file> 16 118 117 113 13 8 19</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 118 8 113 13 117 16 19</file>
+=======
+                    <name>BICOMP</name>
+                    <file> 97 99 89 95 115 93</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
-            <name>$PROJ_DIR$\LCD\ppg_lcd.c</name>
+            <name>$PROJ_DIR$\cg_src\r_cg_port.c</name>
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 54</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 68</file>
+=======
+                    <file> 56</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 45</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
         </file>
@@ -2302,24 +4296,41 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 59</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 77</file>
+=======
+                    <file> 14</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 32</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\Release\Exe\OB1203RL78L13_cpp.out</name>
             <outputs>
                 <tool>
                     <name>ILINK</name>
                     <file> 60</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_intp_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 3</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
+<<<<<<< HEAD
                     <name>ILINK</name>
                     <file> 121 94 109 36 98 42 78 90 55 41 31 91 43 53 93</file>
                 </tool>
@@ -2339,20 +4350,37 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 84</file>
+=======
+                    <name>BICOMP</name>
+                    <file> 79</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 16</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 118 117 119 120 114 116 49 115 122 63 47 39 87 79</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 122 79 63 116 120 117 39 118 119 47 87 114 49 115</file>
+=======
+                    <file> 115 89 97 95 107 93</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 89 93 95 107 97 115</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_int.c</name>
             <outputs>
                 <tool>
@@ -2366,20 +4394,44 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 82</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_cgc.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 38</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 30</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 60</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
+<<<<<<< HEAD
                     <file> 118 117 119 120 114 116 49 115 122 63 47 39 87 79</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
                     <file> 122 79 63 116 120 117 39 118 119 47 87 114 49 115</file>
+=======
+                    <file> 115 89 97 95 114 93</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 97 114 89 95 115 93</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_sub.c</name>
             <outputs>
                 <tool>
@@ -2393,6 +4445,36 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 97</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_dmac.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 28</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 29</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 89 93 95 98 97 115</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_dmac_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 68</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 61</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </outputs>
             <inputs>
@@ -2402,11 +4484,16 @@
                 </tool>
                 <tool>
                     <name>BICOMP</name>
+<<<<<<< HEAD
                     <file> 47 95 87 120 63 39 79 122 116 119 114 49 115</file>
+=======
+                    <file> 89 93 95 98 97 115</file>
+>>>>>>> remotes/origin/algorithm
                 </tool>
             </inputs>
         </file>
         <file>
+<<<<<<< HEAD
             <name>$PROJ_DIR$\r_iic_drv_rl78\r_iic_drv_sfr_rl78l13.c</name>
             <outputs>
                 <tool>
@@ -2420,10 +4507,68 @@
                 <tool>
                     <name>BICOMP</name>
                     <file> 57</file>
+=======
+            <name>$PROJ_DIR$\cg_src\r_cg_iica.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 42</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 31</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
+                    <name>BICOMP</name>
+                    <file> 97 103 89 95 115 93</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_intp.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 9</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 76</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 17</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 115 89 97 95 107 93</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 89 93 95 107 97 115</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_lcd.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 43</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 62</file>
+>>>>>>> remotes/origin/algorithm
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+<<<<<<< HEAD
                     <name>ICCRL78</name>
                     <file> 118 117 113 119 120 114 116 49 115 122 95 63 47 39 87 79</file>
                 </tool>
@@ -2458,6 +4603,84 @@
                     <name>BICOMP</name>
                     <file> 47 95 87 120 63 39 79 122 116 119 114 49 115</file>
                 </tool>
+=======
+                    <name>BICOMP</name>
+                    <file> 89 93 95 99 97 115</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_iica_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 72</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 70</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 97 103 89 95 115 93</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_cgc_user.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 54</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 41</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 63</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 115 89 97 95 114 93</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 97 114 89 95 115 93</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\cg_src\r_cg_main.c</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 6</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 21</file>
+                </tool>
+                <tool>
+                    <name>__cstat</name>
+                    <file> 35</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 115 89 97 95 114 107 94 2 93</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 93 89 107 95 114 94 97 2 115</file>
+                </tool>
+>>>>>>> remotes/origin/algorithm
             </inputs>
         </file>
         <forcedrebuild>

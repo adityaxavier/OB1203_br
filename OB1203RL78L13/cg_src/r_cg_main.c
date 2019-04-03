@@ -188,6 +188,9 @@ static void R_MAIN_UserInit(void)
   }
   
   LCD_DISPLAY_OFF();
+#elif defined(UNITY_TESTING)
+  
+  
 #else
   extern void ob1203_spo2_main(void);
     /* 10ms delay */

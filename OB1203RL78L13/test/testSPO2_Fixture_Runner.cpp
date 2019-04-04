@@ -53,9 +53,11 @@ static void runAllTests(void);
 
 TEST_GROUP_RUNNER(SPO2_TG1)
 {
+  //RUN_TEST_CASE(SPO2_TG1, test_uint_sqrt32);
+  //RUN_TEST_CASE(SPO2_TG1, test_uint_sqrt64);
   RUN_TEST_CASE(SPO2_TG1, test_get_std);
   RUN_TEST_CASE(SPO2_TG1, test_get_avg);
-  RUN_TEST_CASE(SPO2_TG1, test_uint_sqrt);
+  
   
   RUN_TEST_CASE(SPO2_TG1, test_Initialization);
 }

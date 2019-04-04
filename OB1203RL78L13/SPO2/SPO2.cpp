@@ -199,22 +199,34 @@ SPO2::SPO2()
 
 
 uint32_t SPO2::get_std(uint32_t *array,uint8_t length, uint32_t avg)
-{/*calculates standard deviation for the Kalman filter*/
-  int32_t var = 0;
-  for (uint16_t n = 0; n< length; n++) {
-    var += ((int32_t)array[n]-(int32_t)avg)*((int32_t)array[n]-(int32_t)avg);
+{/* calculates standard deviation for the Kalman filter */
+  uint64_t * temp = new uint64_t [length];
+  uint64_t curr_avg = 0;
+
+  for(uint8_t itr = 0; itr < length; itr++)
+  {
+    /* Distance to mean */
+    temp[itr] = abs((int64_t)array[itr]-avg);
+    /* Square */
+    temp[itr] *= temp[itr];
+    temp[itr] = (temp[itr]/length);
+    /* Sum of the square of the distance over length */
+    curr_avg += temp[itr];
   }
-  var /= length;
-  return uint_sqrt((uint32_t)abs(var));
+  
+  delete(temp);
+  
+  uint32_t ret_val = uint_sqrt(curr_avg);
+  return ret_val;
 }
 
 uint32_t SPO2::get_avg(uint32_t *array,uint8_t length)
 {/*calculates the average for the st_dev calculation for the Kalman filter*/
   uint32_t avg = 0;
   for (uint16_t n = 0; n<length; n++) {
-    avg += array[n];
+    avg += (array[n]/length);
   }
-  avg /= length;
+  
   return avg;
 }
 
@@ -374,6 +386,18 @@ uint32_t SPO2::uint_sqrt(uint32_t val)
   return g;
 }
 
+uint32_t SPO2::uint_sqrt(uint64_t val)
+{
+  //integer sqrt function from http://www.azillionmonkeys.com/qed/sqroot.html
+  uint64_t temp, g=0, b = 0x80000000, bshft = 31;
+  do {
+    if (val >= (temp = (((g << 1) + b)<<bshft--))) {
+      g += b;
+      val -= temp;
+    }
+  } while (b >>= 1);
+  return g;
+}
 
 void SPO2::get_rms()
 {/*This takes samples from the IR and Red DC data buffers and calculates the rms and

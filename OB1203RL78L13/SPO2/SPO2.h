@@ -59,6 +59,7 @@ public:
     void copy_data(void);
     void calc_hr(void);
     uint32_t uint_sqrt(uint32_t val);
+    uint32_t uint_sqrt(unsigned long long val);
     void do_algorithm_part1();
     void do_algorithm_part2();
     void get_sum_squares();

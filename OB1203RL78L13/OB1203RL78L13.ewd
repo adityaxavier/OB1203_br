@@ -1338,7 +1338,7 @@
                 </option>
                 <option>
                     <name>DynDriver</name>
-                    <state>E1RL78</state>
+                    <state>SIMRL78</state>
                 </option>
                 <option>
                     <name>DebugDDFOverride</name>

@@ -3302,6 +3302,8 @@
                     <state>DEBUG</state>
                     <state>MEASURE_PERFORMANCE</state>
                     <state>UNITY_TESTING</state>
+                    <state>UNITY_USE_LIMITS_H</state>
+                    <state>UNITY_EXCLUDE_STDINT_H</state>
                 </option>
                 <option>
                     <name>CCPreprocFile</name>
@@ -3373,6 +3375,7 @@
                     <state>$PROJ_DIR$\OB1203</state>
                     <state>$PROJ_DIR$\SPO2</state>
                     <state>$PROJ_DIR$\LCD</state>
+                    <state>$PROJ_DIR$\unity</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -4129,9 +4132,25 @@
         </file>
     </group>
     <group>
+        <name>TEST</name>
+        <excluded>
+            <configuration>Debug</configuration>
+            <configuration>Release</configuration>
+            <configuration>RawLog</configuration>
+        </excluded>
+        <file>
+            <name>$PROJ_DIR$\test\testOB1203.cpp</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\test\testOB1203_Fixture_Runner.cpp</name>
+        </file>
+    </group>
+    <group>
         <name>UNITY</name>
         <excluded>
             <configuration>Debug</configuration>
+            <configuration>Release</configuration>
+            <configuration>RawLog</configuration>
         </excluded>
         <file>
             <name>$PROJ_DIR$\unity\unity.c</name>

@@ -17,6 +17,43 @@
         <StopEnabled>0</StopEnabled>
         <StopSymbol />
     </Start_Stop>
+    <InterruptLog>
+        <LogEnabled>0</LogEnabled>
+        <GraphEnabled>0</GraphEnabled>
+        <ShowTimeLog>1</ShowTimeLog>
+        <SumEnabled>0</SumEnabled>
+        <ShowTimeSum>1</ShowTimeSum>
+        <SumSortOrder>0</SumSortOrder>
+    </InterruptLog>
+    <DataLog>
+        <LogEnabled>0</LogEnabled>
+        <GraphEnabled>0</GraphEnabled>
+        <ShowTimeLog>1</ShowTimeLog>
+        <SumEnabled>0</SumEnabled>
+        <ShowTimeSum>1</ShowTimeSum>
+    </DataLog>
+    <Breakpoints2>
+        <Count>0</Count>
+    </Breakpoints2>
+    <Interrupts>
+        <Enabled>1</Enabled>
+    </Interrupts>
+    <MemoryMap>
+        <Enabled>0</Enabled>
+        <Base>0</Base>
+        <UseAuto>0</UseAuto>
+        <TypeViolation>1</TypeViolation>
+        <UnspecRange>1</UnspecRange>
+        <ActionState>1</ActionState>
+    </MemoryMap>
+    <Trace1>
+        <Enabled>0</Enabled>
+        <ShowSource>1</ShowSource>
+    </Trace1>
+    <Simulator>
+        <Freq>10000000</Freq>
+        <FreqHi>0</FreqHi>
+    </Simulator>
     <Breakpoints>
         <Bp0>_ "STD_CODE" "{$PROJ_DIR$\OB1203\OB1203.cpp}.37.5" 1 0 0 0 "" 0 ""</Bp0>
         <Bp1>_ "STD_CODE" "{$PROJ_DIR$\cg_src\r_cg_iica_user.c}.80.5" 0 0 0 0 "" 0 ""</Bp1>

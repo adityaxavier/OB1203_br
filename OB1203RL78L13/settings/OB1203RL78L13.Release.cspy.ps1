@@ -23,9 +23,9 @@
 
 if ($debugfile -eq "")
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "C:\Users\onkar.raut\Documents\2019H1\Firmware\IDT\OB1203RL78L13\settings\OB1203RL78L13_cpp.Release.general.xcl" --backend -f "C:\Users\onkar.raut\Documents\2019H1\Firmware\IDT\OB1203RL78L13\settings\OB1203RL78L13_cpp.Release.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "C:\Users\onkar.raut\Documents\2019H1\Firmware\IDT\OB1203RL78L13\settings\OB1203RL78L13.Release.general.xcl" --backend -f "C:\Users\onkar.raut\Documents\2019H1\Firmware\IDT\OB1203RL78L13\settings\OB1203RL78L13.Release.driver.xcl" 
 }
 else
 {
-& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "C:\Users\onkar.raut\Documents\2019H1\Firmware\IDT\OB1203RL78L13\settings\OB1203RL78L13_cpp.Release.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\onkar.raut\Documents\2019H1\Firmware\IDT\OB1203RL78L13\settings\OB1203RL78L13_cpp.Release.driver.xcl" 
+& "C:\Program Files (x86)\IAR Systems\Embedded Workbench 8.1\common\bin\cspybat" -f "C:\Users\onkar.raut\Documents\2019H1\Firmware\IDT\OB1203RL78L13\settings\OB1203RL78L13.Release.general.xcl" --debug_file=$debugfile --backend -f "C:\Users\onkar.raut\Documents\2019H1\Firmware\IDT\OB1203RL78L13\settings\OB1203RL78L13.Release.driver.xcl" 
 }

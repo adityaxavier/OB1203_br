@@ -4443,6 +4443,9 @@
     <group>
         <name>TEST</name>
         <file>
+            <name>$PROJ_DIR$\test\AllTests.c</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\test\testOB1203.cpp</name>
         </file>
         <file>

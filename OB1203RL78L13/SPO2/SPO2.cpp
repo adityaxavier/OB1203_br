@@ -1,6 +1,7 @@
 #if defined(DEBUG)
 #include <stdio.h>
 #endif
+#include <string.h>
 #include <math.h>
 #include "SPO2.h"
 #include "OB1203.h"
@@ -184,7 +185,7 @@ void SPO2::do_algorithm_part2() {
 
 
 SPO2::SPO2()
-{/*class initializer*/
+{/*class initializer*/  
   min_offset = MIN_OFFSET;
   max_offset = MAX_OFFSET;
   prev_valid = 0;
@@ -195,6 +196,14 @@ SPO2::SPO2()
   avg_hr1f = 0;
   avg_spo21f = 0;
   samples2avg = MAX_FILTER_LENGTH;
+#if 0
+  memset(dc_data, 0, sizeof(dc_data));
+  memset(idx, 0, sizeof(idx));
+  memset(AC1f, 0, sizeof(AC1f));
+  memset(mean1f, 0, sizeof(mean1f));
+  memset(rms1f, 0, sizeof(rms1f));
+  memset(rms_float, 0, sizeof(rms_float));
+#endif
 }
 
 

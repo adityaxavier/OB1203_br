@@ -3886,7 +3886,7 @@
                 </option>
                 <option>
                     <name>IlinkCspyBufferedWrite</name>
-                    <state>0</state>
+                    <state>1</state>
                 </option>
                 <option>
                     <name>IlinkLogAutoLibSelect</name>
@@ -4138,6 +4138,9 @@
             <configuration>Release</configuration>
             <configuration>RawLog</configuration>
         </excluded>
+        <file>
+            <name>$PROJ_DIR$\test\AllTests.c</name>
+        </file>
         <file>
             <name>$PROJ_DIR$\test\testOB1203.cpp</name>
         </file>

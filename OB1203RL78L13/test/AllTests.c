@@ -9,13 +9,11 @@
 
 static void runAllTests(void)
 {
-    RUN_TEST_GROUP(UnityFixture);
-    RUN_TEST_GROUP(UnityCommandOptions);
-    RUN_TEST_GROUP(LeakDetection);
-    RUN_TEST_GROUP(InternalMalloc);
+  RUN_TEST_GROUP(OB1203_TG1);
+  RUN_TEST_GROUP(SPO2_TG1);
 }
 
-int main(int argc, const char* argv[])
+int main_all_tests(int argc, const char* argv[])
 {
     return UnityMain(argc, argv, runAllTests);
 }

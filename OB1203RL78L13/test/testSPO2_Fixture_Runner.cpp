@@ -33,10 +33,6 @@ Includes   <System Includes> , "Project Includes"
 /***********************************************************************************************************************
 Macro definitions
 ***********************************************************************************************************************/
-#define RUN_TG1     (false)
-#define RUN_TG2     (false)
-#define RUN_TG3     (false)
-#define RUN_TG4     (false)
 
 /***********************************************************************************************************************
 Typedef definitions
@@ -49,48 +45,13 @@ Exported global variables (to be accessed by other files)
 /***********************************************************************************************************************
 Private global variables and functions
 ***********************************************************************************************************************/
-static void runAllTests(void);
 
 TEST_GROUP_RUNNER(SPO2_TG1)
 {
-  //RUN_TEST_CASE(SPO2_TG1, test_uint_sqrt32);
-  //RUN_TEST_CASE(SPO2_TG1, test_uint_sqrt64);
-  RUN_TEST_CASE(SPO2_TG1, test_get_std);
   RUN_TEST_CASE(SPO2_TG1, test_get_avg);
-  
-  
+  RUN_TEST_CASE(SPO2_TG1, test_uint_sqrt32);
+  RUN_TEST_CASE(SPO2_TG1, test_uint_sqrt64);
+  RUN_TEST_CASE(SPO2_TG1, test_get_std);
+    
   RUN_TEST_CASE(SPO2_TG1, test_Initialization);
 }
-
-/***********************************************************************************************************************
-* Function Name: runAllTests
-* Description  : Call test groups
-* Arguments    : none
-* Return Value : none
-***********************************************************************************************************************/
-static void runAllTests(void)
-{
-	/* Get module software versions */
-	RUN_TEST_GROUP(SPO2_TG1);
-
-}
-/***********************************************************************************************************************
-End of function runAllTests
-***********************************************************************************************************************/
-
-/***********************************************************************************************************************
-* Function Name: test_SPO2
-* Description  : Tear down for these unit tests
-* Arguments    : none
-* Return Value : none
-***********************************************************************************************************************/
-int test_SPO2_fixture_runner(void)
-{
-    char const * args[2] = {"", "-v"};
-    UnityBegin("testSPO2.cpp");
-    UnityMain(2, args, runAllTests);
-    return UnityEnd();
-}
-/***********************************************************************************************************************
-End of function test_ctsu
-***********************************************************************************************************************/

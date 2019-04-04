@@ -40,7 +40,7 @@ Includes
 #include "r_cg_dmac.h"
 #include "r_cg_intp.h"
 /* Start user code for include. Do not edit comment generated here */
-#if defined(TEST_CODE)
+#if defined(TEST_CODE) || defined(UNITY_TESTING)
 #include <stdio.h>
 #endif
 #include "OB1203.h"
@@ -92,8 +92,27 @@ static void R_MAIN_UserInit(void);
 ***********************************************************************************************************************/
 void main(void)
 {
-    R_MAIN_UserInit();
+  R_MAIN_UserInit();
     /* Start user code. Do not edit comment generated here */
+#if defined(UNITY_TESTING)
+  extern int main_all_tests(int argc, const char* argv[]);
+  const char* argv[2] = {"", "-v"};
+  main_all_tests(2,argv);
+#else
+  extern void ob1203_spo2_main(void);
+    /* 10ms delay */
+  Init_Display_Panel();
+  
+  /* Turn on all segments momentarily*/
+  {
+    LCD_DISPLAY_ON();
+    uint32_t i = LCD_VOLTAGE_WAITTIME>>1;
+    while(--i);
+    LCD_DISPLAY_OFF();
+  }
+  
+  ob1203_spo2_main();
+#endif
   while (1U)
   {
     ;
@@ -108,7 +127,7 @@ void main(void)
 ***********************************************************************************************************************/
 static void R_MAIN_UserInit(void)
 {
-    /* Start user code. Do not edit comment generated here */
+  /* Start user code. Do not edit comment generated here */
   EI();
 #if defined(DEBUG)
   R_UART2_Start();
@@ -116,99 +135,6 @@ static void R_MAIN_UserInit(void)
   R_INTC0_Start();
   R_INTC5_Start();
   R_INTC7_Start();
-#if defined(TEST_CODE)
-  uint32_t i = LCD_VOLTAGE_WAITTIME;  
-  R_UART2_Start();
-  printf("Hello!\r\n");
-  printf("World!\r\n");
-  
-  /* 10ms delay */
-  Init_Display_Panel();
-  
-  LCD_DISPLAY_ON();
-  
-  while(ob1203.ready==false)
-  {
-    ob1203.reset();
-  }
-  
-  defaultConfig();
-  
-  {
-    i = LCD_VOLTAGE_WAITTIME;
-    while(--i);
-  }
-  LCD_DISPLAY_OFF();
-  
-  R_PPG_LCD_Display_Battery(99);
-  
-  {
-    i = LCD_VOLTAGE_WAITTIME;
-    while(--i);
-  }
-  
-  R_PPG_LCD_Display_Battery(68);
-  
-  {
-    i = LCD_VOLTAGE_WAITTIME;
-    while(--i);
-  }
-  R_PPG_LCD_Display_Battery(45);
-  
-  {
-    i = LCD_VOLTAGE_WAITTIME;
-    while(--i);
-  }
-  
-  R_PPG_LCD_Display_Battery(23);
-  
-  {
-    i = LCD_VOLTAGE_WAITTIME;
-    while(--i);
-  }
-  
-  R_PPG_LCD_Display_Battery(2);
-  
-  {
-    i = LCD_VOLTAGE_WAITTIME;
-    while(--i);
-  }
-  R_PPG_LCD_Display_HRM(100);
-  
-  {
-    i = LCD_VOLTAGE_WAITTIME;
-    while(--i);
-  }
-  
-  R_PPG_LCD_Display_SPO2(950);
-  
-  {
-    i = LCD_VOLTAGE_WAITTIME;
-    while(--i);
-  }
-  
-  LCD_DISPLAY_OFF();
-#elif defined(UNITY_TESTING)
-  extern int test_ob1203_fixture_runner(void);
-  extern int test_SPO2_fixture_runner(void);
-  test_ob1203_fixture_runner();
-  test_SPO2_fixture_runner();
-#else
-  extern void ob1203_spo2_main(void);
-    /* 10ms delay */
-  Init_Display_Panel();
-  
-  LCD_DISPLAY_ON();
-  
-  {
-    uint32_t i = LCD_VOLTAGE_WAITTIME>>1;
-    while(--i);
-  }
-  
-  LCD_DISPLAY_OFF();
-  
-  ob1203_spo2_main();
-#endif
   /* End user code. Do not edit comment generated here */
 }
 

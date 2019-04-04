@@ -28,7 +28,7 @@
         <Leave_target_running>0</Leave_target_running>
     </Monitor_Execution>
     <DebugChecksum>
-        <Checksum>423103332</Checksum>
+        <Checksum>2592454300</Checksum>
     </DebugChecksum>
     <CodeCoverage>
         <Enabled>_ 0</Enabled>
@@ -56,7 +56,8 @@
         <ShowTimeSum>1</ShowTimeSum>
     </DataLog>
     <Breakpoints2>
-        <Count>0</Count>
+        <Bp0>_ 1 "STD_CODE2" "{$PROJ_DIR$\test\testSPO2_Fixture_Runner.cpp}.58.3" 0 0 1 "" 0 ""</Bp0>
+        <Count>1</Count>
     </Breakpoints2>
     <Interrupts>
         <Enabled>1</Enabled>
@@ -70,7 +71,7 @@
         <ActionState>1</ActionState>
     </MemoryMap>
     <DriverProfiling>
-        <Enabled>0</Enabled>
+        <Enabled>1</Enabled>
         <Mode>1</Mode>
         <Graph>0</Graph>
         <Symbiont>0</Symbiont>

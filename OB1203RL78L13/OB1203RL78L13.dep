@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project>
     <fileVersion>4</fileVersion>
-    <fileChecksum>2566330183</fileChecksum>
+    <fileChecksum>2018147505</fileChecksum>
     <configuration>
         <name>Debug</name>
         <outputs>
@@ -965,6 +965,10 @@
                 </tool>
             </inputs>
         </file>
+        <forcedrebuild>
+            <name>[MULTI_TOOL]</name>
+            <tool>ILINK</tool>
+        </forcedrebuild>
     </configuration>
     <configuration>
         <name>DebugUnity</name>
@@ -1130,6 +1134,8 @@
             <file>$PROJ_DIR$\DebugUnity\Obj\r_cg_main.__cstat.et</file>
             <file>$PROJ_DIR$\DebugUnity\Obj\testOB1203.o</file>
             <file>$PROJ_DIR$\DebugUnity\Obj\testRunner.o</file>
+            <file>$PROJ_DIR$\DebugUnity\Obj\testSPO2.pbi</file>
+            <file>$PROJ_DIR$\DebugUnity\Obj\testSPO2.o</file>
             <file>$PROJ_DIR$\DebugUnity\Obj\testOB1203_Fixture_Runner.pbi</file>
             <file>$PROJ_DIR$\test\testOB1203_Runner.cpp</file>
             <file>$PROJ_DIR$\test\testOB1203_Fixture_Runner.cpp</file>
@@ -1140,9 +1146,13 @@
             <file>$PROJ_DIR$\test\testRunner.cpp</file>
             <file>$PROJ_DIR$\DebugUnity\Obj\testOB1203_Runner.pbi</file>
             <file>$PROJ_DIR$\DebugUnity\Obj\testOB1203_Runner.o</file>
+            <file>$PROJ_DIR$\DebugUnity\Obj\testSPO2_Fixture_Runner.o</file>
+            <file>$PROJ_DIR$\DebugUnity\Obj\testSPO2_Fixture_Runner.pbi</file>
             <file>$PROJ_DIR$\DebugUnity\Obj\testOB1203_Fixture_Runner.o</file>
             <file>$PROJ_DIR$\DebugUnity\Obj\testOB1203.__cstat.et</file>
             <file>$PROJ_DIR$\DebugUnity\Obj\testOB1203_Fixture_Runner.__cstat.et</file>
+            <file>$PROJ_DIR$\test\testSPO2.cpp</file>
+            <file>$PROJ_DIR$\test\testSPO2_Fixture_Runner.cpp</file>
         </outputs>
         <file>
             <name>[ROOT_NODE]</name>
@@ -1230,7 +1240,7 @@
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 116 32 68 69 72 127 22 27 119 4 122 70 124 117 126 129 62 66 120 42 71</file>
+                    <file> 116 32 72 127 68 69 22 27 119 4 122 70 124 117 126 129 62 66 120 42 71</file>
                 </tool>
             </inputs>
         </file>
@@ -1253,11 +1263,11 @@
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 7 0 47 116 72 70 124 117 69 126 129 127 62 120 122 165 119 123</file>
+                    <file> 7 0 47 116 72 70 124 117 69 126 129 127 62 120 122 167 119 123</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 127 47 72 116 123 7 0 122 69 165 119 70 124 117 126 129 62 120</file>
+                    <file> 127 47 72 116 123 7 0 122 69 167 119 70 124 117 126 129 62 120</file>
                 </tool>
             </inputs>
         </file>
@@ -1307,11 +1317,11 @@
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 16 7 0 47 116 72 70 124 117 69 126 129 127 62 120 122 165 119 17 123 11 128</file>
+                    <file> 16 7 0 47 116 72 70 124 117 69 126 129 127 62 120 122 167 119 17 123 11 128</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 116 120 7 72 128 17 47 126 122 0 11 69 165 119 70 124 117 129 62 16 127 123</file>
+                    <file> 116 120 7 72 128 17 47 126 122 0 11 69 167 119 70 124 117 129 62 16 127 123</file>
                 </tool>
             </inputs>
         </file>
@@ -1893,7 +1903,7 @@
             <inputs>
                 <tool>
                     <name>ILINK</name>
-                    <file> 118 93 90 91 103 59 60 57 51 61 113 55 56 58 48 54 99 114 49 65 52 50 53 64 79 100 159 171 112 107 96 67 73</file>
+                    <file> 118 93 90 91 103 59 60 57 51 61 113 55 56 58 48 54 99 114 49 65 52 50 53 64 79 100 159 175 162 173 112 107 96 67 73</file>
                 </tool>
             </inputs>
         </file>
@@ -1929,17 +1939,17 @@
             <outputs>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 169</file>
+                    <file> 171</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 7 0 47 116 72 70 124 117 69 126 129 127 62 120 122 63 165 119 32 22 68 71 66 42 27 128</file>
+                    <file> 7 0 47 116 72 70 124 117 69 126 129 127 62 120 122 63 167 119 32 22 68 71 66 42 27 128</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 72 47 32 119 116 122 27 63 127 22 71 7 128 0 69 165 70 124 117 126 129 62 120 42 68 66</file>
+                    <file> 72 47 32 119 116 122 27 63 127 22 71 7 128 0 69 167 70 124 117 126 129 62 120 42 68 66</file>
                 </tool>
             </inputs>
         </file>
@@ -1948,25 +1958,25 @@
             <outputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 171</file>
+                    <file> 175</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 161</file>
+                    <file> 163</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 173</file>
+                    <file> 177</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 16 7 0 47 116 72 70 124 117 69 126 129 127 62 120 122 165 119 17 123 11</file>
+                    <file> 16 7 0 47 116 72 70 124 117 69 126 129 127 62 120 122 167 119 17 123 11</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 0 47 129 72 11 119 124 116 70 117 126 120 7 17 69 165 127 122 16 62 123</file>
+                    <file> 0 47 129 72 11 119 124 116 70 117 126 120 7 17 69 167 127 122 16 62 123</file>
                 </tool>
             </inputs>
         </file>
@@ -1979,21 +1989,21 @@
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 164</file>
+                    <file> 166</file>
                 </tool>
                 <tool>
                     <name>__cstat</name>
-                    <file> 172</file>
+                    <file> 176</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 119 116 72 70 124 117 122 128 16 7 0 47 69 126 129 127 62 120 165 17 123 11 32 22 68 71 66 42 27</file>
+                    <file> 119 116 72 70 124 117 122 128 16 7 0 47 69 126 129 127 62 120 167 17 123 11 32 22 68 71 66 42 27</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 27 7 68 116 72 127 120 122 16 17 47 22 128 32 70 124 117 0 11 69 165 119 126 129 62 123 42 66 71</file>
+                    <file> 27 7 68 116 72 127 120 122 16 17 47 22 128 32 70 124 117 0 11 69 167 119 126 129 62 123 42 66 71</file>
                 </tool>
             </inputs>
         </file>
@@ -2006,17 +2016,63 @@
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 166</file>
+                    <file> 168</file>
                 </tool>
             </outputs>
             <inputs>
                 <tool>
                     <name>ICCRL78</name>
-                    <file> 16 7 0 47 116 72 70 124 117 69 126 129 127 62 120 122 165 119 17 123 11</file>
+                    <file> 16 7 0 47 116 72 70 124 117 69 126 129 127 62 120 122 167 119 17 123 11</file>
                 </tool>
                 <tool>
                     <name>BICOMP</name>
-                    <file> 0 47 129 72 11 119 124 116 70 117 126 120 7 17 69 165 127 122 16 62 123</file>
+                    <file> 0 47 129 72 11 119 124 116 70 117 126 120 7 17 69 167 127 122 16 62 123</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\test\testSPO2.cpp</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 162</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 161</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 16 7 0 47 116 72 70 124 117 69 126 129 127 62 120 122 167 119 17 123 11 4 22 68 71 66 42 27</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 124 116 0 72 122 167 129 62 22 71 11 69 119 70 117 126 120 27 4 7 17 47 127 123 42 68 66 16</file>
+                </tool>
+            </inputs>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\test\testSPO2_Fixture_Runner.cpp</name>
+            <outputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 173</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 174</file>
+                </tool>
+            </outputs>
+            <inputs>
+                <tool>
+                    <name>ICCRL78</name>
+                    <file> 16 7 0 47 116 72 70 124 117 69 126 129 127 62 120 122 167 119 17 123 11</file>
+                </tool>
+                <tool>
+                    <name>BICOMP</name>
+                    <file> 72 7 69 17 167 116 120 0 11 47 119 70 124 117 126 129 127 122 16 62 123</file>
                 </tool>
             </inputs>
         </file>
@@ -2963,6 +3019,10 @@
                 </tool>
             </outputs>
         </file>
+        <forcedrebuild>
+            <name>[MULTI_TOOL]</name>
+            <tool>ILINK</tool>
+        </forcedrebuild>
     </configuration>
     <configuration>
         <name>Release</name>

@@ -65,6 +65,9 @@ than the sample rate.
 //#define PRINT_RAW //print raw, filtered data
 //#define PRINT_AC1F //print DC and slope removed
 
+typedef unsigned long long      uint64_t;
+typedef signed long long        int64_t;
+
 //int32_t sum_squares=2272550; //(for 150 sample array) sum of n^2 for -sample length to + sample length, with sample length = 150 and array length = 301 or 2*sum(1^2+ 2^2...150^2)
 
 //int32_t sum_squares=676700;  //(for 100 sample array) sum of n^2 for -sample length to + sample length, with sample length = 100 and array length = 201 or 2*sum(1^2+ 2^2...100^2)

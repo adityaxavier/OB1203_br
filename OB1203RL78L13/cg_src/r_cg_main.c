@@ -190,8 +190,9 @@ static void R_MAIN_UserInit(void)
   LCD_DISPLAY_OFF();
 #elif defined(UNITY_TESTING)
   extern int test_ob1203_fixture_runner(void);
+  extern int test_SPO2_fixture_runner(void);
   test_ob1203_fixture_runner();
-  
+  test_SPO2_fixture_runner();
 #else
   extern void ob1203_spo2_main(void);
     /* 10ms delay */

@@ -4144,6 +4144,12 @@
         <file>
             <name>$PROJ_DIR$\test\testOB1203_Fixture_Runner.cpp</name>
         </file>
+        <file>
+            <name>$PROJ_DIR$\test\testSPO2.cpp</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\test\testSPO2_Fixture_Runner.cpp</name>
+        </file>
     </group>
     <group>
         <name>UNITY</name>

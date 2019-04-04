@@ -223,7 +223,8 @@ uint32_t SPO2::get_std(uint32_t *array,uint8_t length, uint32_t avg)
 uint32_t SPO2::get_avg(uint32_t *array,uint8_t length)
 {/*calculates the average for the st_dev calculation for the Kalman filter*/
   uint32_t avg = 0;
-  for (uint16_t n = 0; n<length; n++) {
+  for (uint16_t n = 0; n<length; n++) 
+  {
     avg += (array[n]/length);
   }
   

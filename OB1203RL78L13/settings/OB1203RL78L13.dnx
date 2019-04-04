@@ -17,29 +17,41 @@
         <StopEnabled>0</StopEnabled>
         <StopSymbol />
     </Start_Stop>
-    <Breakpoints>
-        <Bp0>_ "STD_CODE" "{$PROJ_DIR$\OB1203\OB1203.cpp}.37.5" 1 0 0 0 "" 0 ""</Bp0>
-        <Bp1>_ "STD_CODE" "{$PROJ_DIR$\cg_src\r_cg_iica_user.c}.80.5" 0 0 0 0 "" 0 ""</Bp1>
-        <Bp2>_ "STD_CODE" "{$PROJ_DIR$\OB1203\OB1203.cpp}.761.11" 0 0 0 0 "" 0 ""</Bp2>
-        <Bp3>_ "STD_CODE" "{$PROJ_DIR$\OB1203\OB1203.cpp}.778.9" 0 0 0 0 "" 0 ""</Bp3>
-        <Count>4</Count>
-    </Breakpoints>
-    <Monitor_Execution>
-        <Leave_target_running>0</Leave_target_running>
-    </Monitor_Execution>
     <DebugChecksum>
-        <Checksum>2592454300</Checksum>
+        <Checksum>4079069955</Checksum>
     </DebugChecksum>
     <CodeCoverage>
         <Enabled>_ 0</Enabled>
     </CodeCoverage>
     <Disassembly>
-        <MixedMode>1</MixedMode>
         <InstrCount>0</InstrCount>
+        <MixedMode>1</MixedMode>
     </Disassembly>
     <CallStack>
         <ShowArgs>0</ShowArgs>
     </CallStack>
+    <DriverProfiling>
+        <Enabled>1</Enabled>
+        <Mode>1</Mode>
+        <Graph>0</Graph>
+        <Symbiont>0</Symbiont>
+        <Exclusions />
+    </DriverProfiling>
+    <CallStackLog>
+        <Enabled>0</Enabled>
+    </CallStackLog>
+    <CallStackStripe>
+        <ShowTiming>1</ShowTiming>
+    </CallStackStripe>
+    <TermIOLog>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+    </TermIOLog>
+    <LogFile>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+        <Category>_ 0</Category>
+    </LogFile>
     <InterruptLog>
         <LogEnabled>0</LogEnabled>
         <GraphEnabled>0</GraphEnabled>
@@ -56,7 +68,7 @@
         <ShowTimeSum>1</ShowTimeSum>
     </DataLog>
     <Breakpoints2>
-        <Bp0>_ 1 "STD_CODE2" "{$PROJ_DIR$\test\testSPO2_Fixture_Runner.cpp}.58.3" 0 0 1 "" 0 ""</Bp0>
+        <Bp0>_ 1 "STD_CODE2" "{$PROJ_DIR$\SPO2\SPO2.cpp}.226.17" 0 0 1 "" 0 ""</Bp0>
         <Count>1</Count>
     </Breakpoints2>
     <Interrupts>
@@ -70,38 +82,26 @@
         <UnspecRange>1</UnspecRange>
         <ActionState>1</ActionState>
     </MemoryMap>
-    <DriverProfiling>
-        <Enabled>1</Enabled>
-        <Mode>1</Mode>
-        <Graph>0</Graph>
-        <Symbiont>0</Symbiont>
-        <Exclusions />
-    </DriverProfiling>
     <Trace1>
         <Enabled>0</Enabled>
         <ShowSource>1</ShowSource>
     </Trace1>
-    <CallStackLog>
-        <Enabled>0</Enabled>
-    </CallStackLog>
-    <CallStackStripe>
-        <ShowTiming>1</ShowTiming>
-    </CallStackStripe>
-    <TermIOLog>
-        <LoggingEnabled>_ 0</LoggingEnabled>
-        <LogFile>_ ""</LogFile>
-    </TermIOLog>
-    <LogFile>
-        <LoggingEnabled>_ 0</LoggingEnabled>
-        <LogFile>_ ""</LogFile>
-        <Category>_ 0</Category>
-    </LogFile>
-    <Aliases>
-        <Count>0</Count>
-        <SuppressDialog>0</SuppressDialog>
-    </Aliases>
     <Simulator>
         <Freq>10000000</Freq>
         <FreqHi>0</FreqHi>
     </Simulator>
+    <Breakpoints>
+        <Bp0>_ "STD_CODE" "{$PROJ_DIR$\OB1203\OB1203.cpp}.37.5" 1 0 0 0 "" 0 ""</Bp0>
+        <Bp1>_ "STD_CODE" "{$PROJ_DIR$\cg_src\r_cg_iica_user.c}.80.5" 0 0 0 0 "" 0 ""</Bp1>
+        <Bp2>_ "STD_CODE" "{$PROJ_DIR$\OB1203\OB1203.cpp}.761.11" 0 0 0 0 "" 0 ""</Bp2>
+        <Bp3>_ "STD_CODE" "{$PROJ_DIR$\OB1203\OB1203.cpp}.778.9" 0 0 0 0 "" 0 ""</Bp3>
+        <Count>4</Count>
+    </Breakpoints>
+    <Monitor_Execution>
+        <Leave_target_running>0</Leave_target_running>
+    </Monitor_Execution>
+    <Aliases>
+        <Count>0</Count>
+        <SuppressDialog>0</SuppressDialog>
+    </Aliases>
 </settings>

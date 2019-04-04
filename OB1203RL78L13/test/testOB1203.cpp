@@ -106,7 +106,7 @@ End of function TEST_OB1203_TG1_TEAR_DOWN
 
 /***********************************************************************************************************************
 * Function Name: test_Initialization
-* Description  : Checking GetVersion function.
+* Description  : Call the initialization routine to check if the minimum set of variables are set.
 * Arguments    : none
 * Return Value : none
 ***********************************************************************************************************************/
@@ -115,9 +115,8 @@ TEST(OB1203_TG1, test_Initialization)
   OB1203 ob1203;
   //TEST_ASSERT_EQUAL_UINT8(OB1203_ADDR, ob1203.i2c_addr);        // Address is a private variable. Ignoring test.
   TEST_ASSERT_EQUAL_UINT(MD_OK, ob1203.i2c_error);
-  TEST_ASSERT_TRUE(ob1203.ready);
-  TEST_ASSERT_FALSE(ob1203.send_stop);
-  TEST_ASSERT_EQUAL_PTR(NULL, ob1203.callback);
+  TEST_ASSERT_FALSE(ob1203.ready);
+  TEST_ASSERT_TRUE(ob1203.send_stop);
 }
 /***********************************************************************************************************************
 End of function test_Initialization

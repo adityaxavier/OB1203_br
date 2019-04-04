@@ -51,12 +51,9 @@ Private global variables and functions
 ***********************************************************************************************************************/
 static void runAllTests(void);
 
-TEST_GROUP_RUNNER(CTSU_TG1)
+TEST_GROUP_RUNNER(OB1203_TG1)
 {
-#if RUN_TG1==true
-	RUN_TEST_CASE(OB1203_TG1, TestGroupMessage);
-
-#endif
+  RUN_TEST_CASE(OB1203_TG1, test_Initialization);
 }
 
 /***********************************************************************************************************************
@@ -68,7 +65,7 @@ TEST_GROUP_RUNNER(CTSU_TG1)
 static void runAllTests(void)
 {
 	/* Get module software versions */
-	RUN_TEST_GROUP(CTSU_TG1);
+	RUN_TEST_GROUP(OB1203_TG1);
 
 }
 /***********************************************************************************************************************

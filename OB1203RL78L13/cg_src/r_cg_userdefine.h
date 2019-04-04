@@ -60,15 +60,10 @@ User definitions
 #define DEBUG_STREAM    stdout
 #endif
 
-#if defined(stdout) && !defined(DEBUG_LVL)
-#define DEBUG_LVL       (LOG_INFO)
-#else
+#if defined(UNITY_TESTING)
 #define DEBUG_LVL       (0)
-#endif
-
-#if defined(PRINT_RAW_STREAM)
-#undef DEBUG_LVL
-#define DEBUG_LVL       (LOG_DEBUG_RAW)
+#elif defined(stdout) && !defined(DEBUG_LVL)
+#define DEBUG_LVL       (LOG_INFO)
 #endif
 
 #if defined(DEBUG_LVL)

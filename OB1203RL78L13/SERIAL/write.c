@@ -41,7 +41,7 @@ void write_done(void)
 {
   ready = true;
 }
-
+#if !defined(UNITY_TESTING)
 /*
  * If the __write implementation uses internal buffering, uncomment
  * the following line to ensure that we are called with "buffer" as 0
@@ -104,3 +104,4 @@ size_t __write(int handle, const unsigned char * buffer, size_t size)
   
   return sending;
 }
+#endif

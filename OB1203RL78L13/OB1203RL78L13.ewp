@@ -3298,8 +3298,8 @@
                 </option>
                 <option>
                     <name>CCDefines</name>
-                    <state>USE_BRUTE_DELAY</state>
                     <state>DEBUG</state>
+                    <state>USE_BRUTE_DELAY</state>
                     <state>MEASURE_PERFORMANCE</state>
                     <state>UNITY_TESTING</state>
                     <state>UNITY_USE_LIMITS_H</state>

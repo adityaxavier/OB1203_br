@@ -10,19 +10,17 @@
 
 /*This algorithm was developed by Dan Allen, IDT-Renesas 2019.
 The main program fetches data from OB1203 at 100Hz for both red and IR.
-This algorithm was developed by Dan Allen, IDT-Renesas 2019.
-The main program fetches data from OB1203 at 100Hz for both red and IR. 
 It arranges the bytes from the FIFO and calls add_sample(). Add sample keeps a 
-running average of 8 samples (12Hz) and loads the filtered data
+running average of 4 samples (12Hz) and loads the filtered data
 into dc_buffer. The DC buffer is long enough for two samples at the slowest heart
 rate of ~40Hz, plus an extra sample to make the sum of squares easy and also an
 even number of samples to be used as the maximum moving average filter for the heart rate samples.
-Once a second main calls do_algorithm_part1(). This checks to make sure enough 
+Main calls get_sum_squares() one, which calculates some constants for algorithm.
+It only needs to be run once.
+Once each second main calls do_algorithm_part1(). This checks to make sure enough 
 samples have been acquired then calls get rms(). 
-get_rms() calls get_idx() which figures out where in the buffer the most recent 
-sample is and loads an array idx[] with indices for copying the data in the order of most recent to oldest. 
-get_rms() then calls get_DC() which calculates the mean levels of IR and red over the entire buffer. 
-Note any variable with a 1f (not LF-font can be confusing) means it has an 
+get_rms() calls get_DC() which calculates the mean levels of IR and red over the entire buffer. 
+Note any variable with a 1f ( "one eff" not "LF" - font can be confusing) means it has an 
 additional 4 bits of fixed precision, set by FIXED_BITS, so mean1f is 16 times the mean. 
 Then get_rms() calls copy_data() which does for each channel:
 -subtracts the means
@@ -69,19 +67,36 @@ than the sample rate.
 typedef unsigned long long      uint64_t;
 typedef signed long long        int64_t;
 
-//int32_t sum_squares=2272550; //(for 150 sample array) sum of n^2 for -sample length to + sample length, with sample length = 150 and array length = 301 or 2*sum(1^2+ 2^2...150^2)
-
-//int32_t sum_squares=676700;  //(for 100 sample array) sum of n^2 for -sample length to + sample length, with sample length = 100 and array length = 201 or 2*sum(1^2+ 2^2...100^2)
 
 int32_t sum_squares;
+int32_t sum_quads;
 
-//const int32_t  h[32] = {3,1,-3,-8,-8,2,16,22,11,-19,-48,-47,4,100,208,279,279,208,100,4,-47,-48,-19,11,22,16,2,-8,-8,-3,1,3}; //10 bits of fixed precision included
-//const int32_t h[12] = {-12,-13,16,89,185,254,254,185,89,16,-13,-12};
-//const int32_t h[18] = {21,74,158,242,280,241,137,18,-60,-74,-41,-2,17,14,3,-4,-3,1};
-//const int32_t h[12] = {-11,-24,-6,72,194,290,290,194,72,-6,-24,-11};
-//const uint8_t h_bit_prec = 10; //real filter coefficients are 2^bit_prec smaller
-//const int32_t h[NUM_FILTER_TAPS] = {1,1,1,1,1,1,1,1}; //running average
-//const uint8_t h_bit_prec = 3;
+
+SPO2::SPO2()
+{/*class initializer*/  
+  min_offset = MIN_OFFSET;
+  max_offset = MAX_OFFSET;
+  prev_valid = 0;
+  data_ptr=0;
+  final_offset = 0;
+  reset_kalman_hr = 1;
+  reset_kalman_spo2 = 1;
+  avg_hr1f = 0;
+  avg_spo21f = 0;
+  samples2avg = MAX_FILTER_LENGTH;
+  downsampled_array_length = ((ARRAY_LENGTH-1)>>DOWNSAMPLE_BITS)+1;
+  downsampled_max_centered_index =  (ARRAY_LENGTH-1)>>(DOWNSAMPLE_BITS+1);
+#if 0
+  memset(dc_data, 0, sizeof(dc_data));
+  memset(idx, 0, sizeof(idx));
+  memset(idx2, 0, sizeof(idx2));
+  memset(AC1f, 0, sizeof(AC1f));
+  memset(mean1f, 0, sizeof(mean1f));
+  memset(rms1f, 0, sizeof(rms1f));
+  memset(rms_float, 0, sizeof(rms_float));
+#endif
+}
+
 
 void SPO2::get_sum_squares()
 {/*This function calculates the sum of squares used in the first order regression
@@ -89,12 +104,21 @@ void SPO2::get_sum_squares()
   length is changed. Currently it is fixed. The method assumes the indices are centered
   on zero and calculates only one half and doubles it. For this reason we use an odd
   number of samples. Otherwise this would be fraction armithmetic as the indices
-  would be -1/2, 1/2....*/
+  would be -1/2, 1/2....
+  This function also calculates the square values and stores them in idx2 and
+  uses those squares to calculated the sum of fourth power terms used in the 
+  calculation of the second order regression. See the Matlab code for notes.
+  */
+  get_idx();
   sum_squares = 0;
-  for (int n=1; n<SAMPLE_LENGTH; n++) {
-    sum_squares += n*n;
+  sum_quads = 0;
+  //do the single-sided sum of squares and fourth power terms
+  for (int n=0; n<downsampled_max_centered_index ; n++) {
+    sum_squares += idx2[n];
+    sum_quads += idx2[n]*idx2[n];
   }
-  sum_squares = sum_squares<<1;
+  sum_squares = abs(sum_squares<<1); //make the sum double sided
+  sum_quads = abs(sum_quads<<1) - sum_squares/(downsampled_array_length); //make the sum double sided and subtract the square term
 }
 
 
@@ -126,10 +150,10 @@ void SPO2::do_algorithm_part2() {
   included in the kalman running average estimation, but are included in the variance 
   calculation. If too many algorithm fails or outliers are incurred the Kalman resets.*/  
   extern uint16_t t_read(void);
-  static uint32_t hr_samples[NUM_HR_AVGS];
+  static uint32_t hr_samples[HR_DATA_LENGTH];
   static uint8_t hr_ptr = 0;
   static uint8_t spo2_ptr =0;
-  static uint32_t spo2_samples[NUM_SPO2_AVGS];
+  static uint32_t spo2_samples[SPO2_DATA_LENGTH];
   static uint8_t num_hr_samples = 0;
   static uint8_t num_spo2_samples = 0;
   static uint8_t kalman_hr_ptr = 0;
@@ -160,9 +184,15 @@ void SPO2::do_algorithm_part2() {
     LOG(LOG_DEBUG,"pre kalman %.1f, %.1f\r\n",(float)current_spo21f/(float)(1<<FIXED_BITS), (float)current_hr1f/(float)(1<<FIXED_BITS));
     //        consensus(); //filter out crap data
     LOG(LOG_INFO,"HR: ");
-    kalman(kalman_hr_array,&kalman_hr_length,&kalman_hr_ptr,hr_samples,&num_hr_samples,&hr_ptr,current_hr1f,&reset_kalman_hr,&avg_hr1f,&hr_outlier_cnt,&hr_alg_fail_cnt);
+    kalman(kalman_hr_array,&kalman_hr_length,HR_KALMAN_LENGTH,&kalman_hr_ptr,
+           hr_samples,&num_hr_samples,HR_DATA_LENGTH,&hr_ptr,
+           current_hr1f,&reset_kalman_hr,&avg_hr1f,&hr_outlier_cnt,&hr_alg_fail_cnt,
+           HR_KALMAN_THRESHOLD_1F,HR_MIN_STD_1F,0);
     LOG(LOG_INFO,"SPO2: ");
-    kalman(kalman_spo2_array,&kalman_spo2_length,&kalman_spo2_ptr,spo2_samples,&num_spo2_samples,&spo2_ptr,current_spo21f,&reset_kalman_spo2,&avg_spo21f,&spo2_outlier_cnt,&spo2_alg_fail_cnt);
+    kalman(kalman_spo2_array,&kalman_spo2_length,SPO2_KALMAN_LENGTH,&kalman_spo2_ptr,
+           spo2_samples,&num_spo2_samples,SPO2_DATA_LENGTH,&spo2_ptr,
+           current_spo21f,&reset_kalman_spo2,&avg_spo21f,&spo2_outlier_cnt,&spo2_alg_fail_cnt,
+           SPO2_KALMAN_THRESHOLD_1F,SPO2_MIN_STD_1F,1);
     LOG(LOG_INFO,"post kalman %.1f, %.1f\r\n",(float)avg_hr1f/(float)(1<<FIXED_BITS), (float)avg_spo21f/(float)(1<<FIXED_BITS) );
     
   } else {
@@ -182,31 +212,13 @@ void SPO2::do_algorithm_part2() {
 }
 
 
-
-
-SPO2::SPO2()
-{/*class initializer*/  
-  min_offset = MIN_OFFSET;
-  max_offset = MAX_OFFSET;
-  prev_valid = 0;
-  data_ptr=0;
-  final_offset = 0;
-  reset_kalman_hr = 1;
-  reset_kalman_spo2 = 1;
-  avg_hr1f = 0;
-  avg_spo21f = 0;
-  samples2avg = MAX_FILTER_LENGTH;
-#if 0
-  memset(dc_data, 0, sizeof(dc_data));
-  memset(idx, 0, sizeof(idx));
-  memset(AC1f, 0, sizeof(AC1f));
-  memset(mean1f, 0, sizeof(mean1f));
-  memset(rms1f, 0, sizeof(rms1f));
-  memset(rms_float, 0, sizeof(rms_float));
-#endif
+void SPO2::do_algorithm_part_3() {
+  /*
+  This function does the beat to beat detection
+  */
 }
-
-
+                                      
+                                      
 uint32_t SPO2::get_std(uint32_t *array,uint8_t length, uint32_t avg)
 {/* calculates standard deviation for the Kalman filter */
   uint64_t * temp = new uint64_t [length];
@@ -229,6 +241,15 @@ uint32_t SPO2::get_std(uint32_t *array,uint8_t length, uint32_t avg)
   return ret_val;
 }
 
+                                      
+void SPO2::get_idx() {
+  for (int16_t n = -downsampled_max_centered_index; n<=downsampled_max_centered_index; n++) {
+    idx[n] = n;
+    idx2[n] = -n*n;
+  }
+}                                      
+
+
 uint32_t SPO2::get_avg(uint32_t *array,uint8_t length)
 {/*calculates the average for the st_dev calculation for the Kalman filter*/
   uint32_t avg = 0;
@@ -240,7 +261,11 @@ uint32_t SPO2::get_avg(uint32_t *array,uint8_t length)
   return avg;
 }
 
-void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t *kalman_ptr, uint32_t *data_array, uint8_t *data_array_length, uint8_t *data_ptr, uint32_t new_data, volatile bool *reset_kalman, uint32_t *kalman_avg, uint8_t *outlier_cnt, uint8_t *alg_fail_cnt)
+
+void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t max_kalman_length, uint8_t *kalman_ptr, 
+                  uint32_t *data_array, uint8_t *data_array_length, uint8_t max_data_length, uint8_t *data_ptr, 
+                  uint32_t new_data, volatile bool *reset_kalman, uint32_t *kalman_avg, 
+                  uint8_t *outlier_cnt, uint8_t *alg_fail_cnt, uint32_t kalman_threshold_1f, uint32_t min_data_std, bool jumps_ok)
 {/*A basic kalman filter for throwing out outliers Decides whether to trust the new data or not.
   Base decision on difference between new data and Kalman average and data variance.
   If data variance is large over Kalman length, admit wide variation samples.
@@ -254,15 +279,16 @@ void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t *kalma
   If 3 bad data in a row or 3 outliers, then reset the filter.
   If OB1203 signal goes out of range then it goes into autogain mode and sets the
   reset_kalman global variable.
+  Note the kalman threshold is fixed precision extended by typically 4 bits, set by FIXED_BITS define.
   */
   uint32_t avg;
   
   LOG(LOG_INFO,"kal ");
-  for (int n= 0; n<MAX_KALMAN_LENGTH; n++) {
+  for (int n= 0; n<max_kalman_length; n++) {
     LOG(LOG_INFO,"%04lu ",kalman_array[n]);
   }
   LOG(LOG_INFO,"\r\ndat ");
-  for (int n= 0; n<NUM_HR_AVGS; n++) {
+  for (int n= 0; n<max_data_length; n++) {
     LOG(LOG_INFO,"%04lu ",data_array[n]);
   }    
   
@@ -286,8 +312,8 @@ void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t *kalma
       (*kalman_ptr)++; //increment the array index
       data_array[*data_ptr] = new_data;
       (*data_ptr)++;
-      if(*data_ptr >= NUM_HR_AVGS) *data_ptr = 0;
-      if(*data_array_length < NUM_HR_AVGS) (*data_array_length)++;
+      if(*data_ptr >= max_data_length) *data_ptr = 0;
+      if(*data_array_length < max_data_length) (*data_array_length)++;
     } else {
       *kalman_avg = 0;
     }
@@ -295,29 +321,32 @@ void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t *kalma
     avg = get_avg(data_array,*data_array_length); //get average of existing (previous) samples)
     LOG(LOG_INFO,"avg %lu\r\n", avg);
     data_std = get_std(data_array, *data_array_length, avg);//get data variance
-    data_std = (data_std < MIN_DATA_STD) ? MIN_DATA_STD : data_std; //constrain data variance to a mininum value
+    data_std = (data_std < min_data_std) ? min_data_std : data_std; //constrain data variance to a mininum value
     LOG(LOG_INFO,"std = %lu\r\n", data_std);
-    if ( abs((int32_t)(new_data-*kalman_avg)) > (uint32_t)KALMAN_THRESHOLD*data_std ) {//outlier case, don't update the filter
+    if ( ((abs((int32_t)(new_data-*kalman_avg))<<FIXED_BITS) > kalman_threshold_1f*data_std) && !jumps_ok ) {//outlier case, don't update the filter
+      LOG(LOG_INFO,"outlier %lu\r\n", new_data);
+      (*outlier_cnt)++;
+    } else if ( jumps_ok && ( ((new_data-(*kalman_avg)<<FIXED_BITS) < kalman_threshold_1f*data_std) || ((new_data-(*kalman_avg)<<FIXED_BITS) > kalman_threshold_1f*data_std<<1) ) ) {
       LOG(LOG_INFO,"outlier %lu\r\n", new_data);
       (*outlier_cnt)++;
     } else { //valid data case: update the Kalman avg
-      if(*kalman_length < MAX_KALMAN_LENGTH)(*kalman_length)++;
+      if(*kalman_length < max_kalman_length)(*kalman_length)++;
       LOG(LOG_INFO,"keeping %lu\r\n", new_data);
       kalman_array[*kalman_ptr] = new_data; //add new data to the kalman array
       *kalman_avg = get_avg(kalman_array,*kalman_length);// get new kalman average
       *alg_fail_cnt = 0; //zero the consecutive algorithm fails
       *outlier_cnt = 0; //zero the consecutive outlier fails
       (*kalman_ptr)++;
-      if(*kalman_ptr == MAX_KALMAN_LENGTH) *kalman_ptr = 0; //loop index in buffer
+      if(*kalman_ptr == max_kalman_length) *kalman_ptr = 0; //loop index in buffer
     }
     
     //load new sample int data_array for next time
-    if(*data_array_length<NUM_HR_AVGS) {//increment number of samples in the average up to the max NUM_HR_AVGS
+    if(*data_array_length<max_data_length) {//increment number of samples in the average up to the max max_data_length
       (*data_array_length)++;
     }
     data_array[*data_ptr] = new_data;
     (*data_ptr)++;//increment data pointer
-    if (*data_ptr>=NUM_HR_AVGS) *data_ptr = 0; //loop index
+    if (*data_ptr>=max_data_length) *data_ptr = 0; //loop index
     
   } else if (new_data == 0) {//not resetting and invalid sample
     LOG(LOG_INFO,"not valid sample\r\n");
@@ -327,7 +356,6 @@ void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t *kalma
       /*i.e., can't latch on to nothing*/
       *reset_kalman = 1;
     }
-    
   }
   if(*outlier_cnt >= OUTLIER_DATA_TOLERANCE) {//too many outliers: next time reset the filters
     /*
@@ -344,22 +372,11 @@ void SPO2::copy_data(uint8_t channel)
 {
   /*copies all data from the dc_data buffers to temporary buffer and subtracts the DC level
   Output is AC1f-->extended precision array*/
+  uint16_t indx = data_ptr;
   for (int n=0; n<ARRAY_LENGTH; n++) {
-    AC1f[n] = (dc_data[channel][idx[n]]<<FIXED_BITS) - mean1f[channel]; //load the ~11bit or less AC data into an array with fixed precision for DC removal, etc.
-  }
-}
-
-
-void SPO2::get_idx()   //creates an array of index pointers mapping 0 to the oldest sample,1 to the next oldest sample, ... ARRAY_LENGTH to the most recent sample.
-{
-  uint16_t new_idx = data_ptr;
-  for (uint16_t n = 0; n < (uint16_t) ARRAY_LENGTH; n++) {
-    if (new_idx == 0) { //wrap the index
-      new_idx = ARRAY_LENGTH - 1;
-    } else {
-      new_idx--;
-    }
-    idx[n] = new_idx; //oldest sample is the next sample to replace
+    AC1f[n] = (dc_data[channel][indx]<<FIXED_BITS) - mean1f[channel]; //load the ~11bit or less AC data into an array with fixed precision for DC removal, etc.
+    indx++;
+    if (indx == ARRAY_LENGTH) indx = 0; //loop back
   }
 }
 
@@ -396,6 +413,7 @@ uint32_t SPO2::uint_sqrt(uint32_t val)
   return g;
 }
 
+
 uint32_t SPO2::uint_sqrt(uint64_t val)
 {
   //integer sqrt function from http://www.azillionmonkeys.com/qed/sqroot.html
@@ -409,14 +427,15 @@ uint32_t SPO2::uint_sqrt(uint64_t val)
   return g;
 }
 
+
 void SPO2::get_rms()
 {/*This takes samples from the IR and Red DC data buffers and calculates the rms and
   mean values needed for the SpO2 calculation. It reuses the AC1f data array for both
   Red and IR to same memory.*/
   int32_t slope1f = 0;
-  int16_t ind;
+  int32_t ind;
   uint32_t var1f;
-  get_idx(); //fill an array with indices
+  int32_t parabolic1f = 0;
   get_DC(); //calculate residual DC level
   for (int channel = 0; channel<2; channel++) {
     
@@ -427,34 +446,64 @@ void SPO2::get_rms()
     
     //remove slope
     slope1f = 0;
-    ind = -(int16_t)SAMPLE_LENGTH;
-    for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
-      //calc slope
-      slope1f += (int32_t)AC1f[n]*(int32_t)ind;
+    ind = -downsampled_max_centered_index;
+    
+    //calc slope
+    for (uint16_t n=0; n<ARRAY_LENGTH; n+=(1<<DOWNSAMPLE_BITS) ) {
+      slope1f += (int32_t)AC1f[n]*ind;
       ind++;
     }
     LOG(LOG_DEBUG,"slop1ef before divide = %ld\r\n",slope1f);
-    slope1f /= sum_squares;
+    slope1f /= sum_squares; //normalize
+    slope1f /= 1<<DOWNSAMPLE_BITS; //reduce slope by downsampling ratio
     LOG(LOG_DEBUG,"slope1f = %ld\r\n",slope1f);
+    
+    //remove linear slope
     LOG(LOG_DEBUG,"AC1f[n] with slope removed\r\n");
     ind = -(int16_t)SAMPLE_LENGTH;
     for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
-      AC1f[n] -= (int32_t)ind*slope1f;
+      AC1f[n] -= ind*slope1f;
       ind++;
-      LOG(LOG_DEBUG,"%d, %d, %d\r\n",ind,idx[n],AC1f[n]);
+      LOG(LOG_DEBUG,"%ld, %d\r\n",ind,AC1f[n]);
     }
+    
+    //calc quadratic term
+    ind = 0;
+    for (uint16_t n = 0; n<ARRAY_LENGTH; n+=(1<<DOWNSAMPLE_BITS) ){
+      parabolic1f += idx2[n]*AC1f[n];
+      ind++;
+    }
+    parabolic1f /= sum_quads;
+    parabolic1f /= (1<<DOWNSAMPLE_BITS)*(1<<DOWNSAMPLE_BITS);
+    
+    //remove quadratic term
+    ind = -(int16_t)SAMPLE_LENGTH;
+    for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
+      AC1f[n] -= ind*ind*parabolic1f;
+      ind++;
+      LOG(LOG_DEBUG,"%ld, %d\r\n",ind,AC1f[n]);
+    }
+    
+    //calculate residual dc after parabolic removal
+    int32_t res_sum = 0;
+    for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
+      res_sum += AC1f[n];
+    }
+    
+    //remove residual dc after parabolic removal
+    for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
+      AC1f[n] -= res_sum;
+    }
+    
+    //calculate variance
     for (uint16_t n=MAX_FILTER_LENGTH; n<SAMPLE_LENGTH+MAX_FILTER_LENGTH; n++) {
-      /*Test whether we need to do the entire array or not.
-      Could reduce this if HR is fast.
-      If it is too long we risk drift affecting the RMS reading.
-      */
       var1f += ( (uint32_t)abs(AC1f[n]>>2 ))*( (uint32_t)abs(AC1f[n]>>2)); //getting 2 bit shifts here, taking out extra bit shift for overhead
       LOG(LOG_DEBUG,"var1f = %lu\r\n",var1f);
     }
     
     if(channel == IR) { //print filtered data for IR channel
       for (int n = 0; n<ARRAY_LENGTH; n++) {
-        LOG(LOG_DEBUG_NEED,"%d\r\n",AC1f[idx[n]]);
+        LOG(LOG_DEBUG_NEED,"%d\r\n",AC1f[n]);
       }
     }
     
@@ -529,7 +578,7 @@ void SPO2::add_sample(uint32_t ir_data, uint32_t r_data)
   filtering with a moving average filter. This is not equivalent to increasing 
   averageing on the OB1203 because that reduces data rate. This does not. We need
   that resolution for accuracy at high heart rates.*/
-  const uint8_t num2avg=8;
+  const uint8_t num2avg=4; //changing this from 8 to 4 based on simulation results from raw data in Matlab
   static uint16_t num_samples = 0;
   static uint8_t buffer_index = 0;
   static uint32_t avg_buffer[2][num2avg];

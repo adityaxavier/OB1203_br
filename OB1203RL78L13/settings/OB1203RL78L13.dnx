@@ -18,28 +18,18 @@
         <StopSymbol />
     </Start_Stop>
     <DebugChecksum>
-        <Checksum>123392995</Checksum>
+        <Checksum>1617445447</Checksum>
     </DebugChecksum>
     <CodeCoverage>
         <Enabled>_ 0</Enabled>
     </CodeCoverage>
     <Disassembly>
-        <MixedMode>1</MixedMode>
         <InstrCount>0</InstrCount>
+        <MixedMode>1</MixedMode>
     </Disassembly>
     <CallStack>
         <ShowArgs>0</ShowArgs>
     </CallStack>
-    <Breakpoints>
-        <Bp0>_ "STD_CODE" "{$PROJ_DIR$\OB1203\OB1203.cpp}.37.5" 1 0 0 0 "" 0 ""</Bp0>
-        <Bp1>_ "STD_CODE" "{$PROJ_DIR$\cg_src\r_cg_iica_user.c}.80.5" 0 0 0 0 "" 0 ""</Bp1>
-        <Bp2>_ "STD_CODE" "{$PROJ_DIR$\OB1203\OB1203.cpp}.761.11" 0 0 0 0 "" 0 ""</Bp2>
-        <Bp3>_ "STD_CODE" "{$PROJ_DIR$\OB1203\OB1203.cpp}.778.9" 0 0 0 0 "" 0 ""</Bp3>
-        <Count>4</Count>
-    </Breakpoints>
-    <Monitor_Execution>
-        <Leave_target_running>0</Leave_target_running>
-    </Monitor_Execution>
     <DriverProfiling>
         <Enabled>1</Enabled>
         <Mode>1</Mode>
@@ -53,15 +43,6 @@
     <CallStackStripe>
         <ShowTiming>1</ShowTiming>
     </CallStackStripe>
-    <TermIOLog>
-        <LoggingEnabled>_ 0</LoggingEnabled>
-        <LogFile>_ ""</LogFile>
-    </TermIOLog>
-    <LogFile>
-        <LoggingEnabled>_ 0</LoggingEnabled>
-        <LogFile>_ ""</LogFile>
-        <Category>_ 0</Category>
-    </LogFile>
     <InterruptLog>
         <LogEnabled>0</LogEnabled>
         <GraphEnabled>0</GraphEnabled>
@@ -95,12 +76,93 @@
         <Enabled>0</Enabled>
         <ShowSource>1</ShowSource>
     </Trace1>
-    <Aliases>
-        <Count>0</Count>
-        <SuppressDialog>0</SuppressDialog>
-    </Aliases>
     <Simulator>
         <Freq>24000000</Freq>
         <FreqHi>0</FreqHi>
     </Simulator>
+    <E1>
+        <Map0>0,0,131071,131072</Map0>
+        <Map1>1,1040128,1048319,8192</Map1>
+        <MapEntries>2</MapEntries>
+        <HWsettings>2,0,1,2,4,0,1,0,16,1,0</HWsettings>
+        <HWsettingsCube>2,4294967295,2,4294967295,0,1,0,0,0</HWsettingsCube>
+        <HWsettingsRsuid>00000000000000000000</HWsettingsRsuid>
+        <EventEntries>0</EventEntries>
+        <SeqName0 />
+        <SeqData0>0,0</SeqData0>
+        <SeqEnable10>0,0,0,0,0,0,0,0,0,0</SeqEnable10>
+        <SeqEnable20>0,0,0,0,0,0,0,0,0,0</SeqEnable20>
+        <SeqEnable30>0,0,0,0,0,0,0,0,0,0</SeqEnable30>
+        <SeqEnable40>0,0,0,0,0,0,0,0,0,0</SeqEnable40>
+        <SeqDisable0>0,0,0,0,0,0,0,0,0,0</SeqDisable0>
+        <SeqData20>0,0,0,0,0,0</SeqData20>
+        <SeqName1 />
+        <SeqData1>0,0</SeqData1>
+        <SeqEnable11>0,0,0,0,0,0,0,0,0,0</SeqEnable11>
+        <SeqEnable21>0,0,0,0,0,0,0,0,0,0</SeqEnable21>
+        <SeqEnable31>0,0,0,0,0,0,0,0,0,0</SeqEnable31>
+        <SeqEnable41>0,0,0,0,0,0,0,0,0,0</SeqEnable41>
+        <SeqDisable1>0,0,0,0,0,0,0,0,0,0</SeqDisable1>
+        <SeqData21>0,0,0,0,0,0</SeqData21>
+        <SeqName2 />
+        <SeqData2>0,0</SeqData2>
+        <SeqEnable12>0,0,0,0,0,0,0,0,0,0</SeqEnable12>
+        <SeqEnable22>0,0,0,0,0,0,0,0,0,0</SeqEnable22>
+        <SeqEnable32>0,0,0,0,0,0,0,0,0,0</SeqEnable32>
+        <SeqEnable42>0,0,0,0,0,0,0,0,0,0</SeqEnable42>
+        <SeqDisable2>0,0,0,0,0,0,0,0,0,0</SeqDisable2>
+        <SeqData22>0,0,0,0,0,0</SeqData22>
+        <SeqName3 />
+        <SeqData3>0,0</SeqData3>
+        <SeqEnable13>0,0,0,0,0,0,0,0,0,0</SeqEnable13>
+        <SeqEnable23>0,0,0,0,0,0,0,0,0,0</SeqEnable23>
+        <SeqEnable33>0,0,0,0,0,0,0,0,0,0</SeqEnable33>
+        <SeqEnable43>0,0,0,0,0,0,0,0,0,0</SeqEnable43>
+        <SeqDisable3>0,0,0,0,0,0,0,0,0,0</SeqDisable3>
+        <SeqData23>0,0,0,0,0,0</SeqData23>
+        <SeqName4 />
+        <SeqData4>0,0</SeqData4>
+        <SeqEnable14>0,0,0,0,0,0,0,0,0,0</SeqEnable14>
+        <SeqEnable24>0,0,0,0,0,0,0,0,0,0</SeqEnable24>
+        <SeqEnable34>0,0,0,0,0,0,0,0,0,0</SeqEnable34>
+        <SeqEnable44>0,0,0,0,0,0,0,0,0,0</SeqEnable44>
+        <SeqDisable4>0,0,0,0,0,0,0,0,0,0</SeqDisable4>
+        <SeqData24>0,0,0,0,0,0</SeqData24>
+        <TraceSettings>128,0,0,0,0,0,8192</TraceSettings>
+        <TimerSettings>0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0</TimerSettings>
+        <Version>1,trace.txt</Version>
+        <LastDevFile>DR5F10WMG.DVF</LastDevFile>
+        <EmulType>64</EmulType>
+        <BreakToggle>0</BreakToggle>
+        <EventLimits>0,1,1,0,0,0,1</EventLimits>
+        <LastSetupFailed>0</LastSetupFailed>
+    </E1>
+    <DataSample>
+        <LogEnabled>0</LogEnabled>
+        <GraphEnabled>0</GraphEnabled>
+        <ShowTimeLog>1</ShowTimeLog>
+    </DataSample>
+    <Breakpoints>
+        <Count>0</Count>
+    </Breakpoints>
+    <Monitor_Execution>
+        <Leave_target_running>0</Leave_target_running>
+    </Monitor_Execution>
+    <TermIOLog>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+    </TermIOLog>
+    <LogFile>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+        <Category>_ 0</Category>
+    </LogFile>
+    <Aliases>
+        <Count>0</Count>
+        <SuppressDialog>0</SuppressDialog>
+    </Aliases>
+    <TraceHelper>
+        <Enabled>0</Enabled>
+        <ShowSource>1</ShowSource>
+    </TraceHelper>
 </settings>

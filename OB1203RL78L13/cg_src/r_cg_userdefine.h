@@ -64,6 +64,7 @@ User definitions
 #define DEBUG_LVL       (0)
 #elif defined(stdout) && !defined(DEBUG_LVL)
 #define DEBUG_LVL       (LOG_INFO)
+//#define DEBUG_LVL       (LOG_DEBUG)
 #endif
 
 #if defined(DEBUG_LVL)

@@ -141,6 +141,7 @@ public:
     int32_t fit_correl; //estimated correlation value from quadratic fit function.
     uint8_t samples2avg; //length of moving average filter for heart rate calculations
     
+    uint16_t ds_start; //point in the array where the downsampled data will start;
     uint16_t downsampled_array_length;
     uint16_t downsampled_max_centered_index;
 private:

@@ -84,8 +84,14 @@ SPO2::SPO2()
   avg_hr1f = 0;
   avg_spo21f = 0;
   samples2avg = MAX_FILTER_LENGTH;
-  downsampled_array_length = ((ARRAY_LENGTH-1)>>DOWNSAMPLE_BITS)+1;
-  downsampled_max_centered_index =  (ARRAY_LENGTH-1)>>(DOWNSAMPLE_BITS+1);
+  downsampled_array_length = ((ARRAY_LENGTH-1)>>DOWNSAMPLE_BITS);
+  ds_start = 0;
+  if(downsampled_array_length & 0x0001) {//odd case
+    ds_start = 1<<(DOWNSAMPLE_BITS-1);
+  } else { //even case
+    downsampled_array_length++;
+  }
+  downsampled_max_centered_index =  (downsampled_array_length-1)>>1;
 #if 0
   memset(dc_data, 0, sizeof(dc_data));
   memset(idx, 0, sizeof(idx));
@@ -109,6 +115,7 @@ void SPO2::get_sum_squares()
   uses those squares to calculated the sum of fourth power terms used in the 
   calculation of the second order regression. See the Matlab code for notes.
   */
+  LOG(LOG_INFO,"get sum squares\r\n");
   get_idx();
   sum_squares = 0;
   sum_quads = 0;
@@ -243,9 +250,13 @@ uint32_t SPO2::get_std(uint32_t *array,uint8_t length, uint32_t avg)
 
                                       
 void SPO2::get_idx() {
-  for (int16_t n = -downsampled_max_centered_index; n<=downsampled_max_centered_index; n++) {
-    idx[n] = n;
-    idx2[n] = -n*n;
+  LOG(LOG_INFO,"\r\n idx \r\n");
+  int16_t val;
+  for (uint16_t n = 0; n<downsampled_array_length; n++) {
+    val = -downsampled_max_centered_index+n;
+    idx[n] = val;
+    LOG(LOG_INFO,"%d\r\n",idx[n]);
+    idx2[n] = val*val;
   }
 }                                      
 
@@ -441,47 +452,58 @@ void SPO2::get_rms()
     
     var1f = 0;
     copy_data(channel); //copies data to AC1f[n] array (extended precision) and removes DC
-    LOG(LOG_DEBUG,"AC1f for channel %d\r\n",channel);
-    //        avg8Samples();
+    //LOG(LOG_DEBUG,"AC1f for channel %d\r\n",channel);
+    LOG(LOG_INFO,"AC1f for channel %d\r\n",channel);
+    ind = -(int16_t)((ARRAY_LENGTH-1)>>1);
+    for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
+      LOG(LOG_INFO,"%ld, %d\r\n",ind,AC1f[n]);
+      ind++;
+    }
+    
     
     //remove slope
     slope1f = 0;
     ind = -downsampled_max_centered_index;
     
     //calc slope
-    for (uint16_t n=0; n<ARRAY_LENGTH; n+=(1<<DOWNSAMPLE_BITS) ) {
-      slope1f += (int32_t)AC1f[n]*ind;
+    LOG(LOG_INFO,"slope calc\r\n");
+    for (uint16_t n=0; n<downsampled_array_length; n++ ) {
+      slope1f += (int32_t)AC1f[ds_start+(1<<DOWNSAMPLE_BITS)*n]*ind;
+      LOG(LOG_INFO,"%d, %ld\r\n",AC1f[ds_start+(1<<DOWNSAMPLE_BITS)*n],slope1f);
       ind++;
     }
-    LOG(LOG_DEBUG,"slop1ef before divide = %ld\r\n",slope1f);
+    LOG(LOG_INFO,"slope1f = %ld, %ld, %ld\r\n",slope1f, slope1f/sum_squares, slope1f/sum_squares/(1<<DOWNSAMPLE_BITS) );
     slope1f /= sum_squares; //normalize
     slope1f /= 1<<DOWNSAMPLE_BITS; //reduce slope by downsampling ratio
-    LOG(LOG_DEBUG,"slope1f = %ld\r\n",slope1f);
     
     //remove linear slope
     LOG(LOG_DEBUG,"AC1f[n] with slope removed\r\n");
-    ind = -(int16_t)SAMPLE_LENGTH;
+    ind = -(int16_t)((ARRAY_LENGTH-1)>>1);
     for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
       AC1f[n] -= ind*slope1f;
+      LOG(LOG_INFO,"%ld, %d\r\n",ind,AC1f[n]);
       ind++;
-      LOG(LOG_DEBUG,"%ld, %d\r\n",ind,AC1f[n]);
+      
     }
     
     //calc quadratic term
     ind = 0;
-    for (uint16_t n = 0; n<ARRAY_LENGTH; n+=(1<<DOWNSAMPLE_BITS) ){
-      parabolic1f += idx2[n]*AC1f[n];
+    for (uint16_t n = 0; n<downsampled_array_length; n++ ){
+      parabolic1f += idx2[n]*AC1f[ds_start+(1<<DOWNSAMPLE_BITS)*n];
       ind++;
     }
     parabolic1f /= sum_quads;
     parabolic1f /= (1<<DOWNSAMPLE_BITS)*(1<<DOWNSAMPLE_BITS);
     
+    LOG(LOG_INFO,"parabolic1f = %ld\r\n",slope1f);
+    
     //remove quadratic term
-    ind = -(int16_t)SAMPLE_LENGTH;
+    ind = -(int16_t)((ARRAY_LENGTH-1)>>1);
     for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
       AC1f[n] -= ind*ind*parabolic1f;
+      LOG(LOG_INFO,"%ld, %d\r\n",ind,AC1f[n]);
       ind++;
-      LOG(LOG_DEBUG,"%ld, %d\r\n",ind,AC1f[n]);
+     
     }
     
     //calculate residual dc after parabolic removal

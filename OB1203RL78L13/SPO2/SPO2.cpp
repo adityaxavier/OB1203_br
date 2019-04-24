@@ -125,7 +125,7 @@ void SPO2::get_sum_squares()
     sum_quads += idx2[n]*idx2[n];
   }
   sum_squares = abs(sum_squares<<1); //make the sum double sided
-  sum_quads = abs(sum_quads<<1) - sum_squares/(downsampled_array_length); //make the sum double sided and subtract the square term
+  sum_quads = abs(sum_quads<<1) - sum_squares*sum_squares/(downsampled_array_length); //make the sum double sided and subtract the square term
 }
 
 
@@ -255,7 +255,7 @@ void SPO2::get_idx() {
   for (uint16_t n = 0; n<downsampled_array_length; n++) {
     val = -downsampled_max_centered_index+n;
     idx[n] = val;
-    LOG(LOG_INFO,"%d\r\n",idx[n]);
+    LOG(LOG_DEBUG,"%d\r\n",idx[n]);
     idx2[n] = val*val;
   }
 }                                      
@@ -446,33 +446,32 @@ void SPO2::get_rms()
   int32_t slope1f = 0;
   int32_t ind;
   uint32_t var1f;
-  int32_t parabolic1f = 0;
+  int32_t parabolic4f = 0;
   get_DC(); //calculate residual DC level
   for (int channel = 0; channel<2; channel++) {
     
     var1f = 0;
     copy_data(channel); //copies data to AC1f[n] array (extended precision) and removes DC
     //LOG(LOG_DEBUG,"AC1f for channel %d\r\n",channel);
-    LOG(LOG_INFO,"AC1f for channel %d\r\n",channel);
-    ind = -(int16_t)((ARRAY_LENGTH-1)>>1);
-    for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
-      LOG(LOG_INFO,"%ld, %d\r\n",ind,AC1f[n]);
-      ind++;
-    }
-    
+    LOG(LOG_DEBUG,"AC1f for channel %d\r\n",channel);
+//    ind = -((ARRAY_LENGTH-1)>>1);
+//    for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
+//      LOG(LOG_DEBUG,"%ld, %d\r\n",ind,AC1f[n]);
+//      ind++;
+//    }
     
     //remove slope
     slope1f = 0;
-    ind = -downsampled_max_centered_index;
+    ind = -(int32_t)downsampled_max_centered_index;
     
     //calc slope
-    LOG(LOG_INFO,"slope calc\r\n");
+    LOG(LOG_DEBUG,"slope calc\r\n");
     for (uint16_t n=0; n<downsampled_array_length; n++ ) {
       slope1f += (int32_t)AC1f[ds_start+(1<<DOWNSAMPLE_BITS)*n]*ind;
-      LOG(LOG_INFO,"%d, %ld\r\n",AC1f[ds_start+(1<<DOWNSAMPLE_BITS)*n],slope1f);
+      LOG(LOG_DEBUG,"%ld, %d, %ld\r\n",ind,AC1f[ds_start+(1<<DOWNSAMPLE_BITS)*n],slope1f);
       ind++;
     }
-    LOG(LOG_INFO,"slope1f = %ld, %ld, %ld\r\n",slope1f, slope1f/sum_squares, slope1f/sum_squares/(1<<DOWNSAMPLE_BITS) );
+    LOG(LOG_DEBUG,"slope1f = %ld, %ld, %ld\r\n",slope1f, slope1f/sum_squares, slope1f/sum_squares/(1<<DOWNSAMPLE_BITS) );
     slope1f /= sum_squares; //normalize
     slope1f /= 1<<DOWNSAMPLE_BITS; //reduce slope by downsampling ratio
     
@@ -481,27 +480,28 @@ void SPO2::get_rms()
     ind = -(int16_t)((ARRAY_LENGTH-1)>>1);
     for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
       AC1f[n] -= ind*slope1f;
-      LOG(LOG_INFO,"%ld, %d\r\n",ind,AC1f[n]);
+      LOG(LOG_DEBUG,"%ld, %d\r\n",ind,AC1f[n]);
       ind++;
-      
     }
     
     //calc quadratic term
     ind = 0;
+    LOG(LOG_DEBUG,"calc parabolic\r\n");
     for (uint16_t n = 0; n<downsampled_array_length; n++ ){
-      parabolic1f += idx2[n]*AC1f[ds_start+(1<<DOWNSAMPLE_BITS)*n];
+      parabolic4f += (int32_t)idx2[n]*(int32_t)AC1f[ds_start+(1<<DOWNSAMPLE_BITS)*n];
+      LOG(LOG_DEBUG,"%d,%d,%ld,%ld,%ld\r\n",idx[n], idx2[n],(int32_t)AC1f[ds_start+(1<<DOWNSAMPLE_BITS)*n],(int32_t)idx2[n]*(int32_t)AC1f[ds_start+(1<<DOWNSAMPLE_BITS)*n],parabolic4f);
       ind++;
     }
-    parabolic1f /= sum_quads;
-    parabolic1f /= (1<<DOWNSAMPLE_BITS)*(1<<DOWNSAMPLE_BITS);
+    parabolic4f = (int32_t)((((int64_t)parabolic4f)<<(FIXED_BITS*3))/(int64_t)sum_quads); //use 12 more bits fixed precision and int64s for the intermediate calculation
+    parabolic4f /= (1<<DOWNSAMPLE_BITS)*(1<<DOWNSAMPLE_BITS);
     
-    LOG(LOG_INFO,"parabolic1f = %ld\r\n",slope1f);
+    LOG(LOG_DEBUG,"parabolic4f = %ld\r\n",parabolic4f);
     
     //remove quadratic term
     ind = -(int16_t)((ARRAY_LENGTH-1)>>1);
     for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
-      AC1f[n] -= ind*ind*parabolic1f;
-      LOG(LOG_INFO,"%ld, %d\r\n",ind,AC1f[n]);
+      AC1f[n] -= (int32_t)(((int64_t)((int32_t)ind*(int32_t)ind)*(int64_t)parabolic4f)>>(FIXED_BITS*3));
+      LOG(LOG_DEBUG,"%ld, %d\r\n",ind,AC1f[n]);
       ind++;
      
     }
@@ -509,12 +509,17 @@ void SPO2::get_rms()
     //calculate residual dc after parabolic removal
     int32_t res_sum = 0;
     for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
-      res_sum += AC1f[n];
+      res_sum += AC1f[n]; 
     }
+    res_sum /= ARRAY_LENGTH;
     
     //remove residual dc after parabolic removal
+    //LOG(LOG_DEBUG,"finished AC1f\r\n");
+    ind = -(int16_t)((ARRAY_LENGTH-1)>>1);
     for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
       AC1f[n] -= res_sum;
+      //LOG(LOG_DEBUG,"%ld, %d\r\n",ind,AC1f[n]);
+      //ind++;
     }
     
     //calculate variance

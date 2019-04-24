@@ -19,7 +19,7 @@
  * character written, or -1 on failure.
  *
  ********************/
-#include <string.h>
+
 #include <LowLevelIOInterface.h>
 #include "r_cg_macrodriver.h"
 #include "r_cg_userdefine.h"
@@ -27,9 +27,6 @@
 #include "r_cg_sau.h"
 
 #pragma module_name = "?__write"
-   
-#define TSF_BITMASK     (0x0040)
-#define DMA_BYTE_COUNT  (_0040_DMA0_BYTE_COUNT)
 
 static volatile bool ready = true;
 
@@ -50,8 +47,6 @@ void write_done(void)
 
 size_t __write(int handle, const unsigned char * buffer, size_t size)
 {
-  extern uint8_t g_Dmac0[];
-  uint8_t sending = 0;
   if (buffer == 0)
   {
     /*
@@ -70,7 +65,7 @@ size_t __write(int handle, const unsigned char * buffer, size_t size)
   }
   
   /* Wait until any previous transfers are completed */
-  while((false == ready) && ((SSR10 & TSF_BITMASK) > 0));
+  while(false == ready);
 
   /* Enable the DMA channel */
   if(1 != DEN0)
@@ -78,30 +73,19 @@ size_t __write(int handle, const unsigned char * buffer, size_t size)
     DEN0 = 1;
   }
   /* Set the new address and count */
-  DRA0 = (uint16_t)&g_Dmac0[0];
-  if((size - 1) > DMA_BYTE_COUNT)
-  {
-    memcpy(&g_Dmac0[0],&buffer[1], DMA_BYTE_COUNT);
-    DBC0 = sending = DMA_BYTE_COUNT;
-    
-  }
-  else
-  {
-    if(size > 1)
-    {
-      memcpy(&g_Dmac0[0],&buffer[1], size-1);
-      DBC0 = size-1;
-      sending = size;
-    }
-  }
+  DRA0 = (uint16_t)&buffer[1];
+  DBC0 = (uint16_t)size-1;
   
   /* Start the DMAC operation */
   R_DMAC0_Start();
   
   /* Write the first byte to the DMAC controller */
-  TXD2 = buffer[0];
+  TXD2 = *buffer;
   ready = false;
   
-  return sending;
+  /* Wait until any previous transfers are completed */
+  while(false == ready);
+  
+  return size;
 }
 #endif

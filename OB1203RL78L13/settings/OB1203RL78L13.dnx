@@ -18,7 +18,7 @@
         <StopSymbol />
     </Start_Stop>
     <DebugChecksum>
-        <Checksum>3997984807</Checksum>
+        <Checksum>3913425942</Checksum>
     </DebugChecksum>
     <CodeCoverage>
         <Enabled>_ 0</Enabled>
@@ -137,14 +137,6 @@
         <EventLimits>0,1,1,0,0,0,1</EventLimits>
         <LastSetupFailed>0</LastSetupFailed>
     </E1>
-    <TermIOLog>
-        <LoggingEnabled>_ 0</LoggingEnabled>
-        <LogFile>_ ""</LogFile>
-    </TermIOLog>
-    <TraceHelper>
-        <Enabled>0</Enabled>
-        <ShowSource>1</ShowSource>
-    </TraceHelper>
     <DataSample>
         <LogEnabled>0</LogEnabled>
         <GraphEnabled>0</GraphEnabled>
@@ -156,6 +148,10 @@
     <Monitor_Execution>
         <Leave_target_running>0</Leave_target_running>
     </Monitor_Execution>
+    <TermIOLog>
+        <LoggingEnabled>_ 0</LoggingEnabled>
+        <LogFile>_ ""</LogFile>
+    </TermIOLog>
     <LogFile>
         <LoggingEnabled>_ 0</LoggingEnabled>
         <LogFile>_ ""</LogFile>
@@ -165,4 +161,8 @@
         <Count>0</Count>
         <SuppressDialog>0</SuppressDialog>
     </Aliases>
+    <TraceHelper>
+        <Enabled>0</Enabled>
+        <ShowSource>1</ShowSource>
+    </TraceHelper>
 </settings>

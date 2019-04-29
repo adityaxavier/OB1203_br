@@ -135,7 +135,7 @@ void SPO2::do_algorithm_part1()
   LOG(LOG_INFO, "sample_count %d\r\n",sample_count);
   if(sample_count>=ARRAY_LENGTH)
   {       
-    LOG(LOG_INFO, "do alg part 1\r\n");
+    LOG(LOG_DEBUG, "do alg part 1\r\n");
     get_rms(); //subtract residual slopes and calculate RMS
   }
 }
@@ -176,7 +176,7 @@ void SPO2::do_algorithm_part2() {
   offset_guess = DEFAULT_GUESS;
   LOG(LOG_DEBUG,"sample_count %d\r\n",sample_count);
   if(sample_count>=ARRAY_LENGTH) {
-    LOG(LOG_INFO,"doing algorithm part 2\r\n");
+    LOG(LOG_DEBUG,"doing algorithm part 2\r\n");
     calc_R();
     calc_spo2();
     avgNsamples(AC1f,samples2avg); //smooth the data more to avoid detecting peaks from the dichrotic notch
@@ -188,7 +188,7 @@ void SPO2::do_algorithm_part2() {
       current_spo21f = 0;
     }
     
-    LOG(LOG_DEBUG,"pre kalman %.1f, %.1f\r\n",(float)current_spo21f/(float)(1<<FIXED_BITS), (float)current_hr1f/(float)(1<<FIXED_BITS));
+    LOG(LOG_INFO,"pre kalman %.1f, %.1f\r\n",(float)current_spo21f/(float)(1<<FIXED_BITS), (float)current_hr1f/(float)(1<<FIXED_BITS));
     //        consensus(); //filter out crap data
     LOG(LOG_INFO,"HR: ");
     kalman(kalman_hr_array,&kalman_hr_length,HR_KALMAN_LENGTH,&kalman_hr_ptr,
@@ -200,7 +200,7 @@ void SPO2::do_algorithm_part2() {
            spo2_samples,&num_spo2_samples,SPO2_DATA_LENGTH,&spo2_ptr,
            current_spo21f,&reset_kalman_spo2,&avg_spo21f,&spo2_outlier_cnt,&spo2_alg_fail_cnt,
            SPO2_KALMAN_THRESHOLD_1F,SPO2_MIN_STD_1F,1);
-    LOG(LOG_INFO,"post kalman %.1f, %.1f\r\n",(float)avg_hr1f/(float)(1<<FIXED_BITS), (float)avg_spo21f/(float)(1<<FIXED_BITS) );
+    LOG(LOG_INFO,"post kalman %.1f, %.1f\r\n",(float)avg_spo21f/(float)(1<<FIXED_BITS), (float)avg_hr1f/(float)(1<<FIXED_BITS) );
     
   } else {
     LOG(LOG_DEBUG,"collecting data\r\n");
@@ -294,13 +294,13 @@ void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t max_ka
   */
   uint32_t avg;
   
-  LOG(LOG_INFO,"kal ");
+  LOG(LOG_DEBUG,"kal ");
   for (int n= 0; n<max_kalman_length; n++) {
-    LOG(LOG_INFO,"%04lu ",kalman_array[n]);
+    LOG(LOG_DEBUG,"%04lu ",kalman_array[n]);
   }
-  LOG(LOG_INFO,"\r\ndat ");
+  LOG(LOG_DEBUG,"\r\ndat ");
   for (int n= 0; n<max_data_length; n++) {
-    LOG(LOG_INFO,"%04lu ",data_array[n]);
+    LOG(LOG_DEBUG,"%04lu ",data_array[n]);
   }    
   
   uint32_t data_std;
@@ -330,10 +330,10 @@ void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t max_ka
     }
   } else if (new_data != 0) {//not resetting and valid sample: update the filter and the sample array
     avg = get_avg(data_array,*data_array_length); //get average of existing (previous) samples)
-    LOG(LOG_INFO,"avg %lu\r\n", avg);
+    LOG(LOG_DEBUG,"avg %lu\r\n", avg);
     data_std = get_std(data_array, *data_array_length, avg);//get data variance
     data_std = (data_std < min_data_std) ? min_data_std : data_std; //constrain data variance to a mininum value
-    LOG(LOG_INFO,"std = %lu\r\n", data_std);
+    LOG(LOG_DEBUG,"std = %lu\r\n", data_std);
     if ( ((abs((int32_t)(new_data-*kalman_avg))<<FIXED_BITS) > kalman_threshold_1f*data_std) && !jumps_ok ) {//outlier case, don't update the filter
       LOG(LOG_INFO,"outlier %lu\r\n", new_data);
       (*outlier_cnt)++;
@@ -605,7 +605,7 @@ void SPO2::add_sample(uint32_t ir_data, uint32_t r_data)
   filtering with a moving average filter. This is not equivalent to increasing 
   averageing on the OB1203 because that reduces data rate. This does not. We need
   that resolution for accuracy at high heart rates.*/
-  const uint8_t num2avg=4; //changing this from 8 to 4 based on simulation results from raw data in Matlab
+  const uint8_t num2avg=8; //changing this from 8 to 4 based on simulation results from raw data in Matlab
   static uint16_t num_samples = 0;
   static uint8_t buffer_index = 0;
   static uint32_t avg_buffer[2][num2avg];

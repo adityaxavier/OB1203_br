@@ -304,6 +304,9 @@ void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t max_ka
   }    
   
   uint32_t data_std;
+  int32_t data_diff_1f = 0;
+  int32_t threshold_1f = 0;
+  
   LOG(LOG_DEBUG,"\r\nk_length = %u, k_ptr = %u, d_length = %u, "\
     "d_ptr = %u, new_data = %lu, reset_kalman = %d, kalman_avg = %lu\r\n",
     *kalman_length,       *kalman_ptr,    *data_array_length,
@@ -334,10 +337,14 @@ void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t max_ka
     data_std = get_std(data_array, *data_array_length, avg);//get data variance
     data_std = (data_std < min_data_std) ? min_data_std : data_std; //constrain data variance to a mininum value
     LOG(LOG_DEBUG,"std = %lu\r\n", data_std);
-    if ( ((abs((int32_t)(new_data-*kalman_avg))<<FIXED_BITS) > kalman_threshold_1f*data_std) && !jumps_ok ) {//outlier case, don't update the filter
+    
+    data_diff_1f = (new_data-(*kalman_avg))<<FIXED_BITS;
+    threshold_1f = kalman_threshold_1f*data_std;
+    
+    if ( !jumps_ok && (abs(data_diff_1f) > threshold_1f )) {//outlier case, don't update the filter
       LOG(LOG_INFO,"outlier %lu\r\n", new_data);
       (*outlier_cnt)++;
-    } else if ( jumps_ok && ( ((new_data-(*kalman_avg)<<FIXED_BITS) < kalman_threshold_1f*data_std) || ((new_data-(*kalman_avg)<<FIXED_BITS) > kalman_threshold_1f*data_std<<1) ) ) {
+    } else if ( jumps_ok && ( (abs(data_diff_1f) > threshold_1f ) || (abs(data_diff_1f) > 2*threshold_1f ) ) ) {
       LOG(LOG_INFO,"outlier %lu\r\n", new_data);
       (*outlier_cnt)++;
     } else { //valid data case: update the Kalman avg

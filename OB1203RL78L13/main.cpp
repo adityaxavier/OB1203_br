@@ -43,6 +43,12 @@ void (*p_IntB_Event)(void) = NULL;
 //RTOS variables
 OB1203 ob1203; //instantiate the OB1203 object from its class and pass i2c object
 SPO2 spo2;
+KALMAN corr_filter(CORR_KALMAN_LENGTH, CORR_DATA_LENGTH, MAX_OUTLIER_COUNT, MAX_ALG_FAIL_COUNT, RR_MIN_STD_1F, CORR_KALMAN_THRESHOLD_1F, NO_JUMPS);
+KALMAN hr_filter(HR_KALMAN_LENGTH, HR_DATA_LENGTH, MAX_OUTLIER_COUNT, MAX_ALG_FAIL_COUNT, HR_MIN_STD_1F, HR_KALMAN_THRESHOLD_1F, NO_JUMPS);
+KALMAN spo2_filter(SPO2_KALMAN_LENGTH, SPO2_DATA_LENGTH, MAX_OUTLIER_COUNT, MAX_ALG_FAIL_COUNT, SPO2_MIN_STD_1F, SPO2_KALMAN_THRESHOLD_1F, JUMPS_OK);
+KALMAN rr_filter(RR_KALMAN_LENGTH, RR_DATA_LENGTH, MAX_OUTLIER_COUNT, MAX_ALG_FAIL_COUNT, RR_MIN_STD_1F, RR_KALMAN_THRESHOLD_1F, NO_JUMPS);
+
+
 //Serial pc(USBTX, USBRX,256000); //create a serial port for printing data to a pc
 //Timer t; //use a microsecond timer for time stamping data
 //Timer p;
@@ -382,6 +388,11 @@ uint16_t t_read(void)
 
 void ob1203_spo2_main(void)
 {
+  spo2.set_filters(&corr_filter,&hr_filter,&spo2_filter,&rr_filter);
+ // spo2.test_kalman();//test the Kalman filter
+  
+
+  
 #if defined(MEASURE_PERFORMANCE)
     /* P03 := Logic low */
     P0_bit.no3 = 1;

@@ -10,7 +10,7 @@
 #define SAMPLE_LENGTH 148 //40.5 BPM at 100sps, also MAX_OFFSET 
 #define MAX_OFFSET (SAMPLE_LENGTH) //
 #define MIN_OFFSET  30 //200 BPM at 100sps
-#define MAX_FILTER_LENGTH 36 //for avgNsamples filter --MUST BE EVEN
+#define MAX_FILTER_LENGTH 38 //for avgNsamples filter --MUST BE EVEN
 #define MIN_FILTER_LENGTH 12 //~<40% of the minimum offset of 32
 #define ARRAY_LENGTH (2*SAMPLE_LENGTH+MAX_FILTER_LENGTH+1) //twice sample length + max filter length plus 1 MUST BE ODD for sum of squares calculation and 2*SAMPLE_LENGTH+MAX_FILTER_LENGTH must be divisible by 2^DOWNSAMPLE_BITS
 #define SAMPLE_RATE 100 //samples per second
@@ -34,6 +34,22 @@
 #define CORR_MIN_STD_1F 10<<FIXED_BITS
 #define CORR_KALMAN_THRESHOLD_1F 40
 
+
+
+#define FILTER_BITS 5 //32 (for fastAvg2Nsamples filter)-not currently in use
+#define MAX_FINE_STEP 3 //maximum step to be used in fine search for slow heart beats
+//#define DEBUG
+
+
+//now enter in all the constants for the kalman filters
+#define NO_JUMPS 0
+#define JUMPS_OK 1
+
+#define CORR_KALMAN_LENGTH 3
+#define CORR_DATA_LENGTH 10
+#define CORR_MIN_STD_1F 10<<FIXED_BITS
+#define CORR_KALMAN_THRESHOLD_1F 40
+
 #define HR_KALMAN_LENGTH 9 //number of points to make a running average over
 #define HR_DATA_LENGTH 15
 #define HR_MIN_STD_1F 8<<FIXED_BITS
@@ -49,9 +65,54 @@
 #define RR_MIN_STD_1F 10<<FIXED_BITS
 #define RR_KALMAN_THRESHOLD_1F 40
 
-#define FILTER_BITS 5 //32 (for fastAvg2Nsamples filter)-not currently in use
-#define MAX_FINE_STEP 3 //maximum step to be used in fine search for slow heart beats
-//#define DEBUG
+#define MAX_OUTLIER_COUNT 3
+#define MAX_ALG_FAIL_COUNT 3
+
+class KALMAN {
+public:
+ /*initializer*/
+  KALMAN(uint8_t max_kalman_length_in, 
+                    uint8_t max_data_array_length_in, 
+                    uint8_t max_outlier_cnt_in, 
+                    uint8_t max_alg_fail_cnt_in, 
+                    uint8_t min_data_std_in,
+                    uint8_t kalman_threshold_2x_in, 
+                    bool jumps_ok_in);
+  
+/*variables*/
+  uint8_t kalman_length;
+  uint32_t *kalman_array;
+  uint8_t kalman_ind;
+  uint32_t kalman_avg;
+  uint32_t *data_array;
+  uint8_t data_array_length;
+  uint8_t data_ind;
+  uint8_t outlier_cnt;
+  uint8_t alg_fail_cnt;
+  uint8_t max_outlier_cnt;
+  uint8_t max_alg_fail_cnt;
+  uint8_t max_kalman_length;
+  uint8_t max_data_array_length;
+  uint8_t min_data_std;
+  uint8_t kalman_threshold_2x;
+  bool do_reset_kalman;
+  uint32_t data_std;
+  uint32_t data_std_out;
+  uint32_t data_mean_out;
+  bool jumps_ok; //use this for spo2 to allow upward jumps of up to 2x the usual threshold during fast SpO2 recovery
+
+/*functions*/  
+  void reset_kalman(void);
+  void run_kalman(uint32_t new_data);
+  uint32_t get_std(uint32_t *array, uint8_t array_length);
+  uint32_t get_avg(uint32_t *array, uint8_t array_length);
+  uint32_t uint_sqrt(uint32_t val);
+ 
+private:
+  
+  
+};
+
 
 class SPO2
 {
@@ -60,6 +121,7 @@ class SPO2
 public:
     SPO2();
 //functions
+    
     void do_algorithm(void);
     void init_running_avgs(uint32_t init_ir_val, uint32_t init_r_val);
     void copy_data(uint8_t channel);
@@ -92,6 +154,8 @@ public:
     uint32_t get_avg(uint32_t *array,uint8_t length);
     void fastAvg2Nsamples(int16_t *x); 
     void avgNsamples(int16_t *x, uint8_t number2avg);
+    
+//    void test_kalman(void);
     
     //variables
     int16_t idx[((ARRAY_LENGTH-1)>>DOWNSAMPLE_BITS)+1];
@@ -144,12 +208,27 @@ public:
     uint16_t ds_start; //point in the array where the downsampled data will start;
     uint16_t downsampled_array_length;
     uint16_t downsampled_max_centered_index;
+    
+    void set_filters(KALMAN* filter1, KALMAN* filter2, KALMAN* filter3, KALMAN* filter4); //utility for populating KALMAN classes within the algorithm SPO2 class after they are instantiated.
+    void get_peak_diff(void); 
+    int16_t get_direction(uint32_t data1, uint32_t data2);
+    void findminmax(int32_t* data, uint16_t start_ind, uint16_t stop_ind, int32_t* extreme, uint16_t c[], int* extreme, int* type); //function to find minima and maxima in an array.
+    
+    
 private:
 //functions
 
     
 //variables
+    KALMAN* corr_filter;
+    KALMAN* hr_filter;
+    KALMAN* spo2_filter;
+    KALMAN* rr_filter;
 };
 
 extern SPO2 spo2;
+
+
+
+
 #endif

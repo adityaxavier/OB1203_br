@@ -8,7 +8,7 @@
 //#include "SoftI2C.h"
 
 
-/*This algorithm was developed by Dan Allen, IDT-Renesas 2019.
+/*This algorithm was developed by Dan Allen, IDT-Renesas 2019 and updated 2020 to add beat-to-beat detection.
 The main program fetches data from OB1203 at 100Hz for both red and IR.
 It arranges the bytes from the FIFO and calls add_sample(). Add sample keeps a 
 running average of 4 samples (12Hz) and loads the filtered data
@@ -104,6 +104,36 @@ SPO2::SPO2()
 }
 
 
+//void SPO2::test_kalman(void) {
+//  
+//   
+//  const uint32_t test_input = 1048576;
+//  uint32_t test_output = hr_filter->uint_sqrt(test_input); //correct output is 1024.
+//  
+//  uint32_t hr_test_data[18] = {64, 72, 73, 74, 69, 82, 41, 68, 62, 63, 61, 68, 72, 100, 76, 58, 68, 65};
+//  uint32_t spo2_test_data[18] ={89, 90, 92, 91, 96, 98, 94, 90, 88, 87, 75, 84, 81, 80, 93, 99, 97, 95};
+//  const int num_test = 18;
+//  
+//  test_output = hr_filter->get_avg(hr_test_data,num_test); //test avg function (69 or 68.9)
+//  test_output = hr_filter->get_std(hr_test_data,num_test); //test std dev function (6 or 5.9)
+// 
+////  uint32_t test_hr_array[num_test];
+////  uint32_t test_spo2_array[num_test];
+////  uint8_t hr_outlier_cnt = 0;
+////  uint8_t spo2_outlier_cnt = 0;
+//  
+//  for (int n=0; n<num_test; n++) {
+//    hr_filter->run_kalman(hr_test_data[n]);  //outlier at index 4 and 15
+//    test_hr_array[n] = hr_filter->kalman_avg;
+//    hr_outlier_cnt = hr_filter->outlier_cnt;
+//    
+//    spo2_filter->run_kalman(spo2_test_data[n]); //outlier at 10 and not at 14
+//    test_spo2_array[n] = spo2_filter->kalman_avg;
+//    spo2_outlier_cnt = spo2_filter->outlier_cnt;
+//  }
+//
+//}
+
 void SPO2::get_sum_squares()
 {/*This function calculates the sum of squares used in the first order regression
   in get_rms(). It is run once at the beginning of the program unless the sample
@@ -157,6 +187,7 @@ void SPO2::do_algorithm_part2() {
   included in the kalman running average estimation, but are included in the variance 
   calculation. If too many algorithm fails or outliers are incurred the Kalman resets.*/  
   extern uint16_t t_read(void);
+/*
   static uint32_t hr_samples[HR_DATA_LENGTH];
   static uint8_t hr_ptr = 0;
   static uint8_t spo2_ptr =0;
@@ -170,7 +201,7 @@ void SPO2::do_algorithm_part2() {
   static uint8_t hr_outlier_cnt =0;
   static uint8_t hr_alg_fail_cnt = 0;
   static uint8_t spo2_outlier_cnt =0;
-  static uint8_t spo2_alg_fail_cnt = 0;
+  static uint8_t spo2_alg_fail_cnt = 0;*/
   
   p2_start_time = t_read();
   offset_guess = DEFAULT_GUESS;
@@ -191,16 +222,26 @@ void SPO2::do_algorithm_part2() {
     LOG(LOG_INFO,"pre kalman %.1f, %.1f\r\n",(float)current_spo21f/(float)(1<<FIXED_BITS), (float)current_hr1f/(float)(1<<FIXED_BITS));
     //        consensus(); //filter out crap data
     LOG(LOG_INFO,"HR: ");
-    kalman(kalman_hr_array,&kalman_hr_length,HR_KALMAN_LENGTH,&kalman_hr_ptr,
+    /*kalman(kalman_hr_array,&kalman_hr_length,HR_KALMAN_LENGTH,&kalman_hr_ptr,
            hr_samples,&num_hr_samples,HR_DATA_LENGTH,&hr_ptr,
            current_hr1f,&reset_kalman_hr,&avg_hr1f,&hr_outlier_cnt,&hr_alg_fail_cnt,
-           HR_KALMAN_THRESHOLD_1F,HR_MIN_STD_1F,0);
+           HR_KALMAN_THRESHOLD_1F,HR_MIN_STD_1F,0); */
+    
+    corr_filter->run_kalman(current_hr1f); //this is an optional short duration filter designed to snag bad correlation function inputs and replace them with reasonably close values in time. 
+    //It is effective because the breathing rate cauases a cyclic variation in the heart rate. If we get bad data, we don't want to the use averge value the nearest valid measurement.
+    
+    hr_filter->run_kalman(current_hr1f); //this is a traditional 8 second average of the heart rate that produces a medically relevant value. 
+    //The effective filter length is slightly longer when we apply the correlation filter, which does some pre-averaging. To first order add the filter lengths in quadrature sqrt(8^2+3^3) = 8.5 sec
+    
     LOG(LOG_INFO,"SPO2: ");
-    kalman(kalman_spo2_array,&kalman_spo2_length,SPO2_KALMAN_LENGTH,&kalman_spo2_ptr,
+    
+    /*kalman(kalman_spo2_array,&kalman_spo2_length,SPO2_KALMAN_LENGTH,&kalman_spo2_ptr,
            spo2_samples,&num_spo2_samples,SPO2_DATA_LENGTH,&spo2_ptr,
            current_spo21f,&reset_kalman_spo2,&avg_spo21f,&spo2_outlier_cnt,&spo2_alg_fail_cnt,
            SPO2_KALMAN_THRESHOLD_1F,SPO2_MIN_STD_1F,1);
-    LOG(LOG_INFO,"post kalman %.1f, %.1f\r\n",(float)avg_spo21f/(float)(1<<FIXED_BITS), (float)avg_hr1f/(float)(1<<FIXED_BITS) );
+    LOG(LOG_INFO,"post kalman %.1f, %.1f\r\n",(float)avg_spo21f/(float)(1<<FIXED_BITS), (float)avg_hr1f/(float)(1<<FIXED_BITS) ); */
+    
+    spo2_filter->run_kalman(current_spo21f); //this is a traditional several second flat average of the heart rate that produces a medically relevant value. 9 seconds matches the reference meter best.
     
   } else {
     LOG(LOG_DEBUG,"collecting data\r\n");
@@ -221,8 +262,9 @@ void SPO2::do_algorithm_part2() {
 
 void SPO2::do_algorithm_part_3() {
   /*
-  This function does the beat to beat detection
+  This function does the beat to beat detection with the triangle filter and peak detection
   */
+  
 }
                                       
                                       
@@ -273,117 +315,115 @@ uint32_t SPO2::get_avg(uint32_t *array,uint8_t length)
 }
 
 
-void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t max_kalman_length, uint8_t *kalman_ptr, 
-                  uint32_t *data_array, uint8_t *data_array_length, uint8_t max_data_length, uint8_t *data_ptr, 
-                  uint32_t new_data, volatile bool *reset_kalman, uint32_t *kalman_avg, 
-                  uint8_t *outlier_cnt, uint8_t *alg_fail_cnt, uint32_t kalman_threshold_1f, uint32_t min_data_std, bool jumps_ok)
-{/*A basic kalman filter for throwing out outliers Decides whether to trust the new data or not.
-  Base decision on difference between new data and Kalman average and data variance.
-  If data variance is large over Kalman length, admit wide variation samples.
-  If data variance is small over Kalman length, admit small variation.
-  Throw out other samples as outliers.
-  Kalman estimate does not include outliers.
-  To do: if data is zero that means the algorithm bonked.
-  Don't use zero in the data_array variance calculation.
-  Simply skip and don't increment data or Kalman pionters
-  Instead increment the bad data counter.
-  If 3 bad data in a row or 3 outliers, then reset the filter.
-  If OB1203 signal goes out of range then it goes into autogain mode and sets the
-  reset_kalman global variable.
-  Note the kalman threshold is fixed precision extended by typically 4 bits, set by FIXED_BITS define.
-  */
-  uint32_t avg;
-  
-  LOG(LOG_DEBUG,"kal ");
-  for (int n= 0; n<max_kalman_length; n++) {
-    LOG(LOG_DEBUG,"%04lu ",kalman_array[n]);
-  }
-  LOG(LOG_DEBUG,"\r\ndat ");
-  for (int n= 0; n<max_data_length; n++) {
-    LOG(LOG_DEBUG,"%04lu ",data_array[n]);
-  }    
-  
-  uint32_t data_std;
-  int32_t data_diff_1f = 0;
-  int32_t threshold_1f = 0;
-  
-  LOG(LOG_DEBUG,"\r\nk_length = %u, k_ptr = %u, d_length = %u, "\
-    "d_ptr = %u, new_data = %lu, reset_kalman = %d, kalman_avg = %lu\r\n",
-    *kalman_length,       *kalman_ptr,    *data_array_length,
-    *data_ptr,    new_data,       *reset_kalman,  *kalman_avg);
-  if (*kalman_avg == 0) *reset_kalman = 1; //reset if the previous average was invalid
-  if(*reset_kalman) {//re-initialize
-    LOG(LOG_INFO,"resetting Kalman\r\n");
-    *kalman_ptr = 0;
-    *kalman_length = 0;
-    *alg_fail_cnt = 0;
-    *outlier_cnt = 0;
-    *reset_kalman = 0;
-    if (new_data != 0) { //if sample is valid
-      kalman_array[*kalman_ptr] = new_data; //put new data in array
-      (*kalman_length)++; //increment the array length
-      *kalman_avg = new_data; //output new data as new average
-      (*kalman_ptr)++; //increment the array index
-      data_array[*data_ptr] = new_data;
-      (*data_ptr)++;
-      if(*data_ptr >= max_data_length) *data_ptr = 0;
-      if(*data_array_length < max_data_length) (*data_array_length)++;
-    } else {
-      *kalman_avg = 0;
-    }
-  } else if (new_data != 0) {//not resetting and valid sample: update the filter and the sample array
-    avg = get_avg(data_array,*data_array_length); //get average of existing (previous) samples)
-    LOG(LOG_DEBUG,"avg %lu\r\n", avg);
-    data_std = get_std(data_array, *data_array_length, avg);//get data variance
-    data_std = (data_std < min_data_std) ? min_data_std : data_std; //constrain data variance to a mininum value
-    LOG(LOG_DEBUG,"std = %lu\r\n", data_std);
-    
-    data_diff_1f = (new_data-(*kalman_avg))<<FIXED_BITS;
-    threshold_1f = kalman_threshold_1f*data_std;
-    
-    if ( !jumps_ok && (abs(data_diff_1f) > threshold_1f )) {//outlier case, don't update the filter
-      LOG(LOG_INFO,"outlier %lu\r\n", new_data);
-      (*outlier_cnt)++;
-    } else if ( jumps_ok && ( (abs(data_diff_1f) > threshold_1f ) || (abs(data_diff_1f) > 2*threshold_1f ) ) ) {
-      LOG(LOG_INFO,"outlier %lu\r\n", new_data);
-      (*outlier_cnt)++;
-    } else { //valid data case: update the Kalman avg
-      if(*kalman_length < max_kalman_length)(*kalman_length)++;
-      LOG(LOG_INFO,"keeping %lu\r\n", new_data);
-      kalman_array[*kalman_ptr] = new_data; //add new data to the kalman array
-      *kalman_avg = get_avg(kalman_array,*kalman_length);// get new kalman average
-      *alg_fail_cnt = 0; //zero the consecutive algorithm fails
-      *outlier_cnt = 0; //zero the consecutive outlier fails
-      (*kalman_ptr)++;
-      if(*kalman_ptr == max_kalman_length) *kalman_ptr = 0; //loop index in buffer
-    }
-    
-    //load new sample int data_array for next time
-    if(*data_array_length<max_data_length) {//increment number of samples in the average up to the max max_data_length
-      (*data_array_length)++;
-    }
-    data_array[*data_ptr] = new_data;
-    (*data_ptr)++;//increment data pointer
-    if (*data_ptr>=max_data_length) *data_ptr = 0; //loop index
-    
-  } else if (new_data == 0) {//not resetting and invalid sample
-    LOG(LOG_INFO,"not valid sample\r\n");
-    (*alg_fail_cnt)++;
-    if(*alg_fail_cnt == ALG_FAIL_TOLERANCE) {//too many bad data points: next time reset the filter
-      LOG(LOG_INFO,"reset: too many alg fails\r\n");
-      /*i.e., can't latch on to nothing*/
-      *reset_kalman = 1;
-    }
-  }
-  if(*outlier_cnt >= OUTLIER_DATA_TOLERANCE) {//too many outliers: next time reset the filters
-    /*
-    This is to handle the case where the Kalman filter latches onto an outlier
-    or harmonic/subharmonic and needs to break out.
-    */
-    LOG(LOG_INFO,"reset: too many outliers\r\n");
-    *reset_kalman = 1;
-  }
-}
+//void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t max_kalman_length, uint8_t *kalman_ptr, 
+//                  uint32_t *data_array, uint8_t *data_array_length, uint8_t max_data_length, uint8_t *data_ptr, 
+//                  uint32_t new_data, volatile bool *reset_kalman, uint32_t *kalman_avg, 
+//                  uint8_t *outlier_cnt, uint8_t *alg_fail_cnt, uint32_t kalman_threshold_1f, uint32_t min_data_std, bool jumps_ok)
+//{
+///*A basic kalman filter for throwing out outliers Decides whether to trust the new data or not.
+//  Base decision on difference between new data and Kalman average and data variance.
+//  If data variance is large over Kalman length, admit wide variation samples.
+//  If data variance is small over Kalman length, admit small variation.
+//  Throw out other samples as outliers.
+//  Kalman estimate does not include outliers.
+//  To do: if data is zero that means the algorithm bonked.
+//  Don't use zero in the data_array variance calculation.
+//  Simply skip and don't increment data or Kalman pionters
+//  Instead increment the bad data counter.
+//  If 3 bad data in a row or 3 outliers, then reset the filter.
+//  If OB1203 signal goes out of range then it goes into autogain mode and sets the
+//  reset_kalman global variable.
+//  Note the kalman threshold is fixed precision extended by typically 4 bits, set by FIXED_BITS define.
+//  */ 
+//  uint32_t avg;
+//  
+//  LOG(LOG_DEBUG,"kal ");
+//  for (int n= 0; n<max_kalman_length; n++) {
+//    LOG(LOG_DEBUG,"%04lu ",kalman_array[n]);
+//  }
+//  LOG(LOG_DEBUG,"\r\ndat ");
+//  for (int n= 0; n<max_data_length; n++) {
+//    LOG(LOG_DEBUG,"%04lu ",data_array[n]);
+//  }    
+//  
+//  uint32_t data_std;
+//  int32_t data_diff_1f = 0;
+//  int32_t threshold_1f = 0;
+//  
+//  LOG(LOG_DEBUG,"\r\nk_length = %u, k_ptr = %u, d_length = %u, "\
+//    "d_ptr = %u, new_data = %lu, reset_kalman = %d, kalman_avg = %lu\r\n",
+//    *kalman_length,       *kalman_ptr,    *data_array_length,
+//    *data_ptr,    new_data,       *reset_kalman,  *kalman_avg);
+//  if (*kalman_avg == 0) *reset_kalman = 1; //reset if the previous average was invalid
+//  if(*reset_kalman) {//re-initialize
+//    LOG(LOG_INFO,"resetting Kalman\r\n");
+//    *kalman_ptr = 0;
+//    *kalman_length = 0;
+//    *alg_fail_cnt = 0;
+//    *outlier_cnt = 0;
+//    *reset_kalman = 0;
+//    if (new_data != 0) { //if sample is valid
+//      kalman_array[*kalman_ptr] = new_data; //put new data in array
+//      (*kalman_length)++; //increment the array length
+//      *kalman_avg = new_data; //output new data as new average
+//      (*kalman_ptr)++; //increment the array index
+//      data_array[*data_ptr] = new_data;
+//      (*data_ptr)++;
+//      if(*data_ptr >= max_data_length) *data_ptr = 0;
+//      if(*data_array_length < max_data_length) (*data_array_length)++;
+//    } else {
+//      *kalman_avg = 0;
+//    }
+//  } else if (new_data != 0) {//not resetting and valid sample: update the filter and the sample array
+//    avg = get_avg(data_array,*data_array_length); //get average of existing (previous) samples)
+//    LOG(LOG_DEBUG,"avg %lu\r\n", avg);
+//    data_std = get_std(data_array, *data_array_length, avg);//get data variance
+//    data_std = (data_std < min_data_std) ? min_data_std : data_std; //constrain data variance to a mininum value
+//    LOG(LOG_DEBUG,"std = %lu\r\n", data_std);
+//    
+//    data_diff_1f = (new_data-(*kalman_avg))<<FIXED_BITS;
+//    threshold_1f = kalman_threshold_1f*data_std;
+//    
+//    if ( !jumps_ok && (abs(data_diff_1f) > threshold_1f )) {//outlier case, don't update the filter
+//      LOG(LOG_INFO,"outlier %lu\r\n", new_data);
+//      (*outlier_cnt)++;
+//    } else if ( jumps_ok && ( (abs(data_diff_1f) > threshold_1f ) || (abs(data_diff_1f) > 2*threshold_1f ) ) ) {
+//      LOG(LOG_INFO,"outlier %lu\r\n", new_data);
+//      (*outlier_cnt)++;
+//    } else { //valid data case: update the Kalman avg
+//      if(*kalman_length < max_kalman_length)(*kalman_length)++;
+//      LOG(LOG_INFO,"keeping %lu\r\n", new_data);
+//      kalman_array[*kalman_ptr] = new_data; //add new data to the kalman array
+//      *kalman_avg = get_avg(kalman_array,*kalman_length);// get new kalman average
+//      *alg_fail_cnt = 0; //zero the consecutive algorithm fails
+//      *outlier_cnt = 0; //zero the consecutive outlier fails
+//      (*kalman_ptr)++;
+//      if(*kalman_ptr == max_kalman_length) *kalman_ptr = 0; //loop index in buffer
+//    }
+//    
+//    //load new sample int data_array for next time
+//    if(*data_array_length<max_data_length) {//increment number of samples in the average up to the max max_data_length
+//      (*data_array_length)++;
+//    }
+//    data_array[*data_ptr] = new_data;
+//    (*data_ptr)++;//increment data pointer
+//    if (*data_ptr>=max_data_length) *data_ptr = 0; //loop index
+//    
+//  } else if (new_data == 0) {//not resetting and invalid sample
+//    LOG(LOG_INFO,"not valid sample\r\n");
+//    (*alg_fail_cnt)++;
+//    if(*alg_fail_cnt == ALG_FAIL_TOLERANCE) {//too many bad data points: next time reset the filter
+//      LOG(LOG_INFO,"reset: too many alg fails\r\n");
+//      //i.e., can't latch on to nothing
+//      *reset_kalman = 1;
+//    }
+//  }
+//  if(*outlier_cnt >= OUTLIER_DATA_TOLERANCE) {//too many outliers: next time reset the filters
+//    //This is to handle the case where the Kalman filter latches onto an outlier or harmonic/subharmonic and needs to break out.
+//    LOG(LOG_INFO,"reset: too many outliers\r\n");
+//    *reset_kalman = 1;
+//  }
+//}
 
 
 void SPO2::copy_data(uint8_t channel)
@@ -1006,6 +1046,14 @@ void SPO2::avgNsamples(int16_t *x, uint8_t number2avg) {
 }
 
 
+void SPO2::set_filters(KALMAN* filter1, KALMAN* filter2, KALMAN* filter3, KALMAN* filter4) {
+   corr_filter = filter1;
+   hr_filter = filter2;
+   spo2_filter = filter3;
+   rr_filter = filter4;
+}
+
+
 void SPO2::fastAvg2Nsamples(int16_t *x) { 
   /*runs filters for multipes of 2 defined by FILTER_BITS 
   Ramps up the filter length for teh first few samples, then runs fast.*/
@@ -1030,3 +1078,213 @@ void SPO2::fastAvg2Nsamples(int16_t *x) {
     buffer_ind &= buffer_mask; //loop index
   }
 }
+
+
+int SPO2::get_direction(uint32_t data1, uint32_t data2) {
+  if (data2 > data1) {
+    dir = 1;
+  } else if (data2 < data1) {
+    dir = -1;
+  } else {
+    dir = 0;
+  }
+  return dir;
+}
+
+
+void SPO2::findminmax(int32_t* data, uint16_t start_ind, uint16_t stop_ind, int32_t c[], int* extreme, int* type){
+  uint16_t ind = start_ind;
+  c[1] = data[ind];
+  ind = ind+1;
+  c[2] = data[ind];
+  bool change_dir = 0;
+  dir1 = get_direction(c[1],c[2]); //-1 is falling, 1 is rising
+  ind = ind+1;
+  extreme = -1; //default = fail condition
+  type = 0;
+  while (!change_dir && (ind<=stop_ind)) {
+    c[0] = c[1];
+    c[1] = c[2];
+    c[2] = data(ind);
+    dir2 = get_direction(c[1],c[2]);
+    if (dir1*dir2 < 0) {
+        change_dir = 1;
+        type = dir1; //1 = peak, -1 = valley
+        break;
+    }
+    ind = ind+1;
+  }
+  extreme = ind-1; //this is the last point we verified is or is not an extremum. Start next search at this point.
+}
+
+
+void SPO2::peak2peak(int32_t ac_data) {
+  int array_ind = 1;
+  int array_end = SAMPLE_RATE + 2;
+  int dir = 0;
+  int32_t c[3];
+  int type = 0; //no extreme type
+  int beat_cnt = 0; //no beats counted yet
+  int prev_min = 0; //no min previously found
+  int prev_max = 0; //no max previously found
+  int prev_type = 0; //no extreme type (+/-) previously found
+  while (1) {
+    //look for extrema
+    findminmax(ac_data, array_ind, array_end, c, &type);
+    if (type != 0) {
+      array_ind = extreme;
+      
+    }
+  }
+  
+}
+
+
+uint32_t KALMAN::uint_sqrt(uint32_t val)
+{
+  //integer sqrt function from http://www.azillionmonkeys.com/qed/sqroot.html
+  uint32_t temp, g=0, b = 0x8000, bshft = 15;
+  do {
+    if (val >= (temp = (((g << 1) + b)<<bshft--))) {
+      g += b;
+      val -= temp;
+    }
+  } while (b >>= 1);
+  return g;
+}
+
+KALMAN::KALMAN(uint8_t max_kalman_length_in, 
+                    uint8_t max_data_array_length_in, 
+                    uint8_t max_outlier_cnt_in, 
+                    uint8_t max_alg_fail_cnt_in, 
+                    uint8_t min_data_std_in,
+                    uint8_t kalman_threshold_2x_in, 
+                    bool jumps_ok_in) { //initializer
+  max_kalman_length = max_kalman_length_in;
+  max_data_array_length = max_data_array_length_in;
+  max_outlier_cnt = max_outlier_cnt_in;
+  max_alg_fail_cnt = max_alg_fail_cnt_in;
+  min_data_std = min_data_std_in;
+  kalman_threshold_2x = kalman_threshold_2x_in; //adding one bit of precision to this number. E.g. 2.5 is stored as 5 and then after multiplying by std deviation we divide by 2.
+  jumps_ok = jumps_ok_in;
+  kalman_avg = 0;
+  kalman_length = 0;
+  data_array_length = 0;
+  kalman_ind = 0;
+  data_ind = 0;
+  do_reset_kalman = 0;
+  kalman_array  = new uint32_t[max_kalman_length]();
+  data_array = new uint32_t[max_data_array_length]();
+}
+
+void KALMAN::reset_kalman() {
+  kalman_ind = 0;
+  kalman_length = 0;
+  alg_fail_cnt = 0;
+  outlier_cnt = 0;
+  do_reset_kalman = 0;
+  kalman_avg = 0;
+}
+
+uint32_t KALMAN::get_std(uint32_t *array, uint8_t array_length) {
+  uint32_t var =0;
+  int32_t less_avg = 0; //data with mean substracted
+  uint32_t avg = get_avg(array,array_length); //get average value of data in array
+
+
+  //calculate variance
+  for (uint8_t n=0; n<array_length; n++) {
+    less_avg = (int32_t)array[n]-(int32_t)avg; //cast as int and subtract avg from data
+    var += (uint32_t) (less_avg*less_avg);  //add square of deviation from avg
+  }
+  var /= (uint32_t) array_length; //divide variance by number of samples
+    return uint_sqrt( (uint32_t)var ); //cast as uint32 and take square root to get rms (aka standard deviation)
+}
+
+
+uint32_t KALMAN::get_avg (uint32_t *array, uint8_t array_length) {
+  int32_t avg = 0;
+  for (uint8_t n = 0; n<array_length; n++) {
+    avg += array[n];
+  }
+  return avg / (uint32_t)array_length;    
+}
+
+
+void KALMAN::run_kalman(uint32_t new_data) {
+  data_std = 0;
+  uint32_t up_thresh = 0;
+  uint32_t down_thresh = 0;
+  
+  bool outlier = false;
+  if ( (kalman_avg == 0) || (do_reset_kalman == 1) ) {
+      reset_kalman(); //reset the average if the previous average was invald
+      if(new_data != 0) { //if the sample is valid
+        data_ind = 0; //reset the data index (don't have to do this but is simplifies the program)
+        kalman_ind = 0; //reset the array index
+        kalman_array[kalman_ind] = new_data; //put new data in the array
+        kalman_length++;
+        kalman_avg = new_data;
+        kalman_ind++; //increment this for next time
+        data_array[data_ind] = new_data; //ouput new data as the new average (lacking other information as yet)
+        data_ind++; //increment this for next time
+        if (data_array_length < max_data_array_length) {
+          data_array_length++; //increase array length
+        }
+      } else {
+        kalman_avg = 0; //average is zero because the first sample is invalid
+      }
+  } else if (new_data != 0) { //not resetting and valid sample case (typical case)
+    data_std = get_std(data_array, data_array_length); //calc the standard deviation of the data using an integer method for sqrt instead of floating point method
+    if (data_std < min_data_std) {
+      data_std = min_data_std; //constrain data variance to a minimum value for stability
+    }
+    
+    outlier = false;
+    if (new_data > kalman_avg) { //new data is bigger than kalman avgerage
+      up_thresh = kalman_threshold_2x*data_std;
+      if (jumps_ok == 0) up_thresh = up_thresh>>1; //divide by two for normal case
+      if( new_data - kalman_avg > up_thresh) { //jumping high case for SpO2
+        outlier_cnt++;
+        outlier = true;
+      }
+    } else { //new_data is smaller than kalman_avg
+      down_thresh = (kalman_threshold_2x*data_std)>>1;
+      if (kalman_avg - new_data > down_thresh) { 
+        outlier_cnt++;
+        outlier = true;
+      } 
+    }
+    if (outlier == false) { //not an outlier, update the filter
+      if (kalman_length < max_kalman_length) {
+        kalman_length++;
+      }
+      kalman_array[kalman_ind] = new_data; //add new data to the kalman array
+      kalman_avg = get_avg(kalman_array, kalman_length);
+      alg_fail_cnt = 0; //zero the consecutive algorithm fails
+      outlier_cnt = 0; //zero the consecutive outlier fails
+      kalman_ind++;
+      if (kalman_ind >= max_kalman_length) {
+        kalman_ind = 0;
+      }
+      
+      if (data_array_length < max_data_array_length) {
+        data_array_length++;
+      }
+      data_array[data_ind] = new_data;
+      data_ind++;
+      if (data_ind >= max_data_array_length) {
+        data_ind = 0;
+      }
+    }
+  } else if (new_data == 0) {
+    alg_fail_cnt++;
+    if (alg_fail_cnt == max_alg_fail_cnt){
+      do_reset_kalman = 1;
+    }
+  }
+  if (outlier_cnt >= max_outlier_cnt) {
+    do_reset_kalman = 1;
+  }
+  data_std_out = data_std;                                                                                           
+ }//end of run_kalman

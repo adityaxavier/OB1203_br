@@ -114,7 +114,7 @@
                 </option>
                 <option>
                     <name>GenNearHeapSize</name>
-                    <state>256</state>
+                    <state>512</state>
                 </option>
                 <option>
                     <name>GenFarHeapSize</name>

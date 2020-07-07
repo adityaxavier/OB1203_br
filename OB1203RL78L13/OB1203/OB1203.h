@@ -166,8 +166,7 @@
 #define PPG_AVG(x)          (x & 0x07)<<4
 //PPG_PWIDTH_RATE
 #define PPG_PWIDTH(x)       (x & 0x07)<<4
-#define PPG_FREQ_60HZ       0
-#define PPG_FREQ_50HZ       1<<3
+#define PPG_FREQ            1<<3 //zero for all production devices.
 #define PPG_RATE(x)         (x & 0x07)
 //FIFO_CFG
 #define FIFO_ROLL_ON        1<<4

@@ -380,6 +380,7 @@
                     <state>$PROJ_DIR$\OB1203</state>
                     <state>$PROJ_DIR$\SPO2</state>
                     <state>$PROJ_DIR$\LCD</state>
+                    <state>$PROJ_DIR$\KALMAN</state>
                 </option>
                 <option>
                     <name>CCStdIncCheck</name>
@@ -4090,6 +4091,15 @@
         </file>
         <file>
             <name>$PROJ_DIR$\cg_src\r_cg_userdefine.h</name>
+        </file>
+    </group>
+    <group>
+        <name>KALMAN</name>
+        <file>
+            <name>$PROJ_DIR$\KALMAN\kalman.cpp</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\KALMAN\kalman.h</name>
         </file>
     </group>
     <group>

@@ -5,10 +5,12 @@
 #include <math.h>
 #include "SPO2.h"
 #include "OB1203.h"
+#include "KALMAN.h"
 //#include "SoftI2C.h"
 
 
-/*This algorithm was developed by Dan Allen, IDT-Renesas 2019 and updated 2020 to add beat-to-beat detection.
+/*This algorithm was developed by Dan Allen, IDT-Renesas 2019 and updated 2020 to add breath detection.
+Beat to beat detection porting from Matlab is in progress.
 The main program fetches data from OB1203 at 100Hz for both red and IR.
 It arranges the bytes from the FIFO and calls add_sample(). Add sample keeps a 
 running average of 4 samples (12Hz) and loads the filtered data
@@ -59,6 +61,32 @@ using zero crossings of the derivative.
 -update the filter length (samples2avg).
 For all peak estimattions fast quadratic fits are used to obtain resolution higher
 than the sample rate. 
+After part 2 runs, additional samples are collected and then part 3 runs. This is the
+breathing detection algorithm. A buffer is kept of recent heart rate measurements.
+Part 3 runs an autocorrelation of the heart rate measurements, looking for periodicity.
+The sinus arrhythmia is a periodic variation in the heart rate. Breathing in heart rate
+speeds up due to smaller volume for the heart to expand. Breathing out, heart rate slows 
+down due to larger volume. 
+The autocorrelation is similar to an FFT, but faster for 16bit processors. 
+Two autocorrelations are performed. One for a short time (preferred) and one
+over a long time (used only when a short time correlation can't be found due to
+a long time between breaths). A Kalman filter seeks to throw out outliers which
+are expected due to sources of variation such as motion.
+This algorithm cannot practically detect breathing more than about 1.5x faster than the heart rate. 
+This is a practical limitation similar to a Nyquist criterion. It also does not detect
+breathing rates slower than the maximum length of the autocorrelation. 
+If variable leneght autocorrelation is implemented this may be possible, however
+the dual range autocorrelation helps with the spontaneous nature of breathing which 
+can change quickly from slow to fast.
+A lag of about 20 seconds occurs in the breathing measurements due to the long time
+required to collect enough heart rate samples to perform the autocorrelation.
+Autocorrelation is used instead of traditional peak/valley detection because it is
+more robust against noise and spurious measurements. Every single data point contributes to 
+determining the periodic, not just the peak and valley points. (The signal is its own matched filter.)
+For breathing rate detection the algorithm is running faster than previous versions with HR and SPO2.
+Those versions ran at 1Hz. This runs at 1/0.7 = ~1.5Hz. That helps detect faster breathing.
+Note that the Kalman filter has not been optimized and minimal verification has been performed.
+This is a beta release.
 */
 
 //#define PRINT_RAW //print raw, filtered data
@@ -86,12 +114,19 @@ SPO2::SPO2()
   samples2avg = MAX_FILTER_LENGTH;
   downsampled_array_length = ((ARRAY_LENGTH-1)>>DOWNSAMPLE_BITS);
   ds_start = 0;
+  alg_count = 0;
+  peak_count = 0;
+  peak_valley_buffer = 0;
+  alg_start_sample_count = 0;
+  prev_alg_start_sample_count = 0;
   if(downsampled_array_length & 0x0001) {//odd case
     ds_start = 1<<(DOWNSAMPLE_BITS-1);
   } else { //even case
     downsampled_array_length++;
   }
   downsampled_max_centered_index =  (downsampled_array_length-1)>>1;
+  hr_data_buffer_ind = 0;
+  
 #if 0
   memset(dc_data, 0, sizeof(dc_data));
   memset(idx, 0, sizeof(idx));
@@ -103,6 +138,71 @@ SPO2::SPO2()
 #endif
 }
 
+ 
+//void SPO2::test_algorithm_part3() {
+//  const uint16_t array_len = 24;
+//  uint32_t hr_buf[array_len];
+//  int32_t autocorr[array_len];
+//  int test_cnt = 0;
+//  int32_t per1f;
+//  int buf_ptr = 0; //test starting in the middle of the array
+//  uint8_t error;
+//  int32_t lin_buf[BREATH_ARRAY_LENGTH];
+//  uint32_t test_array[2*array_len] = {
+//  1100, 1200, 1300, 1400, 
+//  1500, 1600, 1500, 1400, 
+//  1300, 1200, 1100, 1000,
+//  1250, 1500, 1550, 1350,
+//  1100, 1050, 1200, 1400, 
+//  1600, 1500, 1300, 1100,
+//  1100, 1200, 1300, 1400, 
+//  1500, 1600, 1500, 1400, 
+//  1300, 1200, 1100, 1000,
+//  1250, 1500, 1550, 1350,
+//  1100, 1050, 1200, 1400, 
+//  1600, 1500, 1300, 1100};
+//  for (int m = 1; m<20; m++) {//try different delays
+//    test_cnt = 0;
+//    buf_ptr = m;
+//    //check subtract mean
+//    for (int n = 0; n<2*array_len; n++) {
+//      buf_ptr++;
+//      if (buf_ptr == BREATH_ARRAY_LENGTH) {
+//        buf_ptr = 0;
+//      }  
+//      test_cnt++;
+//      hr_buf[buf_ptr] = test_array[buf_ptr]; 
+//      
+//      
+//      if(test_cnt>=BREATH_ARRAY_LENGTH) {
+//        
+////        LOG(LOG_INFO,"buf_ptr = %u, unwrapped =\r\n",buf_ptr);
+//        
+//        unwrap_buffer_to_int(hr_buf,lin_buf,BREATH_ARRAY_LENGTH,buf_ptr);
+//        //      for (int n=0;n<BREATH_ARRAY_LENGTH;n++) {
+//        //        int index1 = buf_ptr -n;
+//        //        if (index1<0) index1+=BREATH_ARRAY_LENGTH;
+//        //        LOG(LOG_INFO,"%d, %u, %lu, %ld\r\n",n, buf_ptr, hr_buf[index1],lin_buf[n]);
+//        //      }
+//        subtract_mean(lin_buf,BREATH_ARRAY_LENGTH);
+//        //      for (int n=0;n<BREATH_ARRAY_LENGTH;n++) {
+//        //        int index1 = buf_ptr -n;
+//        //        if (index1<0) index1+=BREATH_ARRAY_LENGTH;
+//        //        LOG(LOG_INFO,"%d, %u, %lu, %ld\r\n",n, buf_ptr, hr_buf[index1],lin_buf[n]);
+//        //      }
+//        //Consider removing slope here also. This would help with breath detection when in recovery from exercise.
+//        get_autocorrelation(lin_buf,autocorr,BREATH_ARRAY_LENGTH,MAX_BREATH_OFFSET);
+//        for (int n=0;n<MAX_BREATH_OFFSET;n++) {
+//          LOG(LOG_INFO,"%d, %ld\r\n",n, autocorr[n]);
+//        }
+//        error = get_period_from_array(autocorr, MAX_BREATH_OFFSET, &per1f, USE_MIN);
+//        
+//        LOG(LOG_INFO,"buf_ptr = %d, err = %u, per1f = %d\r\n",buf_ptr,error, per1f);
+//        break;
+//      }
+//    }
+//  }
+//}
 
 //void SPO2::test_kalman(void) {
 //  
@@ -187,7 +287,7 @@ void SPO2::do_algorithm_part2() {
   included in the kalman running average estimation, but are included in the variance 
   calculation. If too many algorithm fails or outliers are incurred the Kalman resets.*/  
   extern uint16_t t_read(void);
-/*
+  /*
   static uint32_t hr_samples[HR_DATA_LENGTH];
   static uint8_t hr_ptr = 0;
   static uint8_t spo2_ptr =0;
@@ -205,9 +305,9 @@ void SPO2::do_algorithm_part2() {
   
   p2_start_time = t_read();
   offset_guess = DEFAULT_GUESS;
-  LOG(LOG_DEBUG,"sample_count %d\r\n",sample_count);
+//  LOG(LOG_DEBUG,"sample_count %d\r\n",sample_count);
   if(sample_count>=ARRAY_LENGTH) {
-    LOG(LOG_DEBUG,"doing algorithm part 2\r\n");
+//    LOG(LOG_DEBUG,"doing algorithm part 2\r\n");
     calc_R();
     calc_spo2();
     avgNsamples(AC1f,samples2avg); //smooth the data more to avoid detecting peaks from the dichrotic notch
@@ -219,27 +319,15 @@ void SPO2::do_algorithm_part2() {
       current_spo21f = 0;
     }
     
-    LOG(LOG_INFO,"pre kalman %.1f, %.1f\r\n",(float)current_spo21f/(float)(1<<FIXED_BITS), (float)current_hr1f/(float)(1<<FIXED_BITS));
-    //        consensus(); //filter out crap data
-    LOG(LOG_INFO,"HR: ");
-    /*kalman(kalman_hr_array,&kalman_hr_length,HR_KALMAN_LENGTH,&kalman_hr_ptr,
-           hr_samples,&num_hr_samples,HR_DATA_LENGTH,&hr_ptr,
-           current_hr1f,&reset_kalman_hr,&avg_hr1f,&hr_outlier_cnt,&hr_alg_fail_cnt,
-           HR_KALMAN_THRESHOLD_1F,HR_MIN_STD_1F,0); */
     
     corr_filter->run_kalman(current_hr1f); //this is an optional short duration filter designed to snag bad correlation function inputs and replace them with reasonably close values in time. 
     //It is effective because the breathing rate cauases a cyclic variation in the heart rate. If we get bad data, we don't want to the use averge value the nearest valid measurement.
     
     hr_filter->run_kalman(current_hr1f); //this is a traditional 8 second average of the heart rate that produces a medically relevant value. 
     //The effective filter length is slightly longer when we apply the correlation filter, which does some pre-averaging. To first order add the filter lengths in quadrature sqrt(8^2+3^3) = 8.5 sec
+
+//    LOG(LOG_INFO,"SPO2: ");
     
-    LOG(LOG_INFO,"SPO2: ");
-    
-    /*kalman(kalman_spo2_array,&kalman_spo2_length,SPO2_KALMAN_LENGTH,&kalman_spo2_ptr,
-           spo2_samples,&num_spo2_samples,SPO2_DATA_LENGTH,&spo2_ptr,
-           current_spo21f,&reset_kalman_spo2,&avg_spo21f,&spo2_outlier_cnt,&spo2_alg_fail_cnt,
-           SPO2_KALMAN_THRESHOLD_1F,SPO2_MIN_STD_1F,1);
-    LOG(LOG_INFO,"post kalman %.1f, %.1f\r\n",(float)avg_spo21f/(float)(1<<FIXED_BITS), (float)avg_hr1f/(float)(1<<FIXED_BITS) ); */
     
     spo2_filter->run_kalman(current_spo21f); //this is a traditional several second flat average of the heart rate that produces a medically relevant value. 9 seconds matches the reference meter best.
     
@@ -249,7 +337,7 @@ void SPO2::do_algorithm_part2() {
     prev_valid=0;
     avg_spo21f = 0;
   }
-  LOG(LOG_INFO,"%.2f, %.2f, %.2f, %.2f, %.4f\r\n",(float)avg_spo21f/(float)(1<<FIXED_BITS),(float)avg_hr1f/(float)(1<<FIXED_BITS),(float)current_spo21f/float(1<<FIXED_BITS),(float)current_hr1f/(float)(1<<FIXED_BITS),R);
+  LOG(LOG_INFO,"%.2f, %.2f, %.2f, %.2f, %.4f\r\n",(float)spo2_filter->kalman_avg/(float)(1<<FIXED_BITS),(float)hr_filter->kalman_avg/(float)(1<<FIXED_BITS),(float)current_spo21f/float(1<<FIXED_BITS),(float)current_hr1f/(float)(1<<FIXED_BITS),R);
   display_spo2 = ((avg_spo21f>>FIXED_BITS) * 10) + (((0x0008 & avg_spo21f) == 0) ? 0 : 5);
   display_hr   = avg_hr1f>>FIXED_BITS;
   //reduce averaging for fast heart rates. Ramp from MAX_FILTER_LENGTH down to MIN_FILTER_LENGTH from max HR to min heart rate
@@ -260,19 +348,10 @@ void SPO2::do_algorithm_part2() {
 }
 
 
-void SPO2::do_algorithm_part_3() {
-  /*
-  This function does the beat to beat detection with the triangle filter and peak detection
-  */
-  
-}
-                                      
-                                      
-uint32_t SPO2::get_std(uint32_t *array,uint8_t length, uint32_t avg)
-{/* calculates standard deviation for the Kalman filter */
+uint32_t SPO2::get_std(uint32_t *array,uint8_t length, uint32_t avg) {/* calculates standard deviation for the Kalman filter */
   uint64_t * temp = new uint64_t [length];
   uint64_t curr_avg = 0;
-
+  
   for(uint8_t itr = 0; itr < length; itr++)
   {
     /* Distance to mean */
@@ -290,7 +369,7 @@ uint32_t SPO2::get_std(uint32_t *array,uint8_t length, uint32_t avg)
   return ret_val;
 }
 
-                                      
+
 void SPO2::get_idx() {
   LOG(LOG_INFO,"\r\n idx \r\n");
   int16_t val;
@@ -303,8 +382,7 @@ void SPO2::get_idx() {
 }                                      
 
 
-uint32_t SPO2::get_avg(uint32_t *array,uint8_t length)
-{/*calculates the average for the st_dev calculation for the Kalman filter*/
+uint32_t SPO2::get_avg(uint32_t *array,uint8_t length) {/*calculates the average for the st_dev calculation for the Kalman filter*/
   uint32_t avg = 0;
   for (uint16_t n = 0; n<length; n++) 
   {
@@ -315,121 +393,11 @@ uint32_t SPO2::get_avg(uint32_t *array,uint8_t length)
 }
 
 
-//void SPO2::kalman(uint32_t *kalman_array, uint8_t *kalman_length, uint8_t max_kalman_length, uint8_t *kalman_ptr, 
-//                  uint32_t *data_array, uint8_t *data_array_length, uint8_t max_data_length, uint8_t *data_ptr, 
-//                  uint32_t new_data, volatile bool *reset_kalman, uint32_t *kalman_avg, 
-//                  uint8_t *outlier_cnt, uint8_t *alg_fail_cnt, uint32_t kalman_threshold_1f, uint32_t min_data_std, bool jumps_ok)
-//{
-///*A basic kalman filter for throwing out outliers Decides whether to trust the new data or not.
-//  Base decision on difference between new data and Kalman average and data variance.
-//  If data variance is large over Kalman length, admit wide variation samples.
-//  If data variance is small over Kalman length, admit small variation.
-//  Throw out other samples as outliers.
-//  Kalman estimate does not include outliers.
-//  To do: if data is zero that means the algorithm bonked.
-//  Don't use zero in the data_array variance calculation.
-//  Simply skip and don't increment data or Kalman pionters
-//  Instead increment the bad data counter.
-//  If 3 bad data in a row or 3 outliers, then reset the filter.
-//  If OB1203 signal goes out of range then it goes into autogain mode and sets the
-//  reset_kalman global variable.
-//  Note the kalman threshold is fixed precision extended by typically 4 bits, set by FIXED_BITS define.
-//  */ 
-//  uint32_t avg;
-//  
-//  LOG(LOG_DEBUG,"kal ");
-//  for (int n= 0; n<max_kalman_length; n++) {
-//    LOG(LOG_DEBUG,"%04lu ",kalman_array[n]);
-//  }
-//  LOG(LOG_DEBUG,"\r\ndat ");
-//  for (int n= 0; n<max_data_length; n++) {
-//    LOG(LOG_DEBUG,"%04lu ",data_array[n]);
-//  }    
-//  
-//  uint32_t data_std;
-//  int32_t data_diff_1f = 0;
-//  int32_t threshold_1f = 0;
-//  
-//  LOG(LOG_DEBUG,"\r\nk_length = %u, k_ptr = %u, d_length = %u, "\
-//    "d_ptr = %u, new_data = %lu, reset_kalman = %d, kalman_avg = %lu\r\n",
-//    *kalman_length,       *kalman_ptr,    *data_array_length,
-//    *data_ptr,    new_data,       *reset_kalman,  *kalman_avg);
-//  if (*kalman_avg == 0) *reset_kalman = 1; //reset if the previous average was invalid
-//  if(*reset_kalman) {//re-initialize
-//    LOG(LOG_INFO,"resetting Kalman\r\n");
-//    *kalman_ptr = 0;
-//    *kalman_length = 0;
-//    *alg_fail_cnt = 0;
-//    *outlier_cnt = 0;
-//    *reset_kalman = 0;
-//    if (new_data != 0) { //if sample is valid
-//      kalman_array[*kalman_ptr] = new_data; //put new data in array
-//      (*kalman_length)++; //increment the array length
-//      *kalman_avg = new_data; //output new data as new average
-//      (*kalman_ptr)++; //increment the array index
-//      data_array[*data_ptr] = new_data;
-//      (*data_ptr)++;
-//      if(*data_ptr >= max_data_length) *data_ptr = 0;
-//      if(*data_array_length < max_data_length) (*data_array_length)++;
-//    } else {
-//      *kalman_avg = 0;
-//    }
-//  } else if (new_data != 0) {//not resetting and valid sample: update the filter and the sample array
-//    avg = get_avg(data_array,*data_array_length); //get average of existing (previous) samples)
-//    LOG(LOG_DEBUG,"avg %lu\r\n", avg);
-//    data_std = get_std(data_array, *data_array_length, avg);//get data variance
-//    data_std = (data_std < min_data_std) ? min_data_std : data_std; //constrain data variance to a mininum value
-//    LOG(LOG_DEBUG,"std = %lu\r\n", data_std);
-//    
-//    data_diff_1f = (new_data-(*kalman_avg))<<FIXED_BITS;
-//    threshold_1f = kalman_threshold_1f*data_std;
-//    
-//    if ( !jumps_ok && (abs(data_diff_1f) > threshold_1f )) {//outlier case, don't update the filter
-//      LOG(LOG_INFO,"outlier %lu\r\n", new_data);
-//      (*outlier_cnt)++;
-//    } else if ( jumps_ok && ( (abs(data_diff_1f) > threshold_1f ) || (abs(data_diff_1f) > 2*threshold_1f ) ) ) {
-//      LOG(LOG_INFO,"outlier %lu\r\n", new_data);
-//      (*outlier_cnt)++;
-//    } else { //valid data case: update the Kalman avg
-//      if(*kalman_length < max_kalman_length)(*kalman_length)++;
-//      LOG(LOG_INFO,"keeping %lu\r\n", new_data);
-//      kalman_array[*kalman_ptr] = new_data; //add new data to the kalman array
-//      *kalman_avg = get_avg(kalman_array,*kalman_length);// get new kalman average
-//      *alg_fail_cnt = 0; //zero the consecutive algorithm fails
-//      *outlier_cnt = 0; //zero the consecutive outlier fails
-//      (*kalman_ptr)++;
-//      if(*kalman_ptr == max_kalman_length) *kalman_ptr = 0; //loop index in buffer
-//    }
-//    
-//    //load new sample int data_array for next time
-//    if(*data_array_length<max_data_length) {//increment number of samples in the average up to the max max_data_length
-//      (*data_array_length)++;
-//    }
-//    data_array[*data_ptr] = new_data;
-//    (*data_ptr)++;//increment data pointer
-//    if (*data_ptr>=max_data_length) *data_ptr = 0; //loop index
-//    
-//  } else if (new_data == 0) {//not resetting and invalid sample
-//    LOG(LOG_INFO,"not valid sample\r\n");
-//    (*alg_fail_cnt)++;
-//    if(*alg_fail_cnt == ALG_FAIL_TOLERANCE) {//too many bad data points: next time reset the filter
-//      LOG(LOG_INFO,"reset: too many alg fails\r\n");
-//      //i.e., can't latch on to nothing
-//      *reset_kalman = 1;
-//    }
-//  }
-//  if(*outlier_cnt >= OUTLIER_DATA_TOLERANCE) {//too many outliers: next time reset the filters
-//    //This is to handle the case where the Kalman filter latches onto an outlier or harmonic/subharmonic and needs to break out.
-//    LOG(LOG_INFO,"reset: too many outliers\r\n");
-//    *reset_kalman = 1;
-//  }
-//}
-
-
-void SPO2::copy_data(uint8_t channel)
-{
+void SPO2::copy_data(uint8_t channel) {
   /*copies all data from the dc_data buffers to temporary buffer and subtracts the DC level
   Output is AC1f-->extended precision array*/
+  prev_alg_start_sample_count = alg_start_sample_count;
+  alg_start_sample_count = total_sample_count-ARRAY_LENGTH;
   uint16_t indx = data_ptr;
   for (int n=0; n<ARRAY_LENGTH; n++) {
     AC1f[n] = (dc_data[channel][indx]<<FIXED_BITS) - mean1f[channel]; //load the ~11bit or less AC data into an array with fixed precision for DC removal, etc.
@@ -439,10 +407,9 @@ void SPO2::copy_data(uint8_t channel)
 }
 
 
-void SPO2::get_DC()
-{
+void SPO2::get_DC() {
   /*calculates the mean DC level being subtracted in mean and residual DC level
-  for each channel and stores is in res_dc. THe mean is used for SpO2 calculations.
+  for each channel and stores is in res_dc. The mean is used for SpO2 calculations.
   There is a lag in the mean and rms but this should not be significant as the mean
   is quite constant and changes in SpO2 are usually due to rms.*/
   for(uint8_t channel=0; channel<2; channel++) {
@@ -486,8 +453,8 @@ uint32_t SPO2::uint_sqrt(uint64_t val)
 }
 
 
-void SPO2::get_rms()
-{/*This takes samples from the IR and Red DC data buffers and calculates the rms and
+void SPO2::get_rms(){
+/*This takes samples from the IR and Red DC data buffers and calculates the rms and
   mean values needed for the SpO2 calculation. It reuses the AC1f data array for both
   Red and IR to same memory.*/
   int32_t slope1f = 0;
@@ -501,11 +468,11 @@ void SPO2::get_rms()
     copy_data(channel); //copies data to AC1f[n] array (extended precision) and removes DC
     //LOG(LOG_DEBUG,"AC1f for channel %d\r\n",channel);
     LOG(LOG_DEBUG,"AC1f for channel %d\r\n",channel);
-//    ind = -((ARRAY_LENGTH-1)>>1);
-//    for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
-//      LOG(LOG_DEBUG,"%ld, %d\r\n",ind,AC1f[n]);
-//      ind++;
-//    }
+    //    ind = -((ARRAY_LENGTH-1)>>1);
+    //    for (uint16_t n=0; n<ARRAY_LENGTH; n++) {
+    //      LOG(LOG_DEBUG,"%ld, %d\r\n",ind,AC1f[n]);
+    //      ind++;
+    //    }
     
     //remove slope
     slope1f = 0;
@@ -550,7 +517,7 @@ void SPO2::get_rms()
       AC1f[n] -= (int32_t)(((int64_t)((int32_t)ind*(int32_t)ind)*(int64_t)parabolic4f)>>(FIXED_BITS*3));
       LOG(LOG_DEBUG,"%ld, %d\r\n",ind,AC1f[n]);
       ind++;
-     
+      
     }
     
     //calculate residual dc after parabolic removal
@@ -583,13 +550,12 @@ void SPO2::get_rms()
     
     //        LOG(LOG_INFO,"var1f = %lu\r\n",var1f);
     rms1f[channel] = uint_sqrt(var1f/(uint32_t)SAMPLE_LENGTH ); //square root halfs the bit shifts back to 2, so this is more like RMS0.5f -- OH WELL (it is 4x bigger, not 16x bigger)
-    LOG(LOG_INFO,"channel %d, mean1f = %lu, rms1f = %lu\r\n",channel,mean1f[channel],rms1f[channel]);
+//    LOG(LOG_INFO,"channel %d, mean1f = %lu, rms1f = %lu\r\n",channel,mean1f[channel],rms1f[channel]);
   }//end channel loop
 }
 
 
-void SPO2::calc_R()
-{
+void SPO2::calc_R() {
   /*an error of 0.01 in R is an error of about 0.25% in SpO2. So we want to keep
   at least 8 bits of precision in R
   for a huge RMS value like 2056 for IR and 1024 for R.
@@ -609,8 +575,7 @@ void SPO2::calc_R()
 }
 
 
-void SPO2::calc_spo2()
-{
+void SPO2::calc_spo2() {
   float spo2 = 0;
   //trying to be very efficient with floating point multiplication here
   float Rs[5];
@@ -636,8 +601,8 @@ void SPO2::calc_spo2()
 }
 
 
-void SPO2::calc_hr()
-{/*Calculates heart rate from a beat periodicity (samples per period aka "offset" in fixed precision*/
+void SPO2::calc_hr(){
+/*Calculates heart rate from a beat periodicity (samples per period aka "offset" in fixed precision*/
   if(final_offset1f == 0) {
     current_hr1f = 0;
   } else {
@@ -647,10 +612,10 @@ void SPO2::calc_hr()
 }
 
 
-void SPO2::add_sample(uint32_t ir_data, uint32_t r_data)
-{/*Called by main to load new samples into the algorithm's buffer. Provides additional
+void SPO2::add_sample(uint32_t ir_data, uint32_t r_data) {
+/*Called by main to load new samples into the algorithm's buffer. Provides additional
   filtering with a moving average filter. This is not equivalent to increasing 
-  averageing on the OB1203 because that reduces data rate. This does not. We need
+  averaging on the OB1203 because that reduces data rate. This does not. We need
   that resolution for accuracy at high heart rates.*/
   const uint8_t num2avg=8; //changing this from 8 to 4 based on simulation results from raw data in Matlab
   static uint16_t num_samples = 0;
@@ -681,8 +646,8 @@ void SPO2::add_sample(uint32_t ir_data, uint32_t r_data)
 }
 
 
-int32_t SPO2::corr(int16_t *x, uint16_t len, uint16_t offset)
-{/*this does a correlation of the data with time-offset data and returns the dot 
+int32_t SPO2::corr(int16_t *x, uint16_t len, uint16_t offset){
+/*this does a correlation of the data with time-offset data and returns the dot 
   product of the two arrays. It takes arrays of ACdata with fixed precision.
   I modified it to start after max filter length since the lag is linearly increasing
   in the region and it can cause some error in the HR estimate.*/
@@ -697,8 +662,8 @@ int32_t SPO2::corr(int16_t *x, uint16_t len, uint16_t offset)
   return result;
 }
 
-void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t start_correl, uint32_t max_search_step)
-{/*This program looks for the peak of the autocorrelation function by doing correlations and stepping 
+void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t start_correl, uint32_t max_search_step) {
+/*This program looks for the peak of the autocorrelation function by doing correlations and stepping 
   down then up in offset until it finds a peak. If it exits at the extrema of the range
   then this is considered a fail. That doesn't quite work well with the variable stepping
   at long hear rates, however the kalman can sometimes throw out a bad low heart rate*/
@@ -706,7 +671,7 @@ void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t 
   /*fine search for correlation peak using defined step size (index units).
   Finds peak and interpolates the maximum and saves the answer with fixed precision.
   */
-  LOG(LOG_INFO,"fine search at %lu\r\n",start_offset);
+//  LOG(LOG_INFO,"fine search at %lu\r\n",start_offset);
   uint32_t search_step = start_offset/30; //dynamically stepping to get better resolution at high heart rates
   search_step = (search_step > max_search_step) ? max_search_step : search_step;
   uint16_t offset = start_offset;
@@ -728,7 +693,7 @@ void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t 
       offset -= search_step;
       if (offset>=min_offset) {
         c = corr(x,len,offset);
-        LOG(LOG_INFO,"%u, %ld \r\n",offset, c>>11);
+//        LOG(LOG_INFO,"%u, %ld \r\n",offset, c>>11);
         if (c<=final_correl) {
           break; //Getting worse. Stop.
         } else {
@@ -750,7 +715,7 @@ void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t 
         offset += search_step;
         if (offset<max_offset) {
           c = corr(x,len,offset); //search lower frequency
-          LOG(LOG_INFO,"%u, %ld \r\n",offset, c>>11);
+//          LOG(LOG_INFO,"%u, %ld \r\n",offset, c>>11);
           if (c <= final_correl) {
             break; //getting worse; stop
           } else {
@@ -785,15 +750,14 @@ void SPO2::fine_search(int16_t *x, uint16_t len, uint32_t start_offset, int32_t 
 }
 
 
-bool SPO2::check4max(int16_t *x, uint16_t len,uint16_t start_offset, int32_t start_correl)
-{
+bool SPO2::check4max(int16_t *x, uint16_t len,uint16_t start_offset, int32_t start_correl) {
   //check for a max in the correlation in a region
   bool max_found = 0;
   fine_search(x,len,start_offset,start_correl,MAX_FINE_STEP);
   if ( final_offset1f != (min_offset<<FIXED_BITS)) {
     if(final_offset1f != (max_offset<<FIXED_BITS)) {
       max_found = 1;
-      LOG(LOG_INFO,"start = %u, success at %.2f, correl = %lu\r\n", start_offset, (float)final_offset1f/(float)(1<<FIXED_BITS),fit_correl>>11);
+//      LOG(LOG_INFO,"start = %u, success at %.2f, correl = %lu\r\n", start_offset, (float)final_offset1f/(float)(1<<FIXED_BITS),fit_correl>>11);
     }
   } else {
     LOG(LOG_INFO,"start = %u, fail at %.2f correl = %lu\r\n", start_offset, (float)final_offset1f/(float)(1<<FIXED_BITS), final_correl>>11);
@@ -802,8 +766,8 @@ bool SPO2::check4max(int16_t *x, uint16_t len,uint16_t start_offset, int32_t sta
 }
 
 
-bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
-{/*This is the brains of the heart rate detection. It looks for the minimum of the
+bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess) {
+/*This is the brains of the heart rate detection. It looks for the minimum of the
   autocorrelation using large steps, interpolates the minimum, doubles it and does a fine
   search near the peak. This is usually faster than an FFT, but not if it has to run
   a lot of values. Anyway, it is quite robust.*/
@@ -821,8 +785,8 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
   int32_t min_correl;
   
   
-  LOG(LOG_INFO,"start find max correl\r\n");
-  LOG(LOG_DEBUG,"len = %d, offset_guess = %d\r\n",max_length, offset_guess);
+//  LOG(LOG_INFO,"start find max correl\r\n");
+//  LOG(LOG_DEBUG,"len = %d, offset_guess = %d\r\n",max_length, offset_guess);
   int32_t start_correl;
   bool max_found;
   
@@ -843,11 +807,11 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
   offsets[1] = try_offset;
   c[1] = corr(x,samples2use,try_offset);
   rising = (c[1] > c[0]) ? 1 : 0; //skip to search for a peak if rising, else look for a minimum and double it.
-  LOG(LOG_INFO,"%d, %ld\r\n%d, %ld\r\n", MIN_OFFSET-BIG_STEP,c[0],MIN_OFFSET,c[1]);
+//  LOG(LOG_INFO,"%d, %ld\r\n%d, %ld\r\n", MIN_OFFSET-BIG_STEP,c[0],MIN_OFFSET,c[1]);
   uint16_t step = BIG_STEP; //start with big step
   const uint8_t max_step = 18;
   if(!rising) {
-    LOG(LOG_INFO,"searching for min\r\n");
+//    LOG(LOG_INFO,"searching for min\r\n");
     while(!rising) { //keep going until you find a minimum  
       step += (step < max_step) ? 1 : 0; //increment step size if less than max step
       uint16_t elapsed_time = t_read() - p2_start_time;
@@ -866,7 +830,7 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
         offsets[0] = offsets[1];
         offsets[1] = try_offset;
       }
-      LOG(LOG_INFO,"%u %ld\r\n",try_offset,c[2]);
+//      LOG(LOG_INFO,"%u %ld\r\n",try_offset,c[2]);
     }
     if(!fail) {
       //            highest = (c1 > c3) ? c1 : c3;
@@ -878,15 +842,15 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
       //                LOG(LOG_INFO,"d2 = %ld\r\n",d2);
       //                offset_guess = (uint16_t)( ( ( (int16_t)try_offset-(int16_t)BIG_STEP)<<1) + (int16_t)d2) ; //interpolate a better answer
       offsets[2] = try_offset; 
-      LOG(LOG_INFO,"min fit at: %u %u %u \r\n",offsets[0],offsets[1],offsets[2]);
-      LOG(LOG_INFO,"for values: %ld %ld %ld \r\n",c[0],c[1],c[2]);
+//      LOG(LOG_INFO,"min fit at: %u %u %u \r\n",offsets[0],offsets[1],offsets[2]);
+//      LOG(LOG_INFO,"for values: %ld %ld %ld \r\n",c[0],c[1],c[2]);
       peak_find(offsets,c,&offset_extremum1f,&min_correl); 
       offset_guess = (uint16_t)(offset_extremum1f>>(FIXED_BITS-1));
-      LOG(LOG_INFO,"guessing double the min at %d\r\n",offset_guess);
+//      LOG(LOG_INFO,"guessing double the min at %d\r\n",offset_guess);
       //            }
     }
   } else {//already rising
-    LOG(LOG_INFO,"searching for max\r\n");
+//    LOG(LOG_INFO,"searching for max\r\n");
     while(rising) {//keep going until you find a drop
       uint16_t elapsed_time = t_read() - p2_start_time;
       
@@ -905,7 +869,7 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
           offsets[0] = offsets[1];
           offsets[1] = try_offset;
         }
-        LOG(LOG_INFO,"%u %ld\r\n",try_offset,c[2]);
+//        LOG(LOG_INFO,"%u %ld\r\n",try_offset,c[2]);
       }
     }
     if(!fail) {
@@ -919,11 +883,11 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
       
       //            }
       offsets[2] = try_offset; 
-      LOG(LOG_INFO,"max fit at: %u %u %u \r\n",offsets[0],offsets[1],offsets[2]);
-      LOG(LOG_INFO,"for values: %ld %ld %ld \r\n",c[0],c[1],c[2]);
+//      LOG(LOG_INFO,"max fit at: %u %u %u \r\n",offsets[0],offsets[1],offsets[2]);
+//      LOG(LOG_INFO,"for values: %ld %ld %ld \r\n",c[0],c[1],c[2]);
       peak_find(offsets,c,&offset_extremum1f,&min_correl); 
       offset_guess = (uint16_t)(offset_extremum1f>>FIXED_BITS);
-      LOG(LOG_INFO,"guessing near the max at %d\r\n",offset_guess);
+//      LOG(LOG_INFO,"guessing near the max at %d\r\n",offset_guess);
     } else {
       offset_guess = DEFAULT_GUESS;
     }
@@ -933,11 +897,11 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
   if(offset_guess > MAX_OFFSET) offset_guess = DEFAULT_GUESS;
   
   start_correl = corr(x,samples2use,offset_guess);
-  LOG(LOG_INFO,"%u, %lu\r\n",offset_guess,start_correl>>11);
+//  LOG(LOG_INFO,"%u, %lu\r\n",offset_guess,start_correl>>11);
   max_found = check4max(x, samples2use, offset_guess, start_correl);
   if (prev_valid & !max_found) { //go ahead and try the previous value if the other bonked.
     //note you can't just rely on this or you could lock into a harmonic.
-    LOG(LOG_INFO,"trying prev sol'n\r\n");
+//    LOG(LOG_INFO,"trying prev sol'n\r\n");
     max_found = check4max(x, samples2use, prev_offset, prev_correl);
   }
   
@@ -948,13 +912,13 @@ bool SPO2::find_max_corr(int16_t *x, uint16_t max_length, uint16_t offset_guess)
   } else {
     prev_valid = 1;
   }
-  LOG(LOG_DEBUG,"final_offset %lu\r\n",final_offset);
+  LOG(LOG_INFO,"final_offset %lu\r\n",final_offset);
   return max_found;
 }
 
 
-void SPO2::peak_find(uint16_t *x0, int32_t *y, int32_t *x_fit1f, int32_t *y_fit)
-{/*This is a peak (or valley) finder that takes arbitrary x and y data. THe y 
+void SPO2::peak_find(uint16_t *x0, int32_t *y, int32_t *x_fit1f, int32_t *y_fit) {
+/*This is a peak (or valley) finder that takes arbitrary x and y data. The y 
   data here is not kept in fixed precision so it assumes it is dealing with large
   numbers like the correlation dot products. It is more general than the simple finder
   which assumes equal spacing in the x data (offset steps)
@@ -992,8 +956,8 @@ void SPO2::peak_find(uint16_t *x0, int32_t *y, int32_t *x_fit1f, int32_t *y_fit)
 }
 
 
-void SPO2::simple_peak_find(int32_t *y, int32_t *x_fit1f, int32_t *y_fit, uint16_t x_center, int32_t step)
-{/*This is a fast peak finder for equally spaced data in x. Y is not calculated with
+void SPO2::simple_peak_find(int32_t *y, int32_t *x_fit1f, int32_t *y_fit, uint16_t x_center, int32_t step){
+/*This is a fast peak finder for equally spaced data in x. Y is not calculated with
   additional fixed precision so the estimated peak value is accurate for large values of y only.
   For numerical stability let x[1] = 0, namely the middle point (high or low) is zero
   To simplify the math we measure in units of the step size, so xfit1f is fixed precision in units of the step size
@@ -1003,23 +967,63 @@ void SPO2::simple_peak_find(int32_t *y, int32_t *x_fit1f, int32_t *y_fit, uint16
   a*x[1]^2 + b*x[1] + c = y[1]
   a*x[2]^2 + b*x[2] + c = y[2]
   
-  using x2 = {x[0]^2, x[1]^2, x[2]^2}
-  in this case x[0] = -1, x[1] = 0; x[2] = 1;
+  using x =[-1,0,1}, and x2 = {x[0]^2, x[1]^2, x[2]^2} = {1,0,1]
+  //solve for a, b, and c using x2, x and c as constants
   */
-  int32_t A;
-  int32_t B;
-  int32_t C;
+  int32_t A; //a
+  int32_t B; //b
+  int32_t C; //c
   //using Cramer's rule
-  C = y[1]; //middle equation in system is trivial. Reduces to 2x2 determinant.
-  //let yp[2] = {y[0]-C,y[2]-C};
+  C = y[1]; //middle equation in system is trivial. Problem reduces to 2x2 determinant.
+  /*
+  a*x[0]^2 + b*x[0] = y[0]-c
+  a*x[2]^2 + b*x[2] = y[2]-c
+  */
+  //let yp[0] = y[0]-C and yp[2] = y[2]-C;
   //D = 2; //determinant of {{1, -1},{1, 1}}
-  //Dx = yp[0]*1 - (-1)*yp[2] = yp[0] + y[p] = y[0]-C + y[2]-C = y[0] + y[2] -2*C;
+  //Da = yp[0]*1 - (-1)*yp[1] = yp[0] + yp[1] = y[0]-C + y[2]-C = y[0] + y[2] -2*C;
   //Dy = 1*yp[2] - yp[0]*1 = yp[2] - yp[1] = y[2] -C - (y[0] -C) = y[2] - y[0];
-  A = (y[0]+y[2]-(C<<1) )>>1; // Dx/D
-  B = (y[2]-y[0])>>1; // Dy/D
-  *x_fit1f =  (-((B<<FIXED_BITS)/A)>>1)*(int32_t)step + (x_center<<FIXED_BITS)  ; // -b/2a * step + x_center
-  *y_fit = C - (((B>>2)*B)/A); //C - b2/4a
-  LOG(LOG_DEBUG,"A = %ld, B = %ld, C = %ld, b^2/a = %ld\r\n",A,B,C, B*B/4/A);
+  A = (y[0]+y[2]-(C*2) )/2; // Dx/D
+  B = (y[2] - y[0])/2; // Dy/D
+  *x_fit1f =  (-((B<<FIXED_BITS)/A)*(int32_t)step)/2 + (x_center<<FIXED_BITS)  ; // -b/2a * step + x_center
+  *y_fit = C - (((B>>2)*B)/A); //C - b^2/4a
+  LOG(LOG_DEBUG,"A = %ld, B = %ld, C = %ld, b^2/4a = %ld\r\n",A,B, C, B*B/4/A);
+}
+
+void SPO2::ext_prec_peak_find(int32_t *y, int32_t *x_fit1f, int32_t *y_fit, uint16_t x_center, int32_t step){
+/*This is a fast peak finder for equally spaced data in x. Y is not calculated with
+  additional fixed precision so the estimated peak value is accurate for large values of y only.
+  For numerical stability let x[1] = 0, namely the middle point (high or low) is zero
+  To simplify the math we measure in units of the step size, so xfit1f is fixed precision in units of the step size
+  
+  Solve this linear equation
+  a*x[0]^2 + b*x[0] + c = y[0]
+  a*x[1]^2 + b*x[1] + c = y[1]
+  a*x[2]^2 + b*x[2] + c = y[2]
+  
+  using x =[-1,0,1}, and x2 = {x[0]^2, x[1]^2, x[2]^2} = {1,0,1]
+  //solve for a, b, and c using x2, x and c as constants
+  */
+  int32_t A; //a
+  int32_t B; //b
+  int32_t B1f; //b with addition bits of precisions
+  int32_t C; //c
+  //using Cramer's rule
+  C = y[1]; //middle equation in system is trivial. Problem reduces to 2x2 determinant.
+  /*
+  a*x[0]^2 + b*x[0] = y[0]-c
+  a*x[2]^2 + b*x[2] = y[2]-c
+  */
+  //let yp[0] = y[0]-C and yp[2] = y[2]-C;
+  //D = 2; //determinant of {{1, -1},{1, 1}}
+  //Da = yp[0]*1 - (-1)*yp[1] = yp[0] + yp[1] = y[0]-C + y[2]-C = y[0] + y[2] -2*C;
+  //Dy = 1*yp[2] - yp[0]*1 = yp[2] - yp[1] = y[2] -C - (y[0] -C) = y[2] - y[0];
+  A = (y[0]+y[2]-(C*2) )/2; // Dx/D
+  B = (y[2] - y[0])/2; // Dy/D
+  B1f = ((y[2]*(int32_t)(1<<FIXED_BITS)) - (y[0]*(int32_t)(1<<FIXED_BITS)))/2; // Dy/D
+  *x_fit1f =  (-(B1f/A)*(int32_t)step)/2 + (x_center<<FIXED_BITS)  ; // -b/2a * step + x_center
+  *y_fit = C - (((B>>2)*B)/A); //C - b^2/4a
+  LOG(LOG_DEBUG,"A = %ld, B = %ld, B1f = %ld, C = %ld, b^2/4a = %ld\r\n",A,B, B1f, C, B*B/4/A);
 }
 
 void SPO2::avgNsamples(int16_t *x, uint8_t number2avg) {
@@ -1046,11 +1050,15 @@ void SPO2::avgNsamples(int16_t *x, uint8_t number2avg) {
 }
 
 
+//void SPO2::set_filters(KALMAN* filter1, KALMAN* filter2, KALMAN* filter3, KALMAN* filter4, KALMAN* filter5, KALMAN* filter6 ) {
 void SPO2::set_filters(KALMAN* filter1, KALMAN* filter2, KALMAN* filter3, KALMAN* filter4) {
-   corr_filter = filter1;
-   hr_filter = filter2;
-   spo2_filter = filter3;
-   rr_filter = filter4;
+  corr_filter = filter1;
+  hr_filter = filter2;
+  spo2_filter = filter3;
+  //rr_filter = filter4;
+  consensus_breath_filter = filter4;
+  //short_breath_filter = filter5;
+  //breath_filter = filter6;
 }
 
 
@@ -1081,6 +1089,7 @@ void SPO2::fastAvg2Nsamples(int16_t *x) {
 
 
 int SPO2::get_direction(uint32_t data1, uint32_t data2) {
+  int dir;
   if (data2 > data1) {
     dir = 1;
   } else if (data2 < data1) {
@@ -1092,199 +1101,334 @@ int SPO2::get_direction(uint32_t data1, uint32_t data2) {
 }
 
 
-void SPO2::findminmax(int32_t* data, uint16_t start_ind, uint16_t stop_ind, int32_t c[], int* extreme, int* type){
+void SPO2::findminmax(int32_t* data, uint16_t start_ind, uint16_t stop_ind, int32_t* c, int* extreme, int* type){
   uint16_t ind = start_ind;
   c[1] = data[ind];
   ind = ind+1;
   c[2] = data[ind];
   bool change_dir = 0;
+  int dir1;
+  int dir2;
   dir1 = get_direction(c[1],c[2]); //-1 is falling, 1 is rising
   ind = ind+1;
-  extreme = -1; //default = fail condition
+  *extreme = -1; //default = fail condition
   type = 0;
   while (!change_dir && (ind<=stop_ind)) {
     c[0] = c[1];
     c[1] = c[2];
-    c[2] = data(ind);
+    c[2] = data[ind];
     dir2 = get_direction(c[1],c[2]);
     if (dir1*dir2 < 0) {
-        change_dir = 1;
-        type = dir1; //1 = peak, -1 = valley
-        break;
+      change_dir = 1;
+      *type = dir1; //1 = peak, -1 = valley
+      break;
     }
     ind = ind+1;
   }
-  extreme = ind-1; //this is the last point we verified is or is not an extremum. Start next search at this point.
+  *extreme = ind-1; //this is the last point we verified is or is not an extremum. Start next search at this point.
 }
 
 
-void SPO2::peak2peak(int32_t ac_data) {
-  int array_ind = 1;
-  int array_end = SAMPLE_RATE + 2;
-  int dir = 0;
-  int32_t c[3];
-  int type = 0; //no extreme type
-  int beat_cnt = 0; //no beats counted yet
-  int prev_min = 0; //no min previously found
-  int prev_max = 0; //no max previously found
-  int prev_type = 0; //no extreme type (+/-) previously found
-  while (1) {
-    //look for extrema
-    findminmax(ac_data, array_ind, array_end, c, &type);
-    if (type != 0) {
-      array_ind = extreme;
-      
-    }
-  }
+int32_t SPO2::get_peak_height (int32_t *peak_xdata, int32_t *peak_ydata) {//********UNFINISHED***********//
+  //x and y are 3 points arrays with the extreme at y[1]
+  int32_t dx1;
+  int32_t dx;
+  int32_t y0;
+  int32_t dx2;
   
+  dx1 = peak_xdata[1]-peak_xdata[0];
+  dx2 = peak_xdata[2]-peak_xdata[1];
+  dx = dx1 + dx2;
+  //get estimated baseline at peak position
+  y0 = peak_ydata[0] + dx1/dx * (peak_ydata[2] - peak_ydata[0]); //add an amount proportional to the difference between point 1 and 3
+  //difference between peak and valley
+  return y0;
+} //end get_peak_height
+
+//BEAT TO BEAT PORTING IN PROGRESS
+//void SPO2::peak2peak(int32_t* ac_data) {//********UNFINISHED***********//
+//  static int peaks_found = 0;
+//  static int valleys_found = 0;
+//  int array_end = SAMPLE_RATE + 2;
+//  int dir = 0;
+//  int32_t c[3];
+//  int type = 0;
+//  static int32_t last_peak_x1f = 0;
+//  static int32_t last_peak_y = 0;
+//  static int32_t last_valley_x1f = 0;
+//  static int32_t last_valley_y = 0;
+//  static int last_found_type = 0;
+//  int32_t y[3];
+//  int32_t x1f; //latest peak position
+//  int32_t yfit;
+//  int32_t peak_amp;
+//  uint16_t rr_time;
+//  int32_t step = 1;
+//  int extreme;
+//  int array_ind = 0;
+//  array_end = SAMPLE_RATE+1; //extreme on exit (no peak) will be at SAMPLE_RATE (100) and next search starts here. We search 101 samples and overlap 1 sample.
+//  while (1) {
+//    //look for extrema
+//    findminmax(ac_data, array_ind, array_end, c, &extreme, &type);
+//    array_ind = extreme; //update start position for next time;
+//    if (type !=0) { //peak found
+//      if (type == 1) peaks_found++;
+//      if (type == -1) valleys_found++;
+//      y[0] = ac_data[extreme-1];
+//      y[1] = ac_data[extreme];
+//      y[2] = ac_data[extreme+1];
+//      simple_peak_find(y, &x1f, &yfit, extreme, step);
+//      if ( (peaks_found > 1) && (type ==1 ) ) {//enough peaks to calc R-R time
+//        //THEN USE GET_PEAK_HEIGHT TO GET PEAK AMPLITUDE AND SEE IF IT WORKS BETTER THAN RMS FOR 
+//        rr_time1f = x1f+alg_start_sample_count<<FIXED_BITS - last_peak_x1f;
+//        //ALSO FIGURE OUT HOW TO REPORT THIS--PERHAPS AN ISR?
+//        int32_t xdata[3] = {last_valley_x1f,last_peak_x1f,x1f};
+//        int32_t ydata[3] = {last_valley_y,last_peak_y,yfit};
+//        peak_amp = get_peak_height(xdata,ydata);
+//      }
+//      if (type == 1) {
+//        last_peak_x1f = x1f+alg_start_sample_count<<FIXED_BITS;
+//        last_peak_y = yfit;
+//      }
+//      if (type == -1) {
+//        last_valley_x1f = x1f + alg_start_sample_count<<FIXED_BITS;
+//        last_valley_y = yfit;
+//      }
+//    } else { //ran out of points
+//      break; //exit loop
+//    }
+//  }
+//} //end peak2peak
+
+
+void SPO2::unwrap_buffer_to_int(uint32_t *circular_buffer, int32_t *unwrapped_buffer, int length, int buffer_ind) {
+  //unwrap buffer
+  int ind;
+  for (int n=0;n<length;n++) { //newest sample first, oldest sample last
+    ind = buffer_ind-n;
+    if (ind<0) ind += length;
+    unwrapped_buffer[n] = (int32_t)circular_buffer[ind];
+  } 
 }
 
-
-uint32_t KALMAN::uint_sqrt(uint32_t val)
-{
-  //integer sqrt function from http://www.azillionmonkeys.com/qed/sqroot.html
-  uint32_t temp, g=0, b = 0x8000, bshft = 15;
-  do {
-    if (val >= (temp = (((g << 1) + b)<<bshft--))) {
-      g += b;
-      val -= temp;
-    }
-  } while (b >>= 1);
-  return g;
-}
-
-KALMAN::KALMAN(uint8_t max_kalman_length_in, 
-                    uint8_t max_data_array_length_in, 
-                    uint8_t max_outlier_cnt_in, 
-                    uint8_t max_alg_fail_cnt_in, 
-                    uint8_t min_data_std_in,
-                    uint8_t kalman_threshold_2x_in, 
-                    bool jumps_ok_in) { //initializer
-  max_kalman_length = max_kalman_length_in;
-  max_data_array_length = max_data_array_length_in;
-  max_outlier_cnt = max_outlier_cnt_in;
-  max_alg_fail_cnt = max_alg_fail_cnt_in;
-  min_data_std = min_data_std_in;
-  kalman_threshold_2x = kalman_threshold_2x_in; //adding one bit of precision to this number. E.g. 2.5 is stored as 5 and then after multiplying by std deviation we divide by 2.
-  jumps_ok = jumps_ok_in;
-  kalman_avg = 0;
-  kalman_length = 0;
-  data_array_length = 0;
-  kalman_ind = 0;
-  data_ind = 0;
-  do_reset_kalman = 0;
-  kalman_array  = new uint32_t[max_kalman_length]();
-  data_array = new uint32_t[max_data_array_length]();
-}
-
-void KALMAN::reset_kalman() {
-  kalman_ind = 0;
-  kalman_length = 0;
-  alg_fail_cnt = 0;
-  outlier_cnt = 0;
-  do_reset_kalman = 0;
-  kalman_avg = 0;
-}
-
-uint32_t KALMAN::get_std(uint32_t *array, uint8_t array_length) {
-  uint32_t var =0;
-  int32_t less_avg = 0; //data with mean substracted
-  uint32_t avg = get_avg(array,array_length); //get average value of data in array
-
-
-  //calculate variance
-  for (uint8_t n=0; n<array_length; n++) {
-    less_avg = (int32_t)array[n]-(int32_t)avg; //cast as int and subtract avg from data
-    var += (uint32_t) (less_avg*less_avg);  //add square of deviation from avg
+void SPO2::subtract_mean(int32_t* array,int length) {
+  //subtract the mean
+  int32_t mean=0;  
+  for (int n =0;n<length;n++) {
+    mean += array[n];
   }
-  var /= (uint32_t) array_length; //divide variance by number of samples
-    return uint_sqrt( (uint32_t)var ); //cast as uint32 and take square root to get rms (aka standard deviation)
-}
-
-
-uint32_t KALMAN::get_avg (uint32_t *array, uint8_t array_length) {
-  int32_t avg = 0;
-  for (uint8_t n = 0; n<array_length; n++) {
-    avg += array[n];
+  mean /= length;
+  for (int n=0;n<length;n++) {
+    array[n] -= mean;
   }
-  return avg / (uint32_t)array_length;    
 }
 
-
-void KALMAN::run_kalman(uint32_t new_data) {
-  data_std = 0;
-  uint32_t up_thresh = 0;
-  uint32_t down_thresh = 0;
-  
-  bool outlier = false;
-  if ( (kalman_avg == 0) || (do_reset_kalman == 1) ) {
-      reset_kalman(); //reset the average if the previous average was invald
-      if(new_data != 0) { //if the sample is valid
-        data_ind = 0; //reset the data index (don't have to do this but is simplifies the program)
-        kalman_ind = 0; //reset the array index
-        kalman_array[kalman_ind] = new_data; //put new data in the array
-        kalman_length++;
-        kalman_avg = new_data;
-        kalman_ind++; //increment this for next time
-        data_array[data_ind] = new_data; //ouput new data as the new average (lacking other information as yet)
-        data_ind++; //increment this for next time
-        if (data_array_length < max_data_array_length) {
-          data_array_length++; //increase array length
-        }
-      } else {
-        kalman_avg = 0; //average is zero because the first sample is invalid
+void SPO2::get_autocorrelation(int32_t * array, int32_t * autocorrelation,int array_length, int max_offset) { 
+  //Note if we really wanted to save processing we could update only the change in the autocorrelation with each new data point #lazy I do it all every time because it is fast and stable 
+  //If we don't find a peak, but we do find a minimum, the option "use_min" will allow the algorithm
+  //to peak_find (trough find) the minimum and double that to estimate the period.
+  if (max_offset<0) max_offset *= -1;
+  int64_t product;
+  for (int offset = 0;offset<max_offset;offset++) {//sweep offset
+    autocorrelation[offset] = 0; //initialize
+    for (int n=0;n<max_offset;n++) { //dot product of offset vectors
+      if (n+offset < array_length) {//only do it if the array is long enough
+        product =  (int64_t)array[n]*(int64_t)array[n+offset];
+        autocorrelation[offset] += (int32_t)(product/((int64_t)(1<<FIXED_BITS))); //try to limit the size of the autocorrelation
       }
-  } else if (new_data != 0) { //not resetting and valid sample case (typical case)
-    data_std = get_std(data_array, data_array_length); //calc the standard deviation of the data using an integer method for sqrt instead of floating point method
-    if (data_std < min_data_std) {
-      data_std = min_data_std; //constrain data variance to a minimum value for stability
+    }
+  }
+}
+
+uint8_t SPO2::get_period_from_array(int32_t* array, int max_offset, int32_t* period1f, bool use_min) {
+  int n=1; //starting at 1 instead of zero because occasionally a small offset is greater than 0, especially if data is sloping.
+  int m;
+  uint8_t err = 0;
+  *period1f = max_offset<<FIXED_BITS;
+  int32_t ydat[3];
+  int32_t xfit1f;
+  int32_t yfit;
+  
+  
+  while ( 1 ) {//look for a minimum starting at offset 1 
+    //n is array minimum
+    if ( (n+1) <= max_offset) { //not reached end
+      if  ( array[n+1] <= array[n] ){ //going down
+        n=n+1;
+      }
+      else {//turned up
+        break;
+      }
+    }
+    else {//reached end
+      break;
+    }
+  }
+  if (n == max_offset) {//breathing rate descended continuously
+    *period1f = max_offset<<FIXED_BITS; //didn't find minimum. Choose default minimum detectable breathing rate 
+    err = 1; //no minimum found
+    return err;
+  }
+  //m is array maximum
+  m = n;
+  while (1) { //start search for max
+    if ( (m+1) <= max_offset ) {//not reached end
+      if (array[m+1] >= array[m]) {//going up
+        m = m+1;
+      }
+      else {//passed peak
+        break;
+      }
+    }
+    else {//reached end
+      break;
+    }
+  }//exit loop
+  
+  //calculate period
+  if (m == max_offset) { //error: breathing rate lower than detecable limit
+    err = 2; //min found, but couldn't find max
+    if (use_min) {
+      //double the minimum to estimate the maximum
+      if (m < 3/4*max_offset){ //make sure this minimum is occuring early enough in the dataset to be relevant
+        ydat[0] = array[n-1];
+        ydat[1] = array[n];
+        ydat[2] = array[n+1];
+        simple_peak_find(ydat, &xfit1f, &yfit, (uint16_t)m, 1); //xfit1f is fixed precision period     
+        *period1f = xfit1f*2; //double the min to guess the peak
+      }
+      else {
+        *period1f = max_offset<<FIXED_BITS;
+      }
+    }
+    else {
+      *period1f = max_offset<<FIXED_BITS;
     }
     
-    outlier = false;
-    if (new_data > kalman_avg) { //new data is bigger than kalman avgerage
-      up_thresh = kalman_threshold_2x*data_std;
-      if (jumps_ok == 0) up_thresh = up_thresh>>1; //divide by two for normal case
-      if( new_data - kalman_avg > up_thresh) { //jumping high case for SpO2
-        outlier_cnt++;
-        outlier = true;
-      }
-    } else { //new_data is smaller than kalman_avg
-      down_thresh = (kalman_threshold_2x*data_std)>>1;
-      if (kalman_avg - new_data > down_thresh) { 
-        outlier_cnt++;
-        outlier = true;
-      } 
-    }
-    if (outlier == false) { //not an outlier, update the filter
-      if (kalman_length < max_kalman_length) {
-        kalman_length++;
-      }
-      kalman_array[kalman_ind] = new_data; //add new data to the kalman array
-      kalman_avg = get_avg(kalman_array, kalman_length);
-      alg_fail_cnt = 0; //zero the consecutive algorithm fails
-      outlier_cnt = 0; //zero the consecutive outlier fails
-      kalman_ind++;
-      if (kalman_ind >= max_kalman_length) {
-        kalman_ind = 0;
-      }
-      
-      if (data_array_length < max_data_array_length) {
-        data_array_length++;
-      }
-      data_array[data_ind] = new_data;
-      data_ind++;
-      if (data_ind >= max_data_array_length) {
-        data_ind = 0;
-      }
-    }
-  } else if (new_data == 0) {
-    alg_fail_cnt++;
-    if (alg_fail_cnt == max_alg_fail_cnt){
-      do_reset_kalman = 1;
-    }
   }
-  if (outlier_cnt >= max_outlier_cnt) {
-    do_reset_kalman = 1;
+  else {//not max--peak found
+    if (m <= 2){ //error too fast
+      if (m>1) {//go ahead and try to fit the peak
+        ydat[0] = array[m-1];
+        ydat[1] = array[m];
+        ydat[2] = array[m+1];
+        simple_peak_find(ydat, &xfit1f, &yfit, (uint16_t)m, 1); //xfit1f is fixed precision period     
+        *period1f = xfit1f;
+      }
+      else {//maxed out
+        *period1f = 3<<FIXED_BITS; 
+        err = 3;
+      }
+    }
+    else {
+      err = 0; //found a peak
+      ydat[0] = array[m-1];
+      ydat[1] = array[m];
+      ydat[2] = array[m+1];
+      simple_peak_find(ydat, &xfit1f, &yfit, (uint16_t)m, 1); //xfit1f is fixed precision period     
+//      LOG(LOG_INFO,"m = %u, period for length %u is %ld\r\n",m, max_offset,xfit1f);
+      *period1f = xfit1f;
+    }
+  } //end found max case
+  return err;
+}
+
+void SPO2::do_algorithm_part3() {
+  /*
+  This function does the breathing rate detection with autocorrelation of the sinus arrythmia.
+  */
+  alg_count++; //increment the algorithm run count. Like a 1 second tick. Keeps track of peak and valley positions.
+  int32_t lin_buffer[BREATH_ARRAY_LENGTH];
+  int32_t autocorrelation[BREATH_ARRAY_LENGTH];
+  int32_t short_period1f;
+  int32_t long_period1f;
+  int32_t current_br_period1f;
+  uint8_t short_err = 0;
+  uint8_t long_err = 0;
+  bool choice;
+  //this part is going to use the correlation-based heart rate while beat-to-beat is in development
+  //put in some protection from bad data--like skip it or something.
+  
+  hr_data_buffer[hr_data_buffer_ind] = corr_filter->kalman_avg;
+  
+  if(alg_count>SHORT_BREATH_ARRAY_LENGTH) {
+    
+    unwrap_buffer_to_int(hr_data_buffer,lin_buffer,SHORT_BREATH_ARRAY_LENGTH,hr_data_buffer_ind);
+    subtract_mean(lin_buffer,SHORT_BREATH_ARRAY_LENGTH);
+    //Consider removing slope here also. This would help with breath detection when in recovery from exercise.
+    get_autocorrelation(lin_buffer,autocorrelation,SHORT_BREATH_ARRAY_LENGTH,SHORT_MAX_BREATH_OFFSET);
+    LOG(LOG_INFO,"autocorrelation:\r\n");
+//    for (int n=0;n<SHORT_BREATH_ARRAY_LENGTH;n=n+4) {
+//      LOG(LOG_INFO,"%ld %ld %ld %ld\r\n",autocorrelation[n*4],autocorrelation[n*4+1],autocorrelation[n*4+2],autocorrelation[n*4+3]);
+//    }
+    short_err =get_period_from_array(autocorrelation, SHORT_MAX_BREATH_OFFSET, &short_period1f, USE_MIN);
   }
-  data_std_out = data_std;                                                                                           
- }//end of run_kalman
+  else {
+    LOG(LOG_INFO,"Collecting breath samples...\r\n");
+  }
+  
+  if(alg_count>BREATH_ARRAY_LENGTH) {
+    
+    unwrap_buffer_to_int(hr_data_buffer,lin_buffer,BREATH_ARRAY_LENGTH,hr_data_buffer_ind);
+    subtract_mean(lin_buffer,BREATH_ARRAY_LENGTH);
+    //Consider removing slope here also. This would help with breath detection when in recovery from exercise.
+    get_autocorrelation(lin_buffer,autocorrelation,BREATH_ARRAY_LENGTH,MAX_BREATH_OFFSET);
+    long_err = get_period_from_array(autocorrelation, MAX_BREATH_OFFSET, &long_period1f, USE_MIN);
+  }
+  
+  //filter data and decide which data to use
+  //so long as we have data, run the Kalman filter
+
+  
+  //if(short_period1f > 0) short_breath_filter->run_kalman((uint32_t)short_period1f);
+  //if(long_period1f > 0) breath_filter->run_kalman((uint32_t)long_period1f);
+  
+  //if short has peak and long doesn't, use short
+  if ( (short_err == 0) && (long_err != 0) ) {
+    choice = USE_SHORT;
+  }
+  //if short finds a peak and long does too, use short
+  else if ( (short_err == 0) && (long_err == 0) ) {
+    choice = USE_SHORT;
+  }
+  //if short doesn't find a peak and long does, use long
+  else if ( (short_err !=0) && (long_err == 0) ) {
+    choice = USE_LONG;
+  }
+  //if neither finds a peak, but long found a min, use double the min
+  else if ( (short_err !=0) && (long_err == 2) ) {
+    choice = USE_LONG;
+  }
+  //if long found no min, but short did, use 2x the min
+  else if ( (long_err == 1) && (short_err == 2) ) {
+    choice = USE_SHORT;
+  }
+  //if long and short found no min, use long
+  else if ( (long_err == 1) && (short_err == 1) ) {
+    choice = USE_LONG;
+  }
+  //if short and long both found a very fast peak , use short
+  else if ( (short_err == 3) && (long_err == 3) ) {
+    choice = USE_SHORT;
+  }
+  else {
+    choice = USE_LONG;
+  }
+  
+  current_br_period1f = (choice ? long_period1f : short_period1f);
+
+  consensus_breath_filter->run_kalman(current_br_period1f);
+
+  
+  //below here isn't updated yet
+  breathing_rate1f = (( ( ((uint32_t)60)<<FIXED_BITS)* (uint32_t)INTERVAL)/ (uint32_t)SAMPLE_RATE)<<FIXED_BITS / (uint32_t)consensus_breath_filter->kalman_avg;
+  
+  LOG(LOG_INFO,"avg br %0.2f, cur br %0.2f\r\n",(float)(((int32_t)60*(1<<FIXED_BITS))*(int32_t)SAMPLE_RATE/(int32_t)INTERVAL)/(float)consensus_breath_filter->kalman_avg,(float)(((int)60*(1<<FIXED_BITS))*(int32_t)SAMPLE_RATE/(int32_t)INTERVAL)/(float)(current_br_period1f) ) ;
+  LOG(LOG_INFO,"choice = %u, s/l err = %u/ %u, s/l per = %ld / %ld\r\n", choice, short_err, long_err, short_period1f, long_period1f);
+  
+  //increment buffer index
+  hr_data_buffer_ind++;
+  if (hr_data_buffer_ind >= BREATH_ARRAY_LENGTH) { 
+    hr_data_buffer_ind = 0;
+  }
+}

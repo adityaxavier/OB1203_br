@@ -4402,6 +4402,15 @@
         </file>
     </group>
     <group>
+        <name>KALMAN</name>
+        <file>
+            <name>$PROJ_DIR$\KALMAN\kalman.cpp</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\KALMAN\kalman.h</name>
+        </file>
+    </group>
+    <group>
         <name>LCD</name>
         <file>
             <name>$PROJ_DIR$\LCD\lcd_panel.c</name>

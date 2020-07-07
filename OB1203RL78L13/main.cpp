@@ -9,7 +9,7 @@
 #endif //#if defined(__CA78K0R__) || defined(__CCRL__) || defined(__ICCRL78__) 
 #include "OB1203.h"
 #include "SPO2.h"
-
+#include "KALMAN.h"
 #include "lcd_panel.h"
 #include "ppg_lcd.h"
 
@@ -43,11 +43,13 @@ void (*p_IntB_Event)(void) = NULL;
 //RTOS variables
 OB1203 ob1203; //instantiate the OB1203 object from its class and pass i2c object
 SPO2 spo2;
-KALMAN corr_filter(CORR_KALMAN_LENGTH, CORR_DATA_LENGTH, MAX_OUTLIER_COUNT, MAX_ALG_FAIL_COUNT, RR_MIN_STD_1F, CORR_KALMAN_THRESHOLD_1F, NO_JUMPS);
+KALMAN corr_filter(CORR_KALMAN_LENGTH, CORR_DATA_LENGTH, MAX_OUTLIER_COUNT, MAX_ALG_FAIL_COUNT, CORR_MIN_STD_1F, CORR_KALMAN_THRESHOLD_1F, NO_JUMPS);
 KALMAN hr_filter(HR_KALMAN_LENGTH, HR_DATA_LENGTH, MAX_OUTLIER_COUNT, MAX_ALG_FAIL_COUNT, HR_MIN_STD_1F, HR_KALMAN_THRESHOLD_1F, NO_JUMPS);
 KALMAN spo2_filter(SPO2_KALMAN_LENGTH, SPO2_DATA_LENGTH, MAX_OUTLIER_COUNT, MAX_ALG_FAIL_COUNT, SPO2_MIN_STD_1F, SPO2_KALMAN_THRESHOLD_1F, JUMPS_OK);
-KALMAN rr_filter(RR_KALMAN_LENGTH, RR_DATA_LENGTH, MAX_OUTLIER_COUNT, MAX_ALG_FAIL_COUNT, RR_MIN_STD_1F, RR_KALMAN_THRESHOLD_1F, NO_JUMPS);
-
+//KALMAN rr_filter(RR_KALMAN_LENGTH, RR_DATA_LENGTH, MAX_OUTLIER_COUNT, MAX_ALG_FAIL_COUNT, RR_MIN_STD_1F, RR_KALMAN_THRESHOLD_1F, NO_JUMPS);
+KALMAN consensus_breath_filter(CONSENSUS_KALMAN_LENGTH, CONSENSUS_DATA_LENGTH, MAX_OUTLIER_COUNT, MAX_ALG_FAIL_COUNT, CONSENSUS_MIN_STD_1F, CONSENSUS_KALMAN_THRESHOLD_1F, NO_JUMPS);
+//KALMAN short_breath_filter(SHORT_BREATH_KALMAN_LENGTH, SHORT_BREATH_DATA_LENGTH, MAX_OUTLIER_COUNT, MAX_ALG_FAIL_COUNT, SHORT_BREATH_MIN_STD_1F, SHORT_BREATH_KALMAN_THRESHOLD_1F, NO_JUMPS);
+//KALMAN breath_filter(BREATH_KALMAN_LENGTH, BREATH_DATA_LENGTH, MAX_OUTLIER_COUNT, MAX_ALG_FAIL_COUNT, BREATH_MIN_STD_1F, BREATH_KALMAN_THRESHOLD_1F, NO_JUMPS);
 
 //Serial pc(USBTX, USBRX,256000); //create a serial port for printing data to a pc
 //Timer t; //use a microsecond timer for time stamping data
@@ -84,6 +86,9 @@ const bool trim_oscillator = 0;
 
 
 //internal settings
+//uint32_t prev_total_samples=0;
+//uint32_t samples_collected=0;
+//int32_t avg_sample_count=0;
 volatile uint8_t num_low_samples = 0;
 void defaultConfig() //populate the default settings here
 {
@@ -151,12 +156,11 @@ void defaultConfig() //populate the default settings here
     ob1203.led_flip = LED_FLIP_OFF;
     ob1203.ch1_can_ana = PPG_CH1_CAN(0);
     ob1203.ch2_can_ana = PPG_CH2_CAN(0);
-    //use rate 1 with pulse width 3 and average 4, or rate 3 with pulse width 4 and average 3 for 100 sps (50Hz basis) or 120 sps sample rate (60Hz basis)
+    //use rate 1 with pulse width 3 and average 4, or rate 3 with pulse width 4 and average 3 for 100 sps (60Hz) basis on new samples
     ob1203.ppg_avg = PPG_AVG(4); //2^n averages
     ob1203.ppg_rate = PPG_RATE(1);
     ob1203.ppg_pwidth = PPG_PWIDTH(3);
-    ob1203.ppg_freq = PPG_FREQ_50HZ;
-//    ob1203.ppg_freq = PPG_FREQ_60HZ;
+    ob1203.ppg_freq = PPG_FREQ;
     ob1203.bio_trim = 3; //max 3 --this dims the ADC sensitivity, but reduces noise
     ob1203.led_trim = 0x00; //can use to overwrite trim setting and max out the current
     ob1203.ppg_LED_settling = PPG_LED_SETTLING(2); //hidden regstier for adjusting LED setting time (not a factor for noise)
@@ -250,10 +254,12 @@ void get_sensor_data()
     if(ob1203.ir_in_range && ob1203.r_in_range) {
         for( int n=0; n<(overflow>>1); n++) {
             spo2.add_sample(ppgData[0],ppgData[1]); //duplicate oldest data to deal with missing (overwritten) samples
+            spo2.total_sample_count++;
             if(spo2.sample_count < ARRAY_LENGTH) spo2.sample_count ++; //number of samples in buffer
         }
         for( int n=0; n<samples2Read; n++) { //add samples
             spo2.add_sample(ppgData[2*n],ppgData[2*n+1]); //add data to sample buffer when data is in range
+            spo2.total_sample_count++;
             if(spo2.sample_count < ARRAY_LENGTH) spo2.sample_count ++; //number of samples in buffer
         }
     } else {
@@ -388,9 +394,10 @@ uint16_t t_read(void)
 
 void ob1203_spo2_main(void)
 {
-  spo2.set_filters(&corr_filter,&hr_filter,&spo2_filter,&rr_filter);
- // spo2.test_kalman();//test the Kalman filter
-  
+  //spo2.set_filters(&corr_filter,&hr_filter,&spo2_filter,&consensus_breath_filter,&short_breath_filter,&breath_filter);
+  spo2.set_filters(&corr_filter,&hr_filter,&spo2_filter,&consensus_breath_filter);
+  // spo2.test_kalman();//test the Kalman filter
+  //spo2.test_algorithm_part3();
 
   
 #if defined(MEASURE_PERFORMANCE)
@@ -400,6 +407,7 @@ void ob1203_spo2_main(void)
 //    i2c.frequency( 400000 ); //always use max speed I2C
     bool do_part2 = false;
     bool samples_processed = false;
+    bool do_part3 = false;
 //    LOG(LOG_DEBUG,"register settings\r\n");
 //    regDump(OB1203_ADDR,0,19);
 //    regDump(OB1203_ADDR,20,39);
@@ -453,6 +461,16 @@ void ob1203_spo2_main(void)
                 /* P03 := Logic high */
                 P0_bit.no3 = 1;
 #endif
+//                samples_collected = spo2.total_sample_count - prev_total_samples;
+//                 
+//                if (avg_sample_count == 0) {
+//                  avg_sample_count = samples_collected;
+//                }
+//                else {
+//                  avg_sample_count += ((int32_t)samples_collected - (int32_t)avg_sample_count)>>3; //IIR with 16 sample tail
+//                }
+//                LOG(LOG_INFO,"avg spi = %ld, samples = %lu, total = %lu, prev = %lu\r\n",avg_sample_count,samples_collected,spo2.total_sample_count, prev_total_samples);
+//                prev_total_samples = spo2.total_sample_count;//store current total sample count for
                 spo2.do_algorithm_part1();
                 samples_processed = false;
 #if defined(MEASURE_PERFORMANCE)
@@ -461,7 +479,8 @@ void ob1203_spo2_main(void)
 #endif
             }
             do_part2 = 1;
-            while(t_read()<100) {
+            //while(t_read()<100) {//change this to adjust rate at which algorithm runs
+            while(t_read()<INTERVAL) {//changing to 0.7 seconds to improve breathing rate detection. If you change this you need to update the breathing_filter average lengths and MAX_BREATH_OFFSET, BREATH_ARRAY_LENGTH, etc. to make them equal time
               if(mode == BIO_MODE) {
                 if(samples_ready) { //only read data if available (samples_ready is asserted by ISR and cleard by get_sensor_data)
                   get_sensor_data();
@@ -482,6 +501,11 @@ void ob1203_spo2_main(void)
                 /* P05 := Logic low */
                 P0_bit.no5 = 0;
 #endif  
+                do_part2 = 0;
+                do_part3 = 1;
+                samples_processed = false;
+                ///**********ADD ALGORITHM PART 3 HERE*****************
+
                 if(display==LCD_HEART_RATE)
                 {
                   LCD_DISPLAY_OFF();
@@ -494,10 +518,19 @@ void ob1203_spo2_main(void)
                   R_PPG_LCD_Display_HRM(spo2.display_hr);
                   display = LCD_HEART_RATE;
                 }
-                do_part2 = 0;
-                samples_processed = false;
+                
               }
-            } //end 1sec loop
+              //end if do part 2. Run part 3 after processing additional samples.
+              if ( (do_part3 == true) && (samples_processed == true) ) {
+                P0_bit.no5 = 1;
+                P0_bit.no3 = 1;
+                spo2.do_algorithm_part3();
+                do_part3 = 0;
+                samples_processed = false;
+                P0_bit.no5 = 0;
+                P0_bit.no3 = 0;
+              }
+            } //end 1sec (or other set interval) loop
         } //end conditional
     }//end while (1)
 }//end main

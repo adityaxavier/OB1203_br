@@ -1056,7 +1056,7 @@ void SPO2::set_filters(KALMAN* filter1, KALMAN* filter2, KALMAN* filter3, KALMAN
   hr_filter = filter2;
   spo2_filter = filter3;
   //rr_filter = filter4;
-  consensus_breath_filter = filter4;
+  rr_filter = filter4;
   //short_breath_filter = filter5;
   //breath_filter = filter6;
 }
@@ -1417,13 +1417,13 @@ void SPO2::do_algorithm_part3() {
   
   current_br_period1f = (choice ? long_period1f : short_period1f);
 
-  consensus_breath_filter->run_kalman(current_br_period1f);
+  rr_filter->run_kalman(current_br_period1f);
 
   
   //below here isn't updated yet
-  breathing_rate1f = (( ( ((uint32_t)60)<<FIXED_BITS)* (uint32_t)INTERVAL)/ (uint32_t)SAMPLE_RATE)<<FIXED_BITS / (uint32_t)consensus_breath_filter->kalman_avg;
+  breathing_rate1f = (( ( ((uint32_t)60)<<FIXED_BITS)* (uint32_t)INTERVAL)/ (uint32_t)SAMPLE_RATE)<<FIXED_BITS / (uint32_t)rr_filter->kalman_avg;
   
-  LOG(LOG_INFO,"avg br %0.2f, cur br %0.2f\r\n",(float)(((int32_t)60*(1<<FIXED_BITS))*(int32_t)SAMPLE_RATE/(int32_t)INTERVAL)/(float)consensus_breath_filter->kalman_avg,(float)(((int)60*(1<<FIXED_BITS))*(int32_t)SAMPLE_RATE/(int32_t)INTERVAL)/(float)(current_br_period1f) ) ;
+  LOG(LOG_INFO,"avg br %0.2f, cur br %0.2f\r\n",(float)(((int32_t)60*(1<<FIXED_BITS))*(int32_t)SAMPLE_RATE/(int32_t)INTERVAL)/(float)rr_filter->kalman_avg,(float)(((int)60*(1<<FIXED_BITS))*(int32_t)SAMPLE_RATE/(int32_t)INTERVAL)/(float)(current_br_period1f) ) ;
   LOG(LOG_INFO,"choice = %u, s/l err = %u/ %u, s/l per = %ld / %ld\r\n", choice, short_err, long_err, short_period1f, long_period1f);
   
   //increment buffer index

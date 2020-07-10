@@ -37,7 +37,7 @@
 #define CORR_KALMAN_LENGTH 4
 #define CORR_DATA_LENGTH 13
 #define CORR_MIN_STD_1F 10<<FIXED_BITS
-#define CORR_KALMAN_THRESHOLD_1F 40
+#define CORR_KALMAN_THRESHOLD_2X 5
 
 
 
@@ -52,46 +52,28 @@
 
 //#define HR_KALMAN_LENGTH 9 //number of points to make a running average over
 //#define HR_DATA_LENGTH 15
-//#define HR_MIN_STD_1F 8<<FIXED_BITS
-//#define HR_KALMAN_THRESHOLD_1F  40//the multiplier for the standard deviation to use for the kalman filter
-//
+
 //#define SPO2_KALMAN_LENGTH 8
 //#define SPO2_DATA_LENGTH 8
-//#define SPO2_MIN_STD_1F 4<<FIXED_BITS
-//#define SPO2_KALMAN_THRESHOLD_1F 32
+
 
 #define HR_KALMAN_LENGTH 13 //number of points to make a running average over
 #define HR_DATA_LENGTH 21
 #define HR_MIN_STD_1F 8<<FIXED_BITS
-#define HR_KALMAN_THRESHOLD_1F  40//the multiplier for the standard deviation to use for the kalman filter
+#define HR_KALMAN_THRESHOLD_2X  20//the multiplier for the standard deviation to use for the kalman filter
 
 #define SPO2_KALMAN_LENGTH 11
 #define SPO2_DATA_LENGTH 12
 #define SPO2_MIN_STD_1F 4<<FIXED_BITS
-#define SPO2_KALMAN_THRESHOLD_1F 32
-
-//#define RR_KALMAN_LENGTH 8
-//#define RR_DATA_LENGTH 15
-//#define RR_MIN_STD_1F 10<<FIXED_BITS
-//#define RR_KALMAN_THRESHOLD_1F 40
+#define SPO2_KALMAN_THRESHOLD_2X 4
 
 #define MAX_OUTLIER_COUNT 3
 #define MAX_ALG_FAIL_COUNT 3
 
-#define CONSENSUS_KALMAN_LENGTH 5
-#define CONSENSUS_DATA_LENGTH 10
-#define CONSENSUS_MIN_STD_1F 4<<FIXED_BITS //this is the breath period in intervals. FOr example 70 internal with 100 sample rate means we are looking for std_dev of less than 4 intervals or about 3 seconds * threshold.
-#define CONSENSUS_KALMAN_THRESHOLD_1F 40
-
-//#define BREATH_KALMAN_LENGTH 12
-//#define BREATH_DATA_LENGTH 21
-//#define BREATH_MIN_STD_1F 4<<FIXED_BITS
-//#define BREATH_KALMAN_THRESHOLD_1F 40
-//
-//#define SHORT_BREATH_KALMAN_LENGTH 9
-//#define SHORT_BREATH_DATA_LENGTH 16
-//#define SHORT_BREATH_MIN_STD_1F 4<<FIXED_BITS
-//#define SHORT_BREATH_KALMAN_THRESHOLD_1F 40
+#define RR_KALMAN_LENGTH 5
+#define RR_DATA_LENGTH 10
+#define RR_MIN_STD_1F 4<<FIXED_BITS //this is the breath period in intervals. FOr example 70 internal with 100 sample rate means we are looking for std_dev of less than 4 intervals or about 3 seconds * threshold.
+#define RR_KALMAN_THRESHOLD_2X 5
 
 #define SHORT_MAX_BREATH_OFFSET 12
 #define SHORT_BREATH_ARRAY_LENGTH 24
@@ -239,10 +221,7 @@ private:
     KALMAN* corr_filter;
     KALMAN* hr_filter;
     KALMAN* spo2_filter;
-    //KALMAN* rr_filter;
-    KALMAN* consensus_breath_filter;
-    //KALMAN* short_breath_filter;
-    //KALMAN* breath_filter;
+    KALMAN* rr_filter;
 };
 
 extern SPO2 spo2;
